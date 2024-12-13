@@ -23,6 +23,9 @@ import { RootState } from '../../../../state/store'
 import { setVehicleType } from '../../../../state/rideRequest/rideRequestSlice'
 import { SocketContext } from '../../../../context/SocketContext'
 
+import { addDoc, collection, doc, setDoc } from 'firebase/firestore'
+import { database } from '../../../../../firebaseConfig'
+
 
 
 const { height, width } = Dimensions.get("screen")
@@ -40,16 +43,33 @@ const ConfirmRide = ({ navigation }: FilterRideScreenProps) => {
     const { user } = useSelector((state: RootState) => state.user)
     const { userLocation, destinationLocation } = useSelector((state: RootState) => state.location)
 
-    //send request to server
-    const onFindRidePress = () => {
-        socket?.emit("new-user-request", {
+
+    const collectionRef = collection(database, "userRideRequests");
+    //save on driverriderequests db
+    const onFindRidePress = async () => {
+        // add user request to userriderequests 
+
+
+        console.log("find ride pressef",user)
+        if (user) {
+
+            console.log("add")
+     try {
+        await addDoc(collection(database,"userRideRequests"), {
             userId: user?.id,
             vehicleType,
-            offeredPrice,
+            offeredPrice:offeredPrice??initialPrice,
             pickup: userLocation,
-            dropoff: destinationLocation
+            dropoff: destinationLocation,
+            status: 'pending',
+            user,
+
         })
-        navigation.navigate("FindRideScreen")
+     } catch (error) {
+        console.log("error",error)
+     }
+        }
+         navigation.navigate("FindRideScreen")
     }
 
 

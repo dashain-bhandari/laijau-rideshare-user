@@ -52,8 +52,9 @@ function RootNavigator(): React.JSX.Element {
         if (token) {
           const { data } = await AxiosInstance.get(`authentication/user-from-token`);
           if (data.data) {
+            console.log("data",data.data)
             setLoading(false);
-            dispatch(setUser({ fullName: data.data.fullName, mobileNumber: data.data.mobileNumber, email: data?.data.email, id: data?.data.id, savedAddresses: data?.data.savedAddresses }))
+            dispatch(setUser({ fullName: data.data.name, mobileNumber: data.data.phoneNumber, email: data?.data.email, id: data?.data.id, savedAddresses: data?.data.savedAddresses }))
           }
         }
         setLoading(false)

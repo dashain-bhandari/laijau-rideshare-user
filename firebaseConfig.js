@@ -18,17 +18,4 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-const db = getFireStore(app);
-
-// for user from driver
-export const userRideRequestsRef = collection(db, "userRideRequests");
-
-// for driver from user
-export const driverRideRequestsRef = collection(db, "driverRideRequests");
-
-//ride collections for all rides to notify user and driver in realtime
-export const ridesRef = collection(db, "rides")
-
-//to store driver locations in realtime
-export const driverLocationRef=collection(db,"driverLocation");
-
+export const database= getFirestore();

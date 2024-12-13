@@ -13,6 +13,8 @@ import { FindRideScreenProps } from '../../../../types/types'
 import { SocketContext } from '../../../../context/SocketContext'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../../../state/store'
+import { collection, onSnapshot, query, snapshotEqual, where } from 'firebase/firestore'
+import { database } from '../../../../../firebaseConfig'
 
 const { height, width } = Dimensions.get("screen")
 
@@ -79,13 +81,33 @@ const FindRide = ({ navigation }: FindRideScreenProps) => {
             })
         }
     };
-
-
     useEffect(() => {
-        const interval = setInterval(sendRequest, 60000);
+   if(user){
+    const collectionRef = collection(database, "driverRideRequests");
+    const q = query(collectionRef, 
+    where('userId', '==', user?.id!));
+    
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+        const newRiders = snapshot.docs.map(doc => ({
+            id: doc.id,
+            name:doc.data().driver.fullName,
+            offeredPrice:doc.data().driverOffer,
+            avatar: require("../../../../assets/images/car.png"),
+            rating: 4.35,
+            noOfRides: 432,
+            timeInMinutes: 4,
+        }));
+        
+        console.log("newriders",newRiders)
+        setRiders(newRiders);
+    });
 
-        return () => clearInterval(interval); // Clear interval when component unmounts
+    // Cleanup subscription when component unmounts
+    return () => unsubscribe();
+   }
     }, []);
+
+
 
     const height = useSharedValue(176);
     const opacity = useSharedValue(1);

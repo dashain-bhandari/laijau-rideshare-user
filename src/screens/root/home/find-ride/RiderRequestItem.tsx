@@ -7,6 +7,10 @@ import { TouchableOpacity } from 'react-native';
 
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import colors from '../../../../utils/data/colors';
+import { collection, deleteDoc, doc, query, where } from 'firebase/firestore';
+import { database } from '../../../../../firebaseConfig';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../state/store';
 
 
 const { height } = Dimensions.get("screen")
@@ -14,6 +18,7 @@ const { height } = Dimensions.get("screen")
 const RiderRequestItem = forwardRef(({ item, setRiders, riders }: any, ref) => {
 
 
+    const { requestRef } = useSelector((state: RootState) => state.rideRequest)
     const enteringAnimation = new Keyframe({
         0: {
             transform: [{ translateY: height }],
@@ -124,11 +129,17 @@ const RiderRequestItem = forwardRef(({ item, setRiders, riders }: any, ref) => {
         viewOpacity.value = withTiming(0, { duration: 600 });
     };
 
-   
-    const onAccept = (item: any) => {
+
+    const onAccept = async (item: any) => {
         viewTranslateX.value = withTiming(-400, { duration: 600 })
         viewOpacity.value = withTiming(0, { duration: 600 })
-        // handle accept diff route to another page
+
+        // Reference to the specific document
+        const rideRef = doc(database, 'rideRequests', requestRef);
+
+        // Delete the document
+        await deleteDoc(rideRef);
+
         let driver = {
             fullName: item?.fullName,
             mobileNumber: item?.mobileNumber,
@@ -138,8 +149,8 @@ const RiderRequestItem = forwardRef(({ item, setRiders, riders }: any, ref) => {
         }
         let fare = item?.offeredFare
 
-       
-       
+
+
     }
 
 
