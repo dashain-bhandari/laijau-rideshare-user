@@ -85,7 +85,7 @@ function RootNavigator(): React.JSX.Element {
       <Stack.Navigator
       >
         {
-          token ? (<>
+          user ? (<>
             <Stack.Screen name='TabsScreen' component={TabLayout} options={{ headerShown: false, gestureEnabled: false }}></Stack.Screen>
             <Stack.Screen name="HomeScreen" component={Home} options={{ headerShown: false }}></Stack.Screen>
             <Stack.Screen name='FindRideScreen' component={FindRide} options={{ headerShown: false }}></Stack.Screen>

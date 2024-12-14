@@ -11,7 +11,7 @@ interface RideRequest {
     minimumPrice: number| undefined,
     offeredPrice: number| undefined,
     vehicleType: string | undefined,
-    requestRef:any
+   
 }
 
 const initialState: RideRequest = {
@@ -22,7 +22,7 @@ const initialState: RideRequest = {
     minimumPrice: undefined,
     offeredPrice: undefined,
     vehicleType: undefined,
-    requestRef:undefined
+    
 }
 const rideRequestSlice = createSlice({
     name: "rideRequest",
@@ -56,11 +56,9 @@ const rideRequestSlice = createSlice({
         state.setScreen = action.payload;
       },
 
-      setRequestRef:(state,action)=>{
-        state.requestRef=action.payload
-      }
+     
     },
   });
 export default rideRequestSlice.reducer;
 
-export const {setDistanceInKm,setInitialPrice,setMinimumPrice,setOfferedPrice,setSetScreen,setTimeInMinutes,setVehicleType,setRequestRef}=rideRequestSlice.actions
+export const {setDistanceInKm,setInitialPrice,setMinimumPrice,setOfferedPrice,setSetScreen,setTimeInMinutes,setVehicleType}=rideRequestSlice.actions

@@ -7,10 +7,12 @@ import { TouchableOpacity } from 'react-native';
 
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import colors from '../../../../utils/data/colors';
-import { collection, deleteDoc, doc, query, where } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
 import { database } from '../../../../../firebaseConfig';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../state/store';
+import { useNavigation } from '@react-navigation/native';
+import { HomeScreenNavigation } from '../../../../types/types';
 
 
 const { height } = Dimensions.get("screen")
@@ -18,7 +20,8 @@ const { height } = Dimensions.get("screen")
 const RiderRequestItem = forwardRef(({ item, setRiders, riders }: any, ref) => {
 
 
-    const { requestRef } = useSelector((state: RootState) => state.rideRequest)
+    const navigation = useNavigation<HomeScreenNavigation>();
+    const { user } = useSelector((state: RootState) => state.user)
     const enteringAnimation = new Keyframe({
         0: {
             transform: [{ translateY: height }],
@@ -93,23 +96,6 @@ const RiderRequestItem = forwardRef(({ item, setRiders, riders }: any, ref) => {
         translateX.value = withTiming(-174, { duration: 60000 })
     }, [])
 
-    // const onDecline = (item: any) => {
-    //     viewTranslateX.value = withTiming(-400, { duration: 600 },()=>{
-    //         runOnJS(setRiders)((prev:any)=>{
-    //             return prev.filter((i:any)=>i.id!=item?.id)
-    //         })
-    //     })
-    //     viewOpacity.value = withTiming(0, { duration: 600 })
-    //     // to remove item 
-    //     // setRiders((prev: any) => prev.map((i: any) => i?.name == item?.name ? { ...i, active: false } : i))
-    //     // console.log(item)
-    //     // setRiders((prev: any) => {
-    //     //     const newRiders = prev.map((rider: any) => rider.id == item?.id ? { ...rider, active: false } : rider);
-
-    //     //     console.log('updating rider with ID:', item?.offeredPrice);
-    //     //     return newRiders;
-    //     // });
-    // }
 
     let decline = (item: any) => {
         setRiders((prev: any) => {
@@ -130,26 +116,41 @@ const RiderRequestItem = forwardRef(({ item, setRiders, riders }: any, ref) => {
     };
 
 
-    const onAccept = async (item: any) => {
-        viewTranslateX.value = withTiming(-400, { duration: 600 })
-        viewOpacity.value = withTiming(0, { duration: 600 })
+    const deleteRequestFromDb = async () => {
+        try {
+            // user ko request delete
 
-        // Reference to the specific document
-        const rideRef = doc(database, 'rideRequests', requestRef);
+            if (user) {
+                const q = query(collection(database, "userRideRequests"), where("userId", "==", user?.id));
+                const querySnapshot = await getDocs(q);
 
-        // Delete the document
-        await deleteDoc(rideRef);
+                querySnapshot.forEach(async (doc) => {
+                    await deleteDoc(doc.ref)
+                });
+            }
 
-        let driver = {
-            fullName: item?.fullName,
-            mobileNumber: item?.mobileNumber,
-            vehicleRegistrationNumber: item?.vehicleRegistrationNumber,
-            vehicleName: item?.vehicleName,
-            profileImage: item?.profileImage
+
+            //delete driver ride requests collection belonging to that user
+            if (user) {
+                const q = query(collection(database, "driverRideRequests"), where("userId", "==", user?.id));
+                const querySnapshot = await getDocs(q);
+
+                querySnapshot.forEach(async (doc) => {
+                    await deleteDoc(doc.ref)
+                });
+            }
+
+        } catch (error) {
+            console.log("error", error)
         }
-        let fare = item?.offeredFare
-
-
+    }
+    const onAccept = async (item: any) => {
+        viewTranslateX.value = withTiming(-400, { duration: 600 }, () => {
+            runOnJS(decline)(item)
+            runOnJS(deleteRequestFromDb)()
+        })
+        viewOpacity.value = withTiming(0, { duration: 600 })
+        navigation.navigate("HomeScreen")
 
     }
 
