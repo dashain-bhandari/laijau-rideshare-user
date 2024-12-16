@@ -23,7 +23,7 @@ const FindRide = ({ navigation }: FindRideScreenProps) => {
     const bottomsheetRef = useRef<any>(null);
     const socket = useContext(SocketContext)
     const { ongoingRide } = useSelector((state: RootState) => state.ongoingRide)
-    const { offeredPrice, vehicleType } = useSelector((state: RootState) => state.rideRequest)
+    const { offeredPrice, vehicleType, rideId } = useSelector((state: RootState) => state.rideRequest)
     const { user } = useSelector((state: RootState) => state.user)
     const { userLocation, destinationLocation } = useSelector((state: RootState) => state.location)
 
@@ -81,30 +81,34 @@ const FindRide = ({ navigation }: FindRideScreenProps) => {
             })
         }
     };
-    useEffect(() => {
-   if(user){
-    const collectionRef = collection(database, "driverRideRequests");
-    const q = query(collectionRef, 
-    where('userId', '==', user?.id!));
     
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-        const newRiders = snapshot.docs.map(doc => ({
-            id: doc.id,
-            name:doc.data().driver.fullName,
-            offeredPrice:doc.data().driverOffer,
-            avatar: require("../../../../assets/images/car.png"),
-            rating: 4.35,
-            noOfRides: 432,
-            timeInMinutes: 4,
-        }));
-        
-        console.log("newriders",newRiders)
-        setRiders(newRiders);
-    });
+    useEffect(() => {
 
-    // Cleanup subscription when component unmounts
-    return () => unsubscribe();
-   }
+        if (user) {
+            //fetch any requests belonging to the user
+            const collectionRef = collection(database, "driverRideRequests");
+            const q = rideId ? (query(collectionRef,
+                where('userId', '==', user?.id!), where("rideId", "==", rideId),)) : (query(collectionRef,
+                    where('userId', '==', user?.id!)))
+
+            const unsubscribe = onSnapshot(q, (snapshot) => {
+                const newRiders = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    name: doc.data().driver.fullName,
+                    offeredPrice: doc.data().driverOffer,
+                    avatar: require("../../../../assets/images/car.png"),
+                    rating: 4.35,
+                    noOfRides: 432,
+                    timeInMinutes: 4,
+                }));
+
+                console.log("newriders", newRiders)
+                setRiders(newRiders);
+            });
+
+            // Cleanup subscription when component unmounts
+            return () => unsubscribe();
+        }
     }, []);
 
 

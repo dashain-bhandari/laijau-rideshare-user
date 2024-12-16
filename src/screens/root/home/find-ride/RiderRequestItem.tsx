@@ -118,6 +118,7 @@ const RiderRequestItem = forwardRef(({ item, setRiders, riders }: any, ref) => {
 
     const deleteRequestFromDb = async () => {
         try {
+            
             // user ko request delete
 
             if (user) {

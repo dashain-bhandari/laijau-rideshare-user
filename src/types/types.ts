@@ -1,13 +1,14 @@
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack";
 
 export type RootStackParamList = {
-    RegisterScreen: undefined;
-    EnterDetailsScreen: {
-        mobileNumber: string
-    },
+   SplashScreen:undefined,
+   AuthStackScreen:undefined,
+   AppStackScreen:undefined
+}
+
+export type AppStackParamList={
     TabsScreen: undefined,
-    OtpVerificationScreen: { email: string },
-    OnboardingScreen: undefined,
+    
     HomeScreen: undefined,
     FindRideScreen: undefined,
     FindDestinationScreen: undefined,
@@ -15,13 +16,14 @@ export type RootStackParamList = {
     UserProfileScreen: undefined,
     SetOnMapScreen: undefined,
     AllAddressScreen: undefined,
+    ScheduleRideScreen: undefined,
     AddNewAddressScreen: {
-        tag:string,
-        selectedIcon:string
+        tag: string,
+        selectedIcon: string
     },
     SetAnyAddressScreen: {
-        tag:string,
-        selectedIcon:string
+        tag: string,
+        selectedIcon: string
     },
     SaveNewAddressScreen: {
         tag: string,
@@ -34,31 +36,40 @@ export type RootStackParamList = {
 
     }
 }
-export type EnterDetailsScreenProps = NativeStackScreenProps<RootStackParamList, 'EnterDetailsScreen'>;
-export type RegisterScreenProps = NativeStackScreenProps<RootStackParamList, 'RegisterScreen'>;
-export type TabsScreenProps = NativeStackScreenProps<RootStackParamList, 'TabsScreen'>;
-export type OtpVerificationScreenProps = NativeStackScreenProps<RootStackParamList, 'OtpVerificationScreen'>;
+
+export type AuthStackParamList={
+    RegisterScreen: undefined;
+    EnterDetailsScreen: {
+        mobileNumber: string
+    },
+    OtpVerificationScreen: { email: string },
+    OnboardingScreen: undefined,
+}
+
+//auth stack
+export type EnterDetailsScreenProps = NativeStackScreenProps<AuthStackParamList, 'EnterDetailsScreen'>;
+export type RegisterScreenProps = NativeStackScreenProps<AuthStackParamList, 'RegisterScreen'>;
+export type OtpVerificationScreenProps = NativeStackScreenProps<AuthStackParamList, 'OtpVerificationScreen'>;
 
 
-
-export type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'HomeScreen'>;
-export type FindRideScreenProps = NativeStackScreenProps<RootStackParamList, 'FindRideScreen'>;
-export type FindDestinationScreenProps = NativeStackScreenProps<RootStackParamList, 'FindDestinationScreen'>;
-export type FilterRideScreenProps = NativeStackScreenProps<RootStackParamList, 'FilterRideScreen'>;
-export type UserProfileScreenProps = NativeStackScreenProps<RootStackParamList, 'UserProfileScreen'>;
-export type AllAddressScreenProps = NativeStackScreenProps<RootStackParamList, 'AllAddressScreen'>;
-export type AddNewAddressScreenProps = NativeStackScreenProps<RootStackParamList, 'AddNewAddressScreen'>;
-export type SetAnyAddressScreenProps = NativeStackScreenProps<RootStackParamList, 'SetAnyAddressScreen'>;
-export type SaveNewAddressScreenProps = NativeStackScreenProps<RootStackParamList, 'SaveNewAddressScreen'>;
-
-
+// app stack
+export type TabsScreenProps = NativeStackScreenProps<AppStackParamList, 'TabsScreen'>;
+export type HomeScreenProps = NativeStackScreenProps<AppStackParamList, 'HomeScreen'>;
+export type FindRideScreenProps = NativeStackScreenProps<AppStackParamList, 'FindRideScreen'>;
+export type FindDestinationScreenProps = NativeStackScreenProps<AppStackParamList, 'FindDestinationScreen'>;
+export type FilterRideScreenProps = NativeStackScreenProps<AppStackParamList, 'FilterRideScreen'>;
+export type UserProfileScreenProps = NativeStackScreenProps<AppStackParamList, 'UserProfileScreen'>;
+export type AllAddressScreenProps = NativeStackScreenProps<AppStackParamList, 'AllAddressScreen'>;
+export type AddNewAddressScreenProps = NativeStackScreenProps<AppStackParamList, 'AddNewAddressScreen'>;
+export type SetAnyAddressScreenProps = NativeStackScreenProps<AppStackParamList, 'SetAnyAddressScreen'>;
+export type SaveNewAddressScreenProps = NativeStackScreenProps<AppStackParamList, 'SaveNewAddressScreen'>;
+export type ScheduleRideScreenProps = NativeStackScreenProps<AppStackParamList, 'ScheduleRideScreen'>;
+export type SetOnMapScreenProps = NativeStackScreenProps<AppStackParamList, 'SetOnMapScreen'>
+export type HomeScreenNavigation = NativeStackNavigationProp<AppStackParamList, 'HomeScreen'>;
+export type FindDestinationNavigation = NativeStackNavigationProp<AppStackParamList, 'FindDestinationScreen'>;
 export interface SetOnMapProps extends SetOnMapScreenProps {
     tag: "destination" | "pickup"
     buttonTitle: string,
     confirmHandler: () => void,
 
 }
-export type SetOnMapScreenProps = NativeStackScreenProps<RootStackParamList, 'SetOnMapScreen'>
-
-export type HomeScreenNavigation = NativeStackNavigationProp<RootStackParamList, 'HomeScreen'>;
-export type FindDestinationNavigation = NativeStackNavigationProp<RootStackParamList, 'FindDestinationScreen'>;

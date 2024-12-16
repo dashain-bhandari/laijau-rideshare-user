@@ -23,7 +23,7 @@ import { RootState } from '../../../../state/store'
 import { setVehicleType } from '../../../../state/rideRequest/rideRequestSlice'
 import { SocketContext } from '../../../../context/SocketContext'
 
-import { addDoc, collection, doc, serverTimestamp, setDoc } from 'firebase/firestore'
+import { addDoc, collection, deleteDoc, doc, getDocs, query, serverTimestamp, setDoc, where } from 'firebase/firestore'
 import { database } from '../../../../../firebaseConfig'
 import { v4 as uuidv4 } from 'uuid';
 
@@ -45,16 +45,25 @@ const ConfirmRide = ({ navigation }: FilterRideScreenProps) => {
 
 
     const collectionRef = collection(database, "userRideRequests");
-    //save on driverriderequests db
+
+
+    //save on userriderequests collection
     const onFindRidePress = async () => {
-        // add user request to userriderequests 
 
-
-        console.log("find ride pressed", user)
         if (user) {
 
             console.log("add")
             try {
+
+                //first delete any existing old requests in driverRideRequests of that user so, we can fetch fresh requests for this particular ride.
+                const q = query(collection(database, "driverRideRequests"), where("userId", "==", user?.id));
+                const querySnapshot = await getDocs(q);
+
+                querySnapshot.forEach(async (doc) => {
+                    await deleteDoc(doc.ref)
+                });
+
+
                 addDoc(collection(database, "userRideRequests"), {
                     rideId: `ride${Date.now()}`,
                     userId: user?.id,
@@ -78,7 +87,7 @@ const ConfirmRide = ({ navigation }: FilterRideScreenProps) => {
 
     const scheduleRidePress = () => {
 
-
+        navigation.navigate("ScheduleRideScreen")
     }
 
     return (
