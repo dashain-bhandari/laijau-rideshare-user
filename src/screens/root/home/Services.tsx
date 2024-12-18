@@ -13,7 +13,7 @@ const Services = () => {
   const navigation = useNavigation<HomeScreenNavigation>()
   return (
     <View >
-      <Text style={{ fontSize: 18 }}>Services</Text>
+      <Text style={{ fontSize: 16 }}>Services</Text>
       {/* bike */}
       <View style={{
         flexDirection: "row",

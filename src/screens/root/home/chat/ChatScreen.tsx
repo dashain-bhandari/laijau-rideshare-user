@@ -100,10 +100,10 @@ const ChatScreen = ({ navigation }: ChatScreenProps) => {
             >
                 {/* Chat messages would go here */}
                 {
-                    messages.map((item) => {
+                    messages.map((item,index) => {
                         if (item.sentBy == "user") {
                             return (<>
-                                <View style={{ flexDirection: "row", justifyContent: "flex-end", marginBottom: 10, }}>
+                                <View key={index} style={{ flexDirection: "row", justifyContent: "flex-end", marginBottom: 10, }}>
                                     <View style={{ padding: 10, backgroundColor: colors.primary[400], maxWidth: "60%", borderBottomLeftRadius: 10, borderTopRightRadius: 10 }}>
                                         <Text style={{ flexWrap: "wrap", color: "#fff" }}>{item?.text}</Text>
                                     </View>
@@ -111,7 +111,7 @@ const ChatScreen = ({ navigation }: ChatScreenProps) => {
                             </>)
                         } else {
                             return (<>
-                                <View style={{ flexDirection: "row", justifyContent: "flex-start", marginBottom: 10, }}>
+                                <View key={index} style={{ flexDirection: "row", justifyContent: "flex-start", marginBottom: 10, }}>
                                     <View style={{ padding: 10, backgroundColor: "#fff", maxWidth: "60%", borderBottomRightRadius: 10, borderTopLeftRadius: 10 }}>
                                         <Text style={{ flexWrap: "wrap", color: colors.primary[700] }}>{item?.text}</Text>
                                     </View>
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginTop: 20,
         backgroundColor: "#fff",
-        padding: 5,
+        padding: 10,
         marginRight: 10,
     },
     textInput: {

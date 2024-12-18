@@ -204,8 +204,10 @@ const RiderRequestItem = forwardRef(({ item, setRiders, riders }: any, ref) => {
                 <View style={styles.infoContainer}>
                     {/* name,profile */}
                     <View style={styles.infoflexContainer}>
-                        <View style={{ width: 40, height: 40, borderRadius: 20, overflow: "hidden", marginRight: 10, backgroundColor: colors.primary[200] }}>
-                            <Image source={item.avatar} style={{ width: 40, height: 40 }} resizeMode='contain'></Image>
+                        <View style={{ width: 40, height: 40, borderRadius: 20,  marginRight: 10, backgroundColor: colors.primary[400] }}>
+                            <View style={{flexDirection:"row",alignItems:"center",justifyContent:"center",width:"100%",height:"100%",borderRadius:100}}>
+                                <Text style={{color:"#fff",fontSize:30}}>{item?.driver?.fullName?.slice(0,1)}</Text>
+                            </View>
                         </View>
                         <View>
                             {/* name and no of rides */}

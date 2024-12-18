@@ -10,10 +10,12 @@ import { RootState } from '../../../../state/store';
 import { useNavigation } from '@react-navigation/native';
 import { HomeScreenNavigation } from '../../../../types/types';
 import { database } from '../../../../../firebaseConfig';
-import { deleteDoc, doc, onSnapshot } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs, onSnapshot, query, where } from 'firebase/firestore';
 import { setOngoingRide } from '../../../../state/ongoingRide/ongoingRideSlice';
+import StyledButton from '../../../../styled/StyledButton';
 const AcceptedRideContent = () => {
 
+    const { user } = useSelector((state: RootState) => state.user)
     const navigation = useNavigation<HomeScreenNavigation>();
     const onChatPress = () => {
         navigation.navigate("ChatScreen")
@@ -49,6 +51,22 @@ const AcceptedRideContent = () => {
             }
         }
     }, [ongoingRide])
+
+    const onCancelRequest = async () => {
+        try {
+            const queryUser = query(collection(database, "userRideRequests"), where("userId", "==", user?.id));
+            const querySnapshotUser = await getDocs(queryUser);
+
+            querySnapshotUser.forEach(async (doc) => {
+                await deleteDoc(doc.ref)
+            });
+            navigation.popTo("TabsScreen");
+
+        } catch (error: any) {
+            console.log("error in canceling requests", error?.message)
+        }
+    }
+
     return (
         <ScrollView style={styles.container}>
             {
@@ -82,7 +100,9 @@ const AcceptedRideContent = () => {
                         {/* rider details */}
                         <View style={styles.riderDetails}>
                             <View style={styles.imageContainer}>
-                                <Image source={{ uri: "" }} style={{ width: 60, height: 60 }} resizeMode='contain'></Image>
+                                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", width: "100%", height: "100%", borderRadius: 100 }}>
+                                    <Text style={{ color: "#fff", fontSize: 30 }}>{ongoingRide?.driver?.fullName?.slice(0, 1)}</Text>
+                                </View>
                             </View>
                             <View style={{ flexDirection: "column" }}>
                                 <Text>
@@ -121,6 +141,16 @@ const AcceptedRideContent = () => {
                             >
                                 <Ionicons name="call" size={24} color={colors.primary[500]} />
                             </Pressable>
+                        </View>
+
+                        <View style={{ paddingHorizontal: 16 }}>
+                            <StyledButton
+
+                                buttonStyles={{ backgroundColor: "#eee", marginTop: 20, marginBottom: 20 }}
+                                textStyles={{ color: colors.secondary[600] }}
+                                title='Cancel request'
+                                onPress={() => { onCancelRequest() }}
+                            />
                         </View>
 
                     </>)
@@ -169,11 +199,11 @@ const styles = StyleSheet.create({
         marginTop: 20,
         paddingHorizontal: 16
     },
-    imageContainer: { width: 60, height: 60, overflow: "hidden", borderRadius: 30, marginRight: 10, backgroundColor: "#eee", },
+    imageContainer: { width: 60, height: 60, overflow: "hidden", borderRadius: 30, marginRight: 10, backgroundColor: colors.primary[400], },
     ratingContainer: { flexDirection: "row", alignItems: "center", marginRight: 10 },
     separationLine: { marginRight: 10, width: 2, height: 10, backgroundColor: "#ccc" },
     contactContainer: {
-        marginTop: 10,
+        marginTop: 20,
         paddingHorizontal: 16,
         flexDirection: "row",
         alignItems: "center"

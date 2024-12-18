@@ -18,7 +18,7 @@ const OngoingRide = () => {
                 ongoingRide?.rideId ? (
                     <Pressable style={{ flex: 1, marginTop: 20, }}>
                         <View style={{ flexDirection: "column", gap: 5 }}>
-                            <Text style={{ fontWeight: "500", color: "#555", fontSize: 14 }}>Ongoing Ride</Text>
+                            <Text style={{  fontSize: 16 }}>Ongoing Ride</Text>
                             <View style={{ backgroundColor: "#fff", padding: 10, borderRadius: 10, gap: 15, borderColor: "#ddd", borderWidth: 1 }}>
                                 {/* user pickup */}
                                 <View style={{ flexDirection: "row", gap: 10, alignItems: "center", marginTop: 10 }}>
@@ -56,7 +56,7 @@ const OngoingRide = () => {
                     <>
                         <Pressable style={{ flex: 1, marginTop: 20,  }}>
                             <View style={{ flexDirection: "column", gap: 5 }}>
-                                <Text style={{ fontWeight: "500", color: "#555", fontSize: 14 }}>Ongoing Ride</Text>
+                                <Text style={{ fontSize: 16 }}>Ongoing Ride</Text>
                                 <View style={{ backgroundColor: "#fff", padding: 10, borderRadius: 10, gap: 15, borderColor: "#ddd", borderWidth: 1, flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
 
                                     <View>

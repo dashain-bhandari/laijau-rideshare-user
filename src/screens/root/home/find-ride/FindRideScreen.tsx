@@ -13,7 +13,7 @@ import { FindRideScreenProps } from '../../../../types/types'
 import { SocketContext } from '../../../../context/SocketContext'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../../state/store'
-import { addDoc, collection, deleteDoc, getDocs, onSnapshot, query, serverTimestamp, snapshotEqual, where } from 'firebase/firestore'
+import { addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, query, serverTimestamp, snapshotEqual, where } from 'firebase/firestore'
 import { database } from '../../../../../firebaseConfig'
 import { setOfferedPrice, setRideId } from '../../../../state/rideRequest/rideRequestSlice'
 
@@ -64,7 +64,7 @@ const FindRide = ({ navigation }: FindRideScreenProps) => {
 
             const unsubscribe = onSnapshot(q, (snapshot) => {
                 const newRiders = snapshot.docs.map(doc => {
-console.log("offeredPrice,")
+                    console.log("offeredPrice,")
                     return {
                         id: doc.id,
                         name: doc.data().driver.fullName,
@@ -181,18 +181,25 @@ console.log("offeredPrice,")
             dropoff: destinationLocation,
             status: 'pending',
             user,
-            scheduled:false,
+            scheduled: false,
             createdAt: serverTimestamp()
 
         })
         setNewReqSent(!newReqSent);
     }
 
-    const onCancelRequest = () => {
+    const onCancelRequest = async () => {
         try {
+            const queryUser = query(collection(database, "userRideRequests"), where("userId", "==", user?.id), where("rideId", "==", rideId));
+            const querySnapshotUser = await getDocs(queryUser);
 
-        } catch (error) {
+            querySnapshotUser.forEach(async (doc) => {
+                await deleteDoc(doc.ref)
+            });
+            navigation.popTo("TabsScreen");
 
+        } catch (error: any) {
+            console.log("error in canceling requests", error?.message)
         }
     }
     const [disabled, setDisabled] = useState<boolean>()
@@ -243,7 +250,7 @@ console.log("offeredPrice,")
                                     buttonStyles={{ backgroundColor: "#eee", marginTop: 20, marginBottom: 20 }}
                                     textStyles={{ color: colors.secondary[600] }}
                                     title='Cancel request'
-                                    onPress={() => { }}
+                                    onPress={() => { onCancelRequest() }}
                                 />
                             </>
                         )
