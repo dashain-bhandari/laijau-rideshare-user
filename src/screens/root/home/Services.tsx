@@ -6,8 +6,9 @@ import colors from '../../../utils/data/colors';
 import { LinearGradient } from 'expo-linear-gradient';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { HomeScreenNavigation } from '../../../types/types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setVehicleType } from '../../../state/rideRequest/rideRequestSlice';
+import { RootState } from '../../../state/store';
 const Services = () => {
   const navigation = useNavigation<HomeScreenNavigation>()
   return (
@@ -50,7 +51,8 @@ const styles = StyleSheet.create({
 
 
 const Bike = ({ navigation }: { navigation: HomeScreenNavigation }) => {
-  const dispatch=useDispatch()
+  const dispatch = useDispatch()
+  const { ongoingRide } = useSelector((state: RootState) => state.ongoingRide)
   return (
     <TouchableOpacity style={{
       flexDirection: "column",
@@ -60,8 +62,13 @@ const Bike = ({ navigation }: { navigation: HomeScreenNavigation }) => {
 
     }}
       onPress={() => {
-        dispatch(setVehicleType("Bike"))
-        navigation.navigate("FindDestinationScreen")
+
+        if (ongoingRide) {
+          navigation.navigate("AcceptedRideScreen");
+        } else {
+          dispatch(setVehicleType("Bike"))
+          navigation.navigate("FindDestinationScreen");
+        }
       }}
     >
       <LinearGradient
@@ -80,7 +87,8 @@ const Bike = ({ navigation }: { navigation: HomeScreenNavigation }) => {
 }
 
 const Car = ({ navigation }: { navigation: HomeScreenNavigation }) => {
-  const dispatch=useDispatch()
+  const dispatch = useDispatch()
+  const { ongoingRide } = useSelector((state: RootState) => state.ongoingRide)
   return (
     <TouchableOpacity style={{
       flexDirection: "column",
@@ -88,12 +96,16 @@ const Car = ({ navigation }: { navigation: HomeScreenNavigation }) => {
       alignItems: "center"
     }}
       onPress={() => {
-        dispatch(setVehicleType("Car"))
-        navigation.navigate("FindDestinationScreen")
+        if (ongoingRide) {
+          navigation.navigate("AcceptedRideScreen");
+        } else {
+          dispatch(setVehicleType("Car"))
+          navigation.navigate("FindDestinationScreen")
+        }
       }}
     >
       <LinearGradient
-         colors={[colors.primary[200], colors.primary[100]]}
+        colors={[colors.primary[200], colors.primary[100]]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.serviceView}>

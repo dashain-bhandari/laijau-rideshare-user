@@ -48,9 +48,10 @@ export default function MyTabBar({ state, descriptors, navigation }: BottomTabBa
 
     return (
         <View onLayout={onTabBarLayout} style={{
-            flexDirection: 'row', position: "absolute", overflow: "hidden", alignItems: "center", bottom: 25, backgroundColor: "#fff", paddingVertical: 15, marginHorizontal: 20, borderRadius: 25, borderCurve: "continuous", shadowOffset: {
-                width: 0, height: 10
-            }, shadowColor: "#ddd", shadowOpacity: 1
+            flexDirection: 'row', position: "absolute",  alignItems: "center", bottom: 30, backgroundColor: "#fff", paddingVertical: 15, marginHorizontal: 20, borderRadius: 25, borderCurve: "continuous", shadowOffset: {
+                width: 0, height: 2
+            }, shadowColor: "#ddd", shadowOpacity: 0.7,shadowRadius:4,
+            borderColor:"#eee",borderWidth:1
         }}>
             <Animated.View
                 style={[animatedStyle, { position: "absolute", backgroundColor: colors.primary[200], height: dimensions.height - 15, width: buttonWidth - 25, borderRadius: 25, marginHorizontal: 16 }]}

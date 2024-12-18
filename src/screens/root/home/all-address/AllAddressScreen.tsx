@@ -26,9 +26,9 @@ const AllAddressScreen = ({ navigation }: AllAddressScreenProps) => {
         }}>
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <View>
+                    <Pressable onPress={() => navigation.goBack()}>
                         <AntDesign name='arrowleft' size={24} color={"#555"}></AntDesign>
-                    </View>
+                    </Pressable>
                     <View>
                         <Text style={{ fontSize: 16, color: "#333", fontWeight: "500" }}>Your addresses</Text>
                     </View>
@@ -48,7 +48,11 @@ const AllAddressScreen = ({ navigation }: AllAddressScreenProps) => {
                         renderItem={({ item }) => <AddressItem item={item} />}
                     />
                 </View>
-                <View style={styles.addNewAddress}>
+                <TouchableOpacity
+                    activeOpacity={0.5}
+                    style={styles.addNewAddress} onPress={() => {
+                        navigation.navigate("AddNewAddressScreen", { tag: "saveNewAddress", selectedIcon: "Other" })
+                    }}>
                     <View style={[styles.itemIcon, { backgroundColor: colors.secondary[300] }]}>
 
                         {
@@ -58,17 +62,15 @@ const AllAddressScreen = ({ navigation }: AllAddressScreenProps) => {
                         }
                     </View>
 
-                    <TouchableOpacity style={{ marginLeft: 10 }}
-                        onPress={() => {
-                            navigation.navigate("AddNewAddressScreen", { tag: "saveNewAddress", selectedIcon: "Other" })
-                        }}
+                    <View style={{ marginLeft: 10 }}
+
                     >
                         <Text>
                             Add new address
                         </Text>
-                    </TouchableOpacity>
+                    </View>
 
-                </View>
+                </TouchableOpacity>
             </View>
 
             {/* options modal */}
@@ -154,7 +156,10 @@ const AddressItem = ({ item }: { item: any }) => {
         <TouchableOpacity
             onPress={() => navigation.navigate("AddNewAddressScreen", {
                 tag: "editAddress",
-                selectedIcon: item.addressLabel
+                selectedIcon: item.addressLabel,
+                addressName:item?.addressName,
+                addressLatitude:item?.addressLatitude,
+                addressLongitude:item?.addressLongitude
             })}
             activeOpacity={0.7} style={styles.itemContainer}>
             <View style={styles.itemIcon}>

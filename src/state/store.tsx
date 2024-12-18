@@ -3,6 +3,7 @@ import userReducer from "./user/userSlice";
 import locationReducer from "./location/locationSlice";
 import rideRequestReducer from "./rideRequest/rideRequestSlice";
 import ongoingRideReducer from "./ongoingRide/ongoingRideSlice";
+import scheduledRideReducer from "./scheduledRide/scheduledRideSlice";
 
 export const store = configureStore({
 
@@ -10,8 +11,12 @@ export const store = configureStore({
         user: userReducer,
         location: locationReducer,
         rideRequest: rideRequestReducer,
-        ongoingRide: ongoingRideReducer
-    }
+        ongoingRide: ongoingRideReducer,
+        scheduledRide:scheduledRideReducer
+    },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        serializableCheck:false
+    }),
     
 })
 

@@ -14,12 +14,12 @@ import AddNewScreen from '../screens/root/home/add-new-address/AddNewScreen';
 import SetAnyAddressScreen from '../screens/root/home/set-any-address/SetAnyAddressScreen';
 import SaveNewAddressScreen from '../screens/root/home/save-new-address/SaveNewAddressScreen';
 import ScheduleRideScreen from '../screens/root/home/schedule-ride/ScheduleRideScreen';
-
-
+import FindScheduledRideScreen from '../screens/root/home/find-scheduled-ride/FindScheduledRideScreen';
+import AcceptedRideScreen from '../screens/root/home/accept-ride/AcceptedRideScreen';
+import ChatScreen from '../screens/root/home/chat/ChatScreen';
 
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
-
 const AppStack = () => {
     return (
         <Stack.Navigator>
@@ -35,6 +35,9 @@ const AppStack = () => {
             <Stack.Screen name="SetAnyAddressScreen" component={SetAnyAddressScreen} options={{ headerShown: false }}></Stack.Screen>
             <Stack.Screen name="SaveNewAddressScreen" component={SaveNewAddressScreen} options={{ headerShown: false }}></Stack.Screen>
             <Stack.Screen name="ScheduleRideScreen" component={ScheduleRideScreen} options={{ headerShown: false }}></Stack.Screen>
+            <Stack.Screen name="FindScheduledRideScreen" component={FindScheduledRideScreen} options={{ headerShown: false }}></Stack.Screen>
+            <Stack.Screen name="AcceptedRideScreen" component={AcceptedRideScreen} options={{ headerShown: false }}></Stack.Screen>
+            <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerShown: false }}></Stack.Screen>
         </Stack.Navigator>
     )
 }

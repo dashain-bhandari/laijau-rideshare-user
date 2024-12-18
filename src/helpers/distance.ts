@@ -1,3 +1,6 @@
+
+//haversine distance
+
 export const calculateDistance = ({ lat1, lat2, long1, long2 }: { lat1: number, long1: number, lat2: number, long2: number }) => {
     if (lat1 && lat2 && long1 && long1) {
         const R = 6371e3; // metres

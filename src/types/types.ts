@@ -1,14 +1,14 @@
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack";
 
 export type RootStackParamList = {
-   SplashScreen:undefined,
-   AuthStackScreen:undefined,
-   AppStackScreen:undefined
+    SplashScreen: undefined,
+    AuthStackScreen: undefined,
+    AppStackScreen: undefined
 }
 
-export type AppStackParamList={
+export type AppStackParamList = {
     TabsScreen: undefined,
-    
+
     HomeScreen: undefined,
     FindRideScreen: undefined,
     FindDestinationScreen: undefined,
@@ -19,11 +19,17 @@ export type AppStackParamList={
     ScheduleRideScreen: undefined,
     AddNewAddressScreen: {
         tag: string,
-        selectedIcon: string
+        selectedIcon: string,
+        addressName?:string|undefined,
+        addressLatitude?:number|undefined,
+        addressLongitude?:number|undefined,
     },
     SetAnyAddressScreen: {
         tag: string,
-        selectedIcon: string
+        selectedIcon: string,
+        addressName?:string|undefined,
+        addressLatitude?:number|undefined,
+        addressLongitude?:number|undefined,
     },
     SaveNewAddressScreen: {
         tag: string,
@@ -34,10 +40,17 @@ export type AppStackParamList={
         },
         selectedIcon: string
 
-    }
+    },
+    FindScheduledRideScreen: {
+        date: Date,
+        alertDate: Date,
+        selectedTime:string|null
+    },
+    AcceptedRideScreen: undefined,
+    ChatScreen: undefined
 }
 
-export type AuthStackParamList={
+export type AuthStackParamList = {
     RegisterScreen: undefined;
     EnterDetailsScreen: {
         mobileNumber: string
@@ -64,9 +77,15 @@ export type AddNewAddressScreenProps = NativeStackScreenProps<AppStackParamList,
 export type SetAnyAddressScreenProps = NativeStackScreenProps<AppStackParamList, 'SetAnyAddressScreen'>;
 export type SaveNewAddressScreenProps = NativeStackScreenProps<AppStackParamList, 'SaveNewAddressScreen'>;
 export type ScheduleRideScreenProps = NativeStackScreenProps<AppStackParamList, 'ScheduleRideScreen'>;
-export type SetOnMapScreenProps = NativeStackScreenProps<AppStackParamList, 'SetOnMapScreen'>
+export type FindScheduledRideScreenProps = NativeStackScreenProps<AppStackParamList, 'FindScheduledRideScreen'>;
+export type SetOnMapScreenProps = NativeStackScreenProps<AppStackParamList, 'SetOnMapScreen'>;
+export type AcceptedRideScreenProps = NativeStackScreenProps<AppStackParamList, 'AcceptedRideScreen'>;
+export type ChatScreenProps = NativeStackScreenProps<AppStackParamList, 'ChatScreen'>;
+
+
 export type HomeScreenNavigation = NativeStackNavigationProp<AppStackParamList, 'HomeScreen'>;
 export type FindDestinationNavigation = NativeStackNavigationProp<AppStackParamList, 'FindDestinationScreen'>;
+
 export interface SetOnMapProps extends SetOnMapScreenProps {
     tag: "destination" | "pickup"
     buttonTitle: string,

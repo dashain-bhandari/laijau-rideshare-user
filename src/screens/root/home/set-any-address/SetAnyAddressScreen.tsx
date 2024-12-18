@@ -16,7 +16,10 @@ import { AxiosInstance } from '../../../../config/AxiosInstance'
 const SetAnyAddressScreen = ({ navigation, route }: SetAnyAddressScreenProps) => {
     const {
         tag,
-        selectedIcon
+        selectedIcon,
+        addressLatitude,
+        addressLongitude,
+        addressName
     } = route.params
     const { userLocation, destinationLocation } = useSelector((state: RootState) => state.location);
     const { setScreen } = useSelector((state: RootState) => state.rideRequest);
@@ -25,16 +28,18 @@ const SetAnyAddressScreen = ({ navigation, route }: SetAnyAddressScreenProps) =>
         longitude: number,
         address: string
     }>({
-        latitude: userLocation?.userLatitude ?? fallBackAddress.latitude,
-        longitude: userLocation?.userLongitude ?? fallBackAddress.longitude,
-        address: ""
+        latitude: addressLatitude ?? userLocation?.userLatitude ?? fallBackAddress.latitude,
+        longitude: addressLongitude ?? userLocation?.userLongitude ?? fallBackAddress.longitude,
+        address: addressName || userLocation?.userAddress || "Shiva Shakri marga"
     })
-    let address = draggedLocation?.address !== "" ? draggedLocation.address : "Select your address"
+    let address = draggedLocation?.address !== "" ? draggedLocation.address : addressName || userLocation?.userAddress || "Chaitya marga, Bagmati"
     const dispatch = useDispatch();
 
 
     const onConfirmPress = ({ latitude, longitude, address }: { latitude: number, longitude: number, address: string }) => {
-
+        if (!draggedLocation?.address) {
+            address = addressName || userLocation?.userAddress || "Chaitya marga, Bagmati"
+        }
         if (tag == "editAddress") {
             navigation.navigate("SaveNewAddressScreen", {
                 tag: "editAddress",
@@ -111,13 +116,7 @@ const SetAnyAddressScreen = ({ navigation, route }: SetAnyAddressScreenProps) =>
 
                     >
 
-                        <Callout tooltip={true}>
-                            {
-                                <View style={styles.callout}>
-                                    <Text style={styles.calloutText}>Your destination is too near.</Text>
-                                </View>
-                            }
-                        </Callout>
+
                     </Marker>
                 </MapView>
             </View>

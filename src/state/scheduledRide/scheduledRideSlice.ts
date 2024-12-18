@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { act } from "react";
 
 interface InitialState {
-    ongoingRide: {
+    scheduledRide: {
         status: "accepted" | "started" | "ended" | "canceled",
         driver: any,
         user: any,
@@ -16,21 +16,21 @@ interface InitialState {
 }
 
 const initialState: any = {
-    ongoingRide: undefined,
+    scheduledRide: undefined,
 
 }
-const ongoingRideSlice = createSlice({
-    name: "ongoingRide",
+const scheduledRideSlice = createSlice({
+    name: "scheduledRide",
     initialState: initialState,
     reducers: {
         setStatus: (state, action) => {
-            state.ongoingRide = { ...state, status: action.payload }
+            state.scheduledRide = { ...state, status: action.payload }
         },
-        setOngoingRide: (state, action) => {
-            state.ongoingRide = action.payload
+        setScheduledRide: (state, action) => {
+            state.scheduledRide = action.payload
         }
     }
 })
 
-export const { setStatus, setOngoingRide } = ongoingRideSlice.actions
-export default ongoingRideSlice.reducer;
+export const { setStatus, setScheduledRide } = scheduledRideSlice.actions
+export default scheduledRideSlice.reducer;

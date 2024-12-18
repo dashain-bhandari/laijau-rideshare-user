@@ -32,11 +32,16 @@ const SaveNewAddress = ({ tag, address, label, selectedIcon }: SaveNewAddressPro
     const { user } = useSelector((state: RootState) => state.user);
 
     const [addressLabel, setAddressLabel] = useState<string | undefined>(undefined);
+    const [additionalInfo, setAdditionalInfo] = useState("")
     const [addressIcon, setAddressIcon] = useState(selectedIcon);
     const [addressName, setAddressName] = useState<string>("")
+    console.log("lbel", label)
     useEffect(() => {
         if (tag == "editAddress" && !addressLabel && label) {
             setAddressLabel(label);
+        }
+        if (tag == "editAddress" && !addressLabel && selectedIcon) {
+            setAddressLabel(selectedIcon);
         }
     }, [tag])
 
@@ -45,9 +50,9 @@ const SaveNewAddress = ({ tag, address, label, selectedIcon }: SaveNewAddressPro
             setAddressName(address?.addressName!);
         }
         else {
-            let address = user?.savedAddresses.find((i) => i.addressLabel == label)
+            let addressFound = user?.savedAddresses.find((i) => i.addressLabel == label)
             if (address) {
-                setAddressName(address.addressName)
+                setAddressName(address?.addressName)
             }
         }
     }, [tag, user, label])
@@ -71,6 +76,7 @@ const SaveNewAddress = ({ tag, address, label, selectedIcon }: SaveNewAddressPro
         if (addressIcon != "Other") {
             opacity.value = withTiming(0, { duration: 500 });
             translateY.value = withTiming(-70, { duration: 500 })
+            setAddressLabel(addressIcon)
         }
         else {
             opacity.value = withTiming(1, { duration: 500 });
@@ -82,6 +88,8 @@ const SaveNewAddress = ({ tag, address, label, selectedIcon }: SaveNewAddressPro
     const [displayAlert, setDisplayAlert] = useState(false);
     const [alertResponse, setAlertResponse] = useState(false);
 
+
+
     const onSavePress = async () => {
         try {
             if (user) {
@@ -89,15 +97,20 @@ const SaveNewAddress = ({ tag, address, label, selectedIcon }: SaveNewAddressPro
                     setDisplayAlert(true)
                 }
                 else {
+                    console.log("address", address)
+                    console.log("address name", addressName);
+                    console.log("address label", addressLabel);
+                    console.log("additionl ", additionalInfo)
                     const { data } = await AxiosInstance.patch(`/user/save-new-address/${user.id}`, {
                         addressLabel,
                         addressName,
                         addressLatitude: address?.latitude,
-                        addressLongitude: address?.longitude
+                        addressLongitude: address?.longitude,
+                        additionalInfo: additionalInfo
                     })
                     console.log("data", data.data)
                     if (data.data) {
-                        navigation.pop(3);
+                        navigation.pop(4);
                     }
                 }
             }
@@ -113,16 +126,21 @@ const SaveNewAddress = ({ tag, address, label, selectedIcon }: SaveNewAddressPro
 
             if (user) {
 
+                console.log("address", address)
+                console.log("address name", addressName);
+                console.log("address label", addressLabel);
+                console.log("additionl ", additionalInfo)
                 const { data } = await AxiosInstance.patch(`/user/edit-saved-address/${user.id}`, {
                     addressLabel,
                     addressName,
                     addressLatitude: address?.latitude,
-                    addressLongitude: address?.longitude
+                    addressLongitude: address?.longitude,
+                    additionalInfo
                 })
 
                 console.log("data", data.data)
                 if (data.data) {
-                    navigation.navigate("AllAddressScreen")
+                    navigation.pop(4);
                 }
 
             }
@@ -190,7 +208,7 @@ const SaveNewAddress = ({ tag, address, label, selectedIcon }: SaveNewAddressPro
                     </View>
                     <View style={styles.addressNameContainer}>
                         <View>
-                            <Text style={{ fontSize: 16, color: "#333", fontWeight: "500" }}>Save in this name</Text>
+                            <Text style={{ fontSize: 16, color: "#333", fontWeight: "500" }}>Save as</Text>
                         </View>
                         <View style={styles.addressListContainer}>
                             {/* home */}
@@ -253,12 +271,30 @@ const SaveNewAddress = ({ tag, address, label, selectedIcon }: SaveNewAddressPro
                                 </Text>
                             </View>
                             <View style={[styles.inputContainer, { marginTop: 10 }]}>
-                                <TextInput placeholder='additional information'></TextInput>
+                                <TextInput
+                                    value={additionalInfo}
+                                    onChangeText={(text) => setAdditionalInfo(text)}
+                                    placeholder='additional information'></TextInput>
                             </View>
                             <View style={{ marginTop: 10 }}>
                                 <Text style={{ color: "#888", paddingLeft: 10, fontSize: 12 }}>
                                     Eg. Road no 10
                                 </Text>
+                            </View>
+                            <View style={styles.footer}>
+
+                                <TouchableOpacity
+                                    onPress={onSavePress}
+                                    activeOpacity={0.7} style={{ backgroundColor: colors.primary[500], flexGrow: 1, padding: 10, borderRadius: 10 }}>
+                                    <Text style={{ textAlign: "center", color: "#fff" }}>
+                                        Save
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={onCancelPress}
+                                    activeOpacity={0.7} style={{ borderColor: colors.primary[700], flexGrow: 1, padding: 10, borderRadius: 10, borderWidth: 1 }}>
+                                    <Text style={{ textAlign: "center", color: colors.primary[700] }}>Cancel</Text>
+                                </TouchableOpacity>
                             </View>
                         </Animated.View>
                     </View>
@@ -267,21 +303,7 @@ const SaveNewAddress = ({ tag, address, label, selectedIcon }: SaveNewAddressPro
 
                     </View>
                 </View>
-                <View style={styles.footer}>
 
-                    <TouchableOpacity
-                        onPress={onSavePress}
-                        activeOpacity={0.7} style={{ backgroundColor: colors.primary[500], flexGrow: 1, padding: 10, borderRadius: 10 }}>
-                        <Text style={{ textAlign: "center", color: "#fff" }}>
-                            Save
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={onCancelPress}
-                        activeOpacity={0.7} style={{ borderColor: colors.primary[700], flexGrow: 1, padding: 10, borderRadius: 10, borderWidth: 1 }}>
-                        <Text style={{ textAlign: "center", color: colors.primary[700] }}>Cancel</Text>
-                    </TouchableOpacity>
-                </View>
             </SafeAreaView>
             <Animated.View style={[styles.alertModal, animatedModalStyle]}>
                 <View style={{ paddingTop: 20, paddingHorizontal: 16 }}>
@@ -353,7 +375,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginTop: 30,
         gap: 10,
-        paddingHorizontal: 16
+
     },
     iconBackground: {
         width: 30,

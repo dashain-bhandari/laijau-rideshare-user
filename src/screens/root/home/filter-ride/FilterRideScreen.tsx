@@ -20,12 +20,13 @@ import StyledButton from '../../../../styled/StyledButton'
 import { FilterRideScreenProps } from '../../../../types/types'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../../state/store'
-import { setVehicleType } from '../../../../state/rideRequest/rideRequestSlice'
+import { setOfferedPrice, setPreferredVehicle, setRideId, setVehicleType } from '../../../../state/rideRequest/rideRequestSlice'
 import { SocketContext } from '../../../../context/SocketContext'
 
 import { addDoc, collection, deleteDoc, doc, getDocs, query, serverTimestamp, setDoc, where } from 'firebase/firestore'
 import { database } from '../../../../../firebaseConfig'
 import { v4 as uuidv4 } from 'uuid';
+import { KNN } from '../../../../helpers/KNN'
 
 
 const { height, width } = Dimensions.get("screen")
@@ -39,13 +40,31 @@ const ConfirmRide = ({ navigation }: FilterRideScreenProps) => {
     const vehicleOptionsForCar = ["Taxi", "EV", "Any"];
     const [womanFilterOn, setWomanFilterOn] = useState(false);
     const [priceModal, setPriceModal] = useState(false);
-    const { offeredPrice, initialPrice, minimumPrice, vehicleType } = useSelector((state: RootState) => state.rideRequest)
+    const { offeredPrice, initialPrice, minimumPrice, vehicleType, preferredVehicle } = useSelector((state: RootState) => state.rideRequest)
     const { user } = useSelector((state: RootState) => state.user)
     const { userLocation, destinationLocation } = useSelector((state: RootState) => state.location)
 
+    const dispatch = useDispatch();
 
     const collectionRef = collection(database, "userRideRequests");
 
+    const findNearestDrivers = async () => {
+        try {
+            const allDrivers: any = [];
+            const q = query(collection(database, "drivers"));
+            const querySnapshot = await getDocs(q);
+
+            querySnapshot.forEach(async (doc) => {
+                allDrivers.push(doc.data());
+            });
+            const nearestDrivers = KNN(allDrivers, { location: { lat1: userLocation?.userLatitude, lon1: userLocation?.userLongitude }, preference: preferredVehicle, vehicleType }, 15);
+            console.log("nearest drivers are: ", nearestDrivers);
+            return nearestDrivers;
+
+        } catch (error: any) {
+            console.log("error finding nearest drivers: ", error.message);
+        }
+    }
 
     //save on userriderequests collection
     const onFindRidePress = async () => {
@@ -54,8 +73,10 @@ const ConfirmRide = ({ navigation }: FilterRideScreenProps) => {
 
             console.log("add")
             try {
-
-                //first delete any existing old requests in driverRideRequests of that user so, we can fetch fresh requests for this particular ride.
+                if (!offeredPrice) {
+                    dispatch(setOfferedPrice(initialPrice!));
+                }
+                // first delete any existing old requests in driverRideRequests of that user so, we can fetch fresh requests for this particular ride.
                 const q = query(collection(database, "driverRideRequests"), where("userId", "==", user?.id));
                 const querySnapshot = await getDocs(q);
 
@@ -63,9 +84,23 @@ const ConfirmRide = ({ navigation }: FilterRideScreenProps) => {
                     await deleteDoc(doc.ref)
                 });
 
+                // also delete user ko old requests
 
-                addDoc(collection(database, "userRideRequests"), {
-                    rideId: `ride${Date.now()}`,
+                let rideId = `ride${Date.now()}`;
+                console.log("rideId", rideId)
+                dispatch(setRideId(rideId));
+
+                const queryUser = query(collection(database, "userRideRequests"), where("userId", "==", user?.id), where("rideId", "!=", rideId));
+                const querySnapshotUser = await getDocs(queryUser);
+
+                querySnapshotUser.forEach(async (doc) => {
+                    await deleteDoc(doc.ref)
+                });
+
+                // let nearestDrivers=await findNearestDrivers();
+
+                await addDoc(collection(database, "userRideRequests"), {
+                    rideId: rideId,
                     userId: user?.id,
                     vehicleType,
                     offeredPrice: offeredPrice ?? initialPrice,
@@ -73,7 +108,9 @@ const ConfirmRide = ({ navigation }: FilterRideScreenProps) => {
                     dropoff: destinationLocation,
                     status: 'pending',
                     user,
-                    createdAt: serverTimestamp()
+                    createdAt: serverTimestamp(),
+                    scheduled:false
+                    // nearestDrivers
 
                 })
             } catch (error) {
@@ -126,7 +163,9 @@ const ConfirmRide = ({ navigation }: FilterRideScreenProps) => {
                                         display={displayOptions}
                                         listOptions={vehicleOptionsForBike}
 
-                                        onSelect={(item: string) => { }}
+                                        onSelect={(item: string) => {
+                                            dispatch(setPreferredVehicle(item))
+                                        }}
                                         setDisplay={setDisplayOptions}
                                     ></SelectDropdown>) : (
                                         <SelectDropdown

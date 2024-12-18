@@ -7,19 +7,20 @@ import { TouchableOpacity } from 'react-native';
 
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import colors from '../../../../utils/data/colors';
-import { collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
+import { collection, deleteDoc, disableNetwork, doc, getDocs, query, setDoc, Timestamp, where } from 'firebase/firestore';
 import { database } from '../../../../../firebaseConfig';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../state/store';
 import { useNavigation } from '@react-navigation/native';
 import { HomeScreenNavigation } from '../../../../types/types';
+import { setOngoingRide } from '../../../../state/ongoingRide/ongoingRideSlice';
 
 
 const { height } = Dimensions.get("screen")
 
 const RiderRequestItem = forwardRef(({ item, setRiders, riders }: any, ref) => {
 
-
+    const dispatch = useDispatch();
     const navigation = useNavigation<HomeScreenNavigation>();
     const { user } = useSelector((state: RootState) => state.user)
     const enteringAnimation = new Keyframe({
@@ -118,7 +119,7 @@ const RiderRequestItem = forwardRef(({ item, setRiders, riders }: any, ref) => {
 
     const deleteRequestFromDb = async () => {
         try {
-            
+
             // user ko request delete
 
             if (user) {
@@ -145,15 +146,49 @@ const RiderRequestItem = forwardRef(({ item, setRiders, riders }: any, ref) => {
             console.log("error", error)
         }
     }
-    const onAccept = async (item: any) => {
-        viewTranslateX.value = withTiming(-400, { duration: 600 }, () => {
-            runOnJS(decline)(item)
-            runOnJS(deleteRequestFromDb)()
+
+    const createAnOngoingRideAndChatRoom = async () => {
+      try {
+        console.log("item",item)
+          //add a ride to ride collection
+          await setDoc(doc(database, "rides", item?.rideId), {
+            rideId: item?.rideId,
+            ...item,
+            createdAt: Timestamp.fromDate(new Date()),
+            status:"accepted"
+
         })
-        viewOpacity.value = withTiming(0, { duration: 600 })
-        navigation.navigate("HomeScreen")
+
+        //create chat room
+        await setDoc(doc(database, "chats", item?.rideId), {
+            rideId: item?.rideId,
+            createdAt: Timestamp.fromDate(new Date())
+
+        })
+
+        //store ongoing ride in a state
+        dispatch(setOngoingRide({
+            ...item
+        }))
+
+      } catch (error:any) {
+        console.log("error",error.message)
+      }
 
     }
+    const onAccept = async (item: any) => {
+        viewTranslateX.value = withTiming(-400, { duration: 600 }, () => {
+            
+            runOnJS(createAnOngoingRideAndChatRoom)()
+            runOnJS(deleteRequestFromDb)()
+            runOnJS(decline)(item)
+        })
+        viewOpacity.value = withTiming(0, { duration: 600 })
+        navigation.navigate("AcceptedRideScreen")
+
+    }
+
+
 
 
     return (

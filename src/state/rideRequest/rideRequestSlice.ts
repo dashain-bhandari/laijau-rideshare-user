@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { act } from "react";
 
 interface RideRequest {
   setScreen: {
-
     tag: "destination" | "pickup"
   } | undefined,
   distanceInKm: number | undefined,
@@ -12,11 +12,14 @@ interface RideRequest {
   offeredPrice: number | undefined,
   vehicleType: string | undefined,
   rideId: string | undefined,
-  scheduled: boolean
+  scheduled: boolean,
+  autoAccept: boolean,
+  preferredVehicle: string | undefined
 
 }
 
 const initialState: RideRequest = {
+
   setScreen: undefined,
   distanceInKm: undefined,
   timeInMinutes: undefined,
@@ -25,14 +28,17 @@ const initialState: RideRequest = {
   offeredPrice: undefined,
   vehicleType: undefined,
   rideId: undefined,
-  scheduled: false
+  scheduled: false,
+  autoAccept: false,
+  preferredVehicle: undefined
 
 }
+
 const rideRequestSlice = createSlice({
+
   name: "rideRequest",
   initialState,
   reducers: {
-
     setDistanceInKm: (state, action: PayloadAction<number>) => {
       state.distanceInKm = action.payload;
     },
@@ -61,6 +67,10 @@ const rideRequestSlice = createSlice({
       state.rideId = action.payload;
     },
 
+    setPreferredVehicle: (state, action) => {
+      state.preferredVehicle = action.payload
+    },
+
     setSetScreen: (
       state,
       action: PayloadAction<{
@@ -73,6 +83,10 @@ const rideRequestSlice = createSlice({
 
     setScheduled: (state, action) => {
       state.scheduled = action.payload
+    },
+
+    setAutoAccept: (state, action) => {
+      state.autoAccept = action.payload
     }
 
 
@@ -80,4 +94,4 @@ const rideRequestSlice = createSlice({
 });
 export default rideRequestSlice.reducer;
 
-export const { setDistanceInKm, setInitialPrice, setMinimumPrice, setOfferedPrice, setSetScreen, setTimeInMinutes, setVehicleType, setRideId } = rideRequestSlice.actions
+export const { setDistanceInKm, setInitialPrice, setMinimumPrice, setOfferedPrice, setSetScreen, setTimeInMinutes, setVehicleType, setRideId, setAutoAccept,setPreferredVehicle } = rideRequestSlice.actions

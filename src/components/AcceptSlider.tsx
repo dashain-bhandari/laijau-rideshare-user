@@ -3,6 +3,9 @@ import React, { useEffect, useState } from 'react'
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 import AntDesign from '@expo/vector-icons/AntDesign';
 import colors from '../utils/data/colors';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../state/store';
+import { setAutoAccept } from '../state/rideRequest/rideRequestSlice';
 
 const AcceptSlider = () => {
     const translateX=useSharedValue(0);
@@ -13,20 +16,22 @@ const AcceptSlider = () => {
             }]
         }
     })
-    const [isAccepted,setIsAccepted]=useState(false);
+   
 
+    const {autoAccept}=useSelector((state:RootState)=>state.rideRequest)
+const dispatch=useDispatch();
     useEffect(()=>{
-if(isAccepted){
+if(autoAccept){
 translateX.value=withTiming(24)
 }
 else{
     translateX.value=withTiming(0)
 }
-    },[isAccepted])
+    },[autoAccept])
   return (
-    <View style={{backgroundColor:isAccepted?colors.primary[500]:"#ccc",width:"100%",height:34,borderRadius:20,justifyContent:"center",overflow:"hidden"}}>
+    <View style={{backgroundColor:autoAccept?colors.primary[400]:"#ccc",width:"100%",height:34,borderRadius:20,justifyContent:"center",overflow:"hidden"}}>
      <Animated.View style={[{marginHorizontal:5},animatedIconStyle]}>
-     <Pressable onPress={()=>setIsAccepted(!isAccepted)}>
+     <Pressable onPress={()=>dispatch(setAutoAccept(!autoAccept))}>
      <AntDesign name="checkcircle" size={26} color="#fff" />
      </Pressable>
      </Animated.View>

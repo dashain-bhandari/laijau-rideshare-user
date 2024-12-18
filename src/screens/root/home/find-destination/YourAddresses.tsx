@@ -5,10 +5,14 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import colors from '../../../../utils/data/colors';
 import { FindDestinationNavigation } from '../../../../types/types';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../state/store';
 
 const YourAddresses = () => {
 
+    const {user}=useSelector((state:RootState)=>state.user);
 
+   
     const navigation = useNavigation<FindDestinationNavigation>();
     const onViewAllPress = () => {
         navigation.navigate("AllAddressScreen")
@@ -26,7 +30,8 @@ const YourAddresses = () => {
                 </View>
                 <View style={styles.textContainer}>
                     <Text style={styles.heading}>Home</Text>
-                    <Text style={styles.address}> Set an address</Text>
+                    <Text style={styles.address}> {user?.savedAddresses?.find((i)=>i.addressLabel=="Home")?.addressName||"Set an address"}</Text>
+
                 </View>
             </View>
             {/* work */}
@@ -36,10 +41,26 @@ const YourAddresses = () => {
                         <MaterialIcons name="work" size={24} color="#555" />
                     </View>
                 </View>
+
                 <View style={styles.textContainer}>
                     <Text style={styles.heading}>Work</Text>
-                    <Text style={styles.address}>Set an address</Text>
+                    <Text style={styles.address}> {user?.savedAddresses?.find((i)=>i.addressLabel=="Work")?.addressName||"Set an address"}</Text>
                 </View>
+                
+            </View>
+              {/* college */}
+              <View style={styles.addressContainer}>
+                <View>
+                    <View style={styles.iconBackground}>
+                        <MaterialIcons name="work" size={24} color="#555" />
+                    </View>
+                </View>
+                
+                <View style={styles.textContainer}>
+                    <Text style={styles.heading}>College</Text>
+                    <Text style={styles.address}> {user?.savedAddresses?.find((i)=>i.addressLabel=="College")?.addressName??"Set an address"}</Text>
+                </View>
+                
             </View>
         </View>
     )
