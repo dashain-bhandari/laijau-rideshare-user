@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
     Dimensions,
     KeyboardAvoidingView,
+    Linking,
     Platform,
     Pressable,
     ScrollView,
@@ -27,6 +28,11 @@ const ChatScreen = () => {
     const [messages, setMessages] = useState<any[]>([])
     const headerHeight = useHeaderHeight();
     const { ongoingRide } = useSelector((state: RootState) => state.ongoingRide)
+
+    const onCallPress = () => {
+        Linking.openURL(`tel:${ongoingRide?.driver?.mobileNumber}`)
+    }
+
     //fetch messages
     useEffect(() => {
         const docRef = doc(database, "chats", ongoingRide?.rideId);
@@ -80,7 +86,7 @@ const ChatScreen = () => {
                         {ongoingRide?.driver?.fullName}
                     </Text>
                 </View>
-                <Pressable>
+                <Pressable onPress={onCallPress}>
                 <Ionicons name="call" size={24} color={colors.primary[600]} />
                 </Pressable>
             </SafeAreaView>
@@ -131,6 +137,8 @@ const ChatScreen = () => {
         </KeyboardAvoidingView>
     );
 };
+
+
 
 const styles = StyleSheet.create({
     container: {

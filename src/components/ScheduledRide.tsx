@@ -42,13 +42,11 @@ const ScheduledRide = () => {
                                     </View>
                                 </View>
                                 {/* button */}
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        navigation.navigate("AcceptedRideScreen")
-                                    }}
-                                    activeOpacity={0.5} style={{ backgroundColor: colors.secondary[400], padding: 10, borderRadius: 10, marginBottom: 10 }}>
-                                    <Text style={{ textAlign: "center", color: "#fff" }}>View Details</Text>
-                                </TouchableOpacity>
+                                <Pressable
+                                   
+                                   style={{ backgroundColor: colors.secondary[400], padding: 10, borderRadius: 10, marginBottom: 10 }}>
+                                    <Text style={{ textAlign: "center", color: "#fff" }}>{scheduledRide?.scheduledDate}</Text>
+                                </Pressable>
                             </View>
                         </View>
                     </Pressable>

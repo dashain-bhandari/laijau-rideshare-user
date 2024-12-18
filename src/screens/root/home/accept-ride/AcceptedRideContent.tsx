@@ -20,7 +20,7 @@ const AcceptedRideContent = () => {
     }
 
     const onCallPress = () => {
-        Linking.openURL(`tel:${ongoingRide?.driver?.vehicleRegistrationNumber}`)
+        Linking.openURL(`tel:${ongoingRide?.driver?.mobileNumber}`)
     }
 
     const [loading, setLoading] = useState(false)

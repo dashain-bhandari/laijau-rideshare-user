@@ -142,28 +142,30 @@ const ScheduleRideScreen = ({ navigation }: ScheduleRideScreenProps) => {
             status: 'pending',
             user,
             createdAt: serverTimestamp(),
-            scheduledDate:date,
+            scheduledDate:date.toLocaleString(),
             scheduled:true
             // nearestDrivers
 
         })
-        const trigger: TimestampTrigger = {
-            type: TriggerType.TIMESTAMP,
-            timestamp: (new Date(alertDate)).getTime() // fire at 11:10am (10 minutes before meeting)
-        };
-        // Create a trigger notification
-        await notifee.createTriggerNotification(
-            {
-                title: 'Ride reminder',
-                body: `Today at ${selectedTime}`,
+
+        // fort test purpose
+        // const trigger: TimestampTrigger = {
+        //     type: TriggerType.TIMESTAMP,
+        //     timestamp: (new Date(alertDate)).getTime() // fire at 11:10am (10 minutes before meeting)
+        // };
+        // // Create a trigger notification
+        // await notifee.createTriggerNotification(
+        //     {
+        //         title: 'Ride reminder',
+        //         body: `Today at ${selectedTime}`,
 
                
-                ios: {
-                    critical: true
-                }
-            },
-            trigger,
-        );
+        //         ios: {
+        //             critical: true
+        //         }
+        //     },
+        //     trigger,
+        // );
     } catch (error) {
         console.log("error", error)
     }
