@@ -42,7 +42,8 @@ const AcceptedRideContent = () => {
             try {
                 const docRef = doc(database, "rides", ongoingRide?.rideId);
                 deleteDoc(docRef)
-                navigation.navigate("HomeScreen")
+                dispatch(setOngoingRide(undefined));
+                navigation.popTo("TabsScreen")
             } catch (error: any) {
                 console.log("Error deleting ongoing ride: ", error?.message)
             }

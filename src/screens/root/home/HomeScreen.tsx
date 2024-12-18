@@ -21,6 +21,7 @@ import { setOngoingRide } from '../../../state/ongoingRide/ongoingRideSlice';
 import OngoingRide from '../../../components/OngoingRide';
 import { setScheduledRide } from '../../../state/scheduledRide/scheduledRideSlice';
 import ScheduledRide from '../../../components/ScheduledRide';
+import { TabsScreenProps } from '../../../types/types';
 
 const ios = Platform.OS === "ios";
 const Home = () => {
@@ -33,6 +34,7 @@ const Home = () => {
     const closeModal = () => {
         setModalOpen(false)
     }
+
 
     useEffect(() => {
         console.log("loc requetsed")

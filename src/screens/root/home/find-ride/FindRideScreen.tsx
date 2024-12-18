@@ -63,16 +63,19 @@ const FindRide = ({ navigation }: FindRideScreenProps) => {
                     where('userId', '==', user?.id!)))
 
             const unsubscribe = onSnapshot(q, (snapshot) => {
-                const newRiders = snapshot.docs.map(doc => ({
-                    id: doc.id,
-                    name: doc.data().driver.fullName,
-                    offeredPrice: doc.data().driverOffer,
-                    avatar: require("../../../../assets/images/car.png"),
-                    rating: 4.35,
-                    noOfRides: 432,
-                    timeInMinutes: 4,
-                    ...doc.data()
-                }));
+                const newRiders = snapshot.docs.map(doc => {
+console.log("offeredPrice,")
+                    return {
+                        id: doc.id,
+                        name: doc.data().driver.fullName,
+                        offeredPrice: doc.data().driverOffer,
+                        avatar: require("../../../../assets/images/car.png"),
+                        rating: 4.35,
+                        noOfRides: 432,
+                        timeInMinutes: 4,
+                        ...doc.data()
+                    }
+                });
 
                 console.log("newriders", newRiders)
                 setRiders(newRiders);

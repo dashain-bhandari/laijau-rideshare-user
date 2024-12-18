@@ -231,7 +231,7 @@ const RiderRequestItem = forwardRef(({ item, setRiders, riders }: any, ref) => {
                 {/* price */}
                 <View style={{ marginTop: 10, flexDirection: "row", alignItems: "center" }}>
                     <Text style={{ fontWeight: 600, fontSize: 26, color: "#444" }}>रु </Text>
-                    <Text style={{ fontWeight: 700, fontSize: 30 }}>{item.offeredPrice}</Text>
+                    <Text style={{ fontWeight: 700, fontSize: 30 }}>{item?.driverOffer??item.offeredPrice}</Text>
                 </View>
                 {/* Buttons */}
                 <View style={styles.buttonContainer}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     Dimensions,
     KeyboardAvoidingView,
@@ -22,8 +22,9 @@ import { database } from '../../../../../firebaseConfig';
 import { Alert } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { ChatScreenProps } from '../../../../types/types';
 
-const ChatScreen = () => {
+const ChatScreen = ({ navigation }: ChatScreenProps) => {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState<any[]>([])
     const headerHeight = useHeaderHeight();
@@ -48,6 +49,7 @@ const ChatScreen = () => {
     }, [])
 
 
+    const inputRef = useRef<TextInput>(null)
     const { user } = useSelector((state: RootState) => state.user)
     const sendMessage = async () => {
         if (!message) {
@@ -57,6 +59,8 @@ const ChatScreen = () => {
             let rideId = ongoingRide?.rideId;
             const docRef = doc(database, "chats", rideId);
             const messageRef = collection(docRef, "messages");
+
+            inputRef.current?.clear();
 
             const newDoc = await addDoc(messageRef, {
                 userId: user?.id,
@@ -78,16 +82,16 @@ const ChatScreen = () => {
         >
             {/* header */}
             <SafeAreaView style={{ flexDirection: "row", justifyContent: "space-between", backgroundColor: "#fff", borderBottomColor: "#eee", borderBottomWidth: 4, paddingHorizontal: 16, paddingTop: 10 }}>
-                <Pressable>
+                <Pressable onPress={() => { navigation.goBack() }}>
                     <AntDesign name="arrowleft" size={24} color="#555" />
                 </Pressable>
                 <View>
-                    <Text style={{fontWeight:"600",fontSize:18}}>
+                    <Text style={{ fontWeight: "600", fontSize: 18 }}>
                         {ongoingRide?.driver?.fullName}
                     </Text>
                 </View>
                 <Pressable onPress={onCallPress}>
-                <Ionicons name="call" size={24} color={colors.primary[600]} />
+                    <Ionicons name="call" size={24} color={colors.primary[600]} />
                 </Pressable>
             </SafeAreaView>
             <ScrollView
@@ -121,17 +125,23 @@ const ChatScreen = () => {
             <View style={styles.inputContainer}>
                 <View style={styles.textInputWrapper}>
                     <TextInput
+                        ref={inputRef}
                         style={styles.textInput}
                         placeholder='Type a message'
                         value={message}
-                        onChangeText={setMessage}
+                        onChangeText={(text) => {
+                            if (text) {
+                                setMessage(text);
+                            }
+                        }}
                         multiline={true}
                         numberOfLines={4}
                     />
                 </View>
 
                 <Pressable onPress={sendMessage} style={styles.microphoneButton}>
-                    <FontAwesome name="microphone" size={20} color="white" />
+
+                    <FontAwesome name="send" size={24} color="white" />
                 </Pressable >
             </View>
         </KeyboardAvoidingView>
@@ -164,7 +174,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginTop: 20,
         backgroundColor: "#fff",
-        padding: 10,
+        padding: 5,
         marginRight: 10,
     },
     textInput: {
@@ -174,9 +184,12 @@ const styles = StyleSheet.create({
     },
     microphoneButton: {
         backgroundColor: colors.secondary[300],
-        padding: 6,
+        padding: 10,
         marginTop: 20,
-        borderRadius: 20,
+        borderRadius: 40,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center"
     },
 });
 
