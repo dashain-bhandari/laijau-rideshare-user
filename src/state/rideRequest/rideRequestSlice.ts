@@ -13,8 +13,11 @@ interface RideRequest {
   vehicleType: string | undefined,
   rideId: string | undefined,
   scheduled: boolean,
+  bookedForFriend: boolean,
   autoAccept: boolean,
-  preferredVehicle: string | undefined
+  preferredVehicle: string | undefined,
+  friendName:string|undefined,
+  friendNumber:string|undefined
 
 }
 
@@ -26,11 +29,14 @@ const initialState: RideRequest = {
   initialPrice: undefined,
   minimumPrice: undefined,
   offeredPrice: undefined,
-  vehicleType: undefined,
+  vehicleType: "Bike",
   rideId: undefined,
   scheduled: false,
   autoAccept: false,
-  preferredVehicle: undefined
+  preferredVehicle: undefined,
+  bookedForFriend: false,
+  friendName:undefined,
+  friendNumber:undefined
 
 }
 
@@ -84,14 +90,18 @@ const rideRequestSlice = createSlice({
     setScheduled: (state, action) => {
       state.scheduled = action.payload
     },
-
     setAutoAccept: (state, action) => {
       state.autoAccept = action.payload
+    },
+    setBookedForFriend: (state, action) => {
+      state.bookedForFriend = action.payload
+    },
+    setFriendDetail:(state,action)=>{
+      state.friendName=action.payload.friendName
+      state.friendNumber=action.payload.friendNumber
     }
-
-
   },
 });
 export default rideRequestSlice.reducer;
 
-export const { setDistanceInKm, setInitialPrice, setMinimumPrice, setOfferedPrice, setSetScreen, setTimeInMinutes, setVehicleType, setRideId, setAutoAccept,setPreferredVehicle } = rideRequestSlice.actions
+export const { setDistanceInKm, setInitialPrice, setMinimumPrice, setOfferedPrice, setSetScreen, setTimeInMinutes, setVehicleType, setRideId, setAutoAccept, setPreferredVehicle, setBookedForFriend,setFriendDetail } = rideRequestSlice.actions

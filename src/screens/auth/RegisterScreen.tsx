@@ -7,18 +7,22 @@ import { TouchableHighlight } from 'react-native'
 import { AxiosInstance } from '../../config/AxiosInstance'
 import { useNavigation } from '@react-navigation/native'
 import colors from '../../utils/data/colors'
-import { RegisterScreenProps } from '../../types/types'
+import { HomeScreenNavigation, RegisterScreenProps } from '../../types/types'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useDispatch } from 'react-redux'
+import { setUser } from '../../state/user/userSlice'
 
 const { width, height } = Dimensions.get("screen")
 
 
 
-const RegisterScreen = ({ route, navigation }: RegisterScreenProps) => {
+const RegisterScreen = ({ navigation }: RegisterScreenProps) => {
   const [number, onChangeNumber] = React.useState('');
   const [code, onChangeCode] = React.useState('');
   const [loading, setLoading] = useState<boolean>(false);
 
+  const navigationHome=useNavigation<HomeScreenNavigation>()
+const dispatch=useDispatch()
   const sendVerificationCode = async () => {
     let phoneNumber = `${number}`
     setLoading(true)
@@ -29,7 +33,10 @@ const RegisterScreen = ({ route, navigation }: RegisterScreenProps) => {
 
       if (data && data.token) {
         await AsyncStorage.setItem("user-token", data.token)
-        navigation.navigate("TabsScreen");
+
+        let token=await AsyncStorage.getItem("user-token")
+      //  token &&  navigationHome.navigate("TabsScreen");
+       dispatch(setUser({ fullName: data.data.name, mobileNumber: data.data.phoneNumber, email: data?.data.email, id: data?.data.id, savedAddresses: data?.data.savedAddresses }))
 
       }
       else {

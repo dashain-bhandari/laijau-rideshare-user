@@ -8,6 +8,8 @@ import { AxiosInstance } from '../../config/AxiosInstance';
 import colors from '../../utils/data/colors';
 import { useNavigation } from '@react-navigation/native';
 import { OtpVerificationScreenProps } from '../../types/types';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../state/user/userSlice';
 
 const { width } = Dimensions.get("screen");
 
@@ -17,7 +19,7 @@ async function save(key: string, value: string) {
 const Otp = ({ route, navigation }: OtpVerificationScreenProps) => {
   const [otp, setOtp] = useState<number>()
   const { email } = route.params;
-
+  const dispatch = useDispatch();
   const verify = async () => {
     try {
       const { data } = await AxiosInstance.post("/authentication/verify-user-email", {
@@ -25,10 +27,12 @@ const Otp = ({ route, navigation }: OtpVerificationScreenProps) => {
         otp
       });
       console.log(data);
-      if (data && data.token) {
+      if (data && data.token && data.data) {
         save("user-token", data.token);
-        await AsyncStorage.setItem("user", JSON.stringify(data.user))
-        navigation.navigate("TabsScreen");
+        // await AsyncStorage.setItem("user", JSON.stringify(data.user))
+        dispatch(setUser({ fullName: data.data.name, mobileNumber: data.data.phoneNumber, email: data?.data.email, id: data?.data.id, savedAddresses: data?.data.savedAddresses }))
+
+
       }
       else {
         console.log("errorrrr")

@@ -25,7 +25,7 @@ import { TabsScreenProps } from '../../../types/types';
 
 const ios = Platform.OS === "ios";
 const Home = () => {
-    const navigation = useNavigation<any>()
+
     const socket = useContext(SocketContext)
     const { user } = useSelector((state: RootState) => state.user);
     //for requesting permission and opening modal if permission denied
@@ -136,12 +136,12 @@ const Home = () => {
                             <Text>Welcome back</Text>
                         </View>
                         {/* image avatar */}
-                        <Pressable 
-                        // onPress={() => navigation.push("/(root)/(screens)/user-profile")} 
-                        style={styles.userAvatar}>
+                        <Pressable
+                            // onPress={() => navigation.push("/(root)/(screens)/user-profile")} 
+                            style={styles.userAvatar}>
                             {/* <Image resizeMode='contain' style={{ width: 45, height: 45 }} source={require("../../../assets/images/user.jpg")}></Image> */}
-                            <View style={{backgroundColor:colors.primary[400],width:"100%",height:"100%",borderRadius:30,flexDirection:"row",justifyContent:"center",alignItems:"center"}}>
-                                <Text style={{color:"#fff",fontSize:30}}>{user?.fullName?.slice(0,1)}</Text>
+                            <View style={{ backgroundColor: colors.primary[400], width: "100%", height: "100%", borderRadius: 30, flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+                                <Text style={{ color: "#fff", fontSize: 30 }}>{user?.fullName?.slice(0, 1)}</Text>
                             </View>
                         </Pressable >
                     </View>
@@ -179,6 +179,9 @@ const Home = () => {
                         <Services />
                     </View>
 
+
+                    {/* book for a friend
+                    <BookForFriend/> */}
                     {/* ongoing ride */}
                     <OngoingRide />
                     {/* scheduled ride */}
@@ -201,7 +204,7 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(0,0,0,0.5)"
     },
 
-    userAvatar: { width: 45, height: 45, borderRadius: 40,  }
+    userAvatar: { width: 45, height: 45, borderRadius: 40, }
     ,
     modalView: {
         margin: 20,

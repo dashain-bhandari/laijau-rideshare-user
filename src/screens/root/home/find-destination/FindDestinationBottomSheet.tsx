@@ -2,7 +2,7 @@ import { Dimensions, Keyboard, Pressable, StyleSheet, Text, View } from 'react-n
 import React, { useEffect, useRef, useState } from 'react'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { Extrapolation, interpolate, runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-
+import AntDesign from '@expo/vector-icons/AntDesign';
 const { width, height } = Dimensions.get("screen");
 import { TouchableOpacity } from 'react-native';
 import PickUpTextInput from "./PickUpTextInput";
@@ -137,8 +137,17 @@ const FindDestinationBottomSheet = ({ navigation }: FindDestinationScreenProps) 
                     <Animated.View style={[inputViewStyle, { marginBottom: 10 }]}>
                         <PickUpTextInput />
                     </Animated.View>
-                    <View style={{ height: 38, marginBottom: 20 }}>
-                        <DestinationTextInput ref={destinationRef} />
+                    <View style={{ height: 38, marginBottom: 20, flexDirection: "row", alignItems: "center" }}>
+                        <View style={{ flexGrow: 1 }}>
+                            <DestinationTextInput ref={destinationRef} />
+                        </View>
+                        <Pressable 
+                        onPress={()=>{
+                            navigation.navigate("AddDestinationScreen")
+                        }}
+                        style={{ marginLeft: 10, padding: 6, borderWidth: 1, borderColor: "#ddd", borderRadius: 10 }}>
+                            <AntDesign name="plus" size={20} color="black" />
+                        </Pressable>
                     </View>
                     {/* setonmap */}
                     <Pressable style={[styles.setOnMapView, { marginBottom: 20 }]} onPress={onSetOnMapHandler} >
@@ -149,7 +158,7 @@ const FindDestinationBottomSheet = ({ navigation }: FindDestinationScreenProps) 
 
                     {/* address list */}
 
-                    <YourAddresses/>
+                    <YourAddresses />
                     {/* button */}
                     <TouchableOpacity
                         disabled={!isValid}

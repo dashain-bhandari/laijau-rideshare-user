@@ -8,13 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* laijauuserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* laijauuserTests.m */; };
-		0C80B921A6F3F58F76C31292 /* libPods-laijauuser.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-laijauuser.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		7699B88040F8A987B510C191 /* libPods-laijauuser-laijauuserTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-laijauuser-laijauuserTests.a */; };
+		618EFBC7BAE13938DDEEFCCC /* libPods-laijauuser.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9756EAE48BC6DE164F28846A /* libPods-laijauuser.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		C0A4C6E1C00B89768B3465B8 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		C71947ADDA33B6FDB247555D /* libPods-laijauuser-laijauuserTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A890C42082DFBEDDCBF68F29 /* libPods-laijauuser-laijauuserTests.a */; };
 		D6E9D6912C2CDEE8B0C0563C /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9DAD1AC7053954A6201127 /* ExpoModulesProvider.swift */; };
 		EA2F65FD580CEE024141F29D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DBB3C6D23AABB6E1BC2A41 /* ExpoModulesProvider.swift */; };
 /* End PBXBuildFile section */
@@ -40,13 +40,13 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = laijauuser/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = laijauuser/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = laijauuser/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		19F6CBCC0A4E27FBF8BF4A61 /* libPods-laijauuser-laijauuserTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-laijauuser-laijauuserTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3B4392A12AC88292D35C810B /* Pods-laijauuser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-laijauuser.debug.xcconfig"; path = "Target Support Files/Pods-laijauuser/Pods-laijauuser.debug.xcconfig"; sourceTree = "<group>"; };
-		5709B34CF0A7D63546082F79 /* Pods-laijauuser.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-laijauuser.release.xcconfig"; path = "Target Support Files/Pods-laijauuser/Pods-laijauuser.release.xcconfig"; sourceTree = "<group>"; };
-		5B7EB9410499542E8C5724F5 /* Pods-laijauuser-laijauuserTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-laijauuser-laijauuserTests.debug.xcconfig"; path = "Target Support Files/Pods-laijauuser-laijauuserTests/Pods-laijauuser-laijauuserTests.debug.xcconfig"; sourceTree = "<group>"; };
-		5DCACB8F33CDC322A6C60F78 /* libPods-laijauuser.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-laijauuser.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2EFD6500B6AA3183E6CBDD8C /* Pods-laijauuser-laijauuserTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-laijauuser-laijauuserTests.debug.xcconfig"; path = "Target Support Files/Pods-laijauuser-laijauuserTests/Pods-laijauuser-laijauuserTests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = laijauuser/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		89C6BE57DB24E9ADA2F236DE /* Pods-laijauuser-laijauuserTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-laijauuser-laijauuserTests.release.xcconfig"; path = "Target Support Files/Pods-laijauuser-laijauuserTests/Pods-laijauuser-laijauuserTests.release.xcconfig"; sourceTree = "<group>"; };
+		8D4E86DE41A149402D5A9C16 /* Pods-laijauuser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-laijauuser.debug.xcconfig"; path = "Target Support Files/Pods-laijauuser/Pods-laijauuser.debug.xcconfig"; sourceTree = "<group>"; };
+		9756EAE48BC6DE164F28846A /* libPods-laijauuser.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-laijauuser.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A890C42082DFBEDDCBF68F29 /* libPods-laijauuser-laijauuserTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-laijauuser-laijauuserTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AE3A2EC023572DD43A06F4FB /* Pods-laijauuser-laijauuserTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-laijauuser-laijauuserTests.release.xcconfig"; path = "Target Support Files/Pods-laijauuser-laijauuserTests/Pods-laijauuser-laijauuserTests.release.xcconfig"; sourceTree = "<group>"; };
+		D6F3459F3FBB7F9A05472D93 /* Pods-laijauuser.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-laijauuser.release.xcconfig"; path = "Target Support Files/Pods-laijauuser/Pods-laijauuser.release.xcconfig"; sourceTree = "<group>"; };
 		DA9DAD1AC7053954A6201127 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-laijauuser-laijauuserTests/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		E1DBB3C6D23AABB6E1BC2A41 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-laijauuser/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -57,7 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7699B88040F8A987B510C191 /* libPods-laijauuser-laijauuserTests.a in Frameworks */,
+				C71947ADDA33B6FDB247555D /* libPods-laijauuser-laijauuserTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,7 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C80B921A6F3F58F76C31292 /* libPods-laijauuser.a in Frameworks */,
+				618EFBC7BAE13938DDEEFCCC /* libPods-laijauuser.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,8 +107,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				5DCACB8F33CDC322A6C60F78 /* libPods-laijauuser.a */,
-				19F6CBCC0A4E27FBF8BF4A61 /* libPods-laijauuser-laijauuserTests.a */,
+				9756EAE48BC6DE164F28846A /* libPods-laijauuser.a */,
+				A890C42082DFBEDDCBF68F29 /* libPods-laijauuser-laijauuserTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -165,10 +165,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				3B4392A12AC88292D35C810B /* Pods-laijauuser.debug.xcconfig */,
-				5709B34CF0A7D63546082F79 /* Pods-laijauuser.release.xcconfig */,
-				5B7EB9410499542E8C5724F5 /* Pods-laijauuser-laijauuserTests.debug.xcconfig */,
-				89C6BE57DB24E9ADA2F236DE /* Pods-laijauuser-laijauuserTests.release.xcconfig */,
+				8D4E86DE41A149402D5A9C16 /* Pods-laijauuser.debug.xcconfig */,
+				D6F3459F3FBB7F9A05472D93 /* Pods-laijauuser.release.xcconfig */,
+				2EFD6500B6AA3183E6CBDD8C /* Pods-laijauuser-laijauuserTests.debug.xcconfig */,
+				AE3A2EC023572DD43A06F4FB /* Pods-laijauuser-laijauuserTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -188,13 +188,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "laijauuserTests" */;
 			buildPhases = (
-				A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */,
+				16F2EFDFBD77441A5AAB4091 /* [CP] Check Pods Manifest.lock */,
 				24833E76B1206AC3B8FA4E0E /* [Expo] Configure project */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				C59DA0FBD6956966B86A3779 /* [CP] Embed Pods Frameworks */,
-				F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */,
+				81EBBD5C09A2F5B8D677C81B /* [CP] Embed Pods Frameworks */,
+				3B52576F46A8BB410AF360D6 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -210,14 +210,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "laijauuser" */;
 			buildPhases = (
-				C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */,
+				B6A7C967D4FE8413120F6D32 /* [CP] Check Pods Manifest.lock */,
 				BB97735D283B2A06CDFE5F9C /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
-				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
+				B8A2BFA1A566AB0E03312AC9 /* [CP] Embed Pods Frameworks */,
+				88539C7309A2843980515783 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -301,43 +301,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-laijauuser/Pods-laijauuser-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-laijauuser/Pods-laijauuser-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-laijauuser/Pods-laijauuser-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		24833E76B1206AC3B8FA4E0E /* [Expo] Configure project */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "[Expo] Configure project";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-laijauuser-laijauuserTests/expo-configure-project.sh\"\n";
-		};
-		A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */ = {
+		16F2EFDFBD77441A5AAB4091 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -359,7 +323,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BB97735D283B2A06CDFE5F9C /* [Expo] Configure project */ = {
+		24833E76B1206AC3B8FA4E0E /* [Expo] Configure project */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -376,9 +340,60 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-laijauuser/expo-configure-project.sh\"\n";
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-laijauuser-laijauuserTests/expo-configure-project.sh\"\n";
 		};
-		C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */ = {
+		3B52576F46A8BB410AF360D6 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-laijauuser-laijauuserTests/Pods-laijauuser-laijauuserTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-laijauuser-laijauuserTests/Pods-laijauuser-laijauuserTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-laijauuser-laijauuserTests/Pods-laijauuser-laijauuserTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		81EBBD5C09A2F5B8D677C81B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-laijauuser-laijauuserTests/Pods-laijauuser-laijauuserTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-laijauuser-laijauuserTests/Pods-laijauuser-laijauuserTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-laijauuser-laijauuserTests/Pods-laijauuser-laijauuserTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		88539C7309A2843980515783 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-laijauuser/Pods-laijauuser-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-laijauuser/Pods-laijauuser-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-laijauuser/Pods-laijauuser-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B6A7C967D4FE8413120F6D32 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -400,56 +415,41 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C59DA0FBD6956966B86A3779 /* [CP] Embed Pods Frameworks */ = {
+		B8A2BFA1A566AB0E03312AC9 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-laijauuser-laijauuserTests/Pods-laijauuser-laijauuserTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-laijauuser/Pods-laijauuser-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-laijauuser-laijauuserTests/Pods-laijauuser-laijauuserTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-laijauuser/Pods-laijauuser-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-laijauuser-laijauuserTests/Pods-laijauuser-laijauuserTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-laijauuser/Pods-laijauuser-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E235C05ADACE081382539298 /* [CP] Copy Pods Resources */ = {
+		BB97735D283B2A06CDFE5F9C /* [Expo] Configure project */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-laijauuser/Pods-laijauuser-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Copy Pods Resources";
+			inputPaths = (
+			);
+			name = "[Expo] Configure project";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-laijauuser/Pods-laijauuser-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-laijauuser/Pods-laijauuser-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-laijauuser-laijauuserTests/Pods-laijauuser-laijauuserTests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-laijauuser-laijauuserTests/Pods-laijauuser-laijauuserTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-laijauuser-laijauuserTests/Pods-laijauuser-laijauuserTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-laijauuser/expo-configure-project.sh\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -486,7 +486,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-laijauuser-laijauuserTests.debug.xcconfig */;
+			baseConfigurationReference = 2EFD6500B6AA3183E6CBDD8C /* Pods-laijauuser-laijauuserTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -515,7 +515,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-laijauuser-laijauuserTests.release.xcconfig */;
+			baseConfigurationReference = AE3A2EC023572DD43A06F4FB /* Pods-laijauuser-laijauuserTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -541,7 +541,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-laijauuser.debug.xcconfig */;
+			baseConfigurationReference = 8D4E86DE41A149402D5A9C16 /* Pods-laijauuser.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -571,7 +571,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-laijauuser.release.xcconfig */;
+			baseConfigurationReference = D6F3459F3FBB7F9A05472D93 /* Pods-laijauuser.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
@@ -7,7 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { HomeScreenNavigation } from '../../../types/types';
 import { useDispatch, useSelector } from 'react-redux';
-import { setVehicleType } from '../../../state/rideRequest/rideRequestSlice';
+import { setBookedForFriend, setVehicleType } from '../../../state/rideRequest/rideRequestSlice';
 import { RootState } from '../../../state/store';
 const Services = () => {
   const navigation = useNavigation<HomeScreenNavigation>()
@@ -21,6 +21,7 @@ const Services = () => {
       }}>
         <Bike navigation={navigation} />
         <Car navigation={navigation} />
+        <ForFriend navigation={navigation} />
       </View>
     </View>
   )
@@ -93,7 +94,8 @@ const Car = ({ navigation }: { navigation: HomeScreenNavigation }) => {
     <TouchableOpacity style={{
       flexDirection: "column",
       justifyContent: "center",
-      alignItems: "center"
+      alignItems: "center",
+      marginRight: 20
     }}
       onPress={() => {
         if (ongoingRide) {
@@ -112,6 +114,41 @@ const Car = ({ navigation }: { navigation: HomeScreenNavigation }) => {
         <FontAwesome6 name="car-side" size={36} color={colors.primary[800]} />
       </LinearGradient>
       <Text style={{ marginTop: 5 }}>Car</Text>
+    </TouchableOpacity>
+  )
+}
+
+const ForFriend = ({ navigation }: { navigation: HomeScreenNavigation }) => {
+  const dispatch = useDispatch()
+  const { bookedForFriend } = useSelector((state: RootState) => state.bookedForFriend)
+  return (
+    <TouchableOpacity style={{
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center"
+    }}
+      onPress={() => {
+        // if (bookedForFriend) {
+        //   Alert.alert("You have already booked a ride.")
+        // } else {
+        //   // dispatch(setVehicleType("Car"))
+        //   navigation.navigate("FindDestinationScreen")
+        // }
+
+        dispatch(setBookedForFriend(true));
+        navigation.navigate("BookForFriendScreen")
+
+      }}
+    >
+      <LinearGradient
+        colors={[colors.primary[200], colors.primary[100]]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={styles.serviceView}>
+        <FontAwesome5 name="user-friends" size={36} color={colors.primary[800]} />
+
+      </LinearGradient>
+      <Text style={{ marginTop: 5 }}>Book for friend</Text>
     </TouchableOpacity>
   )
 }

@@ -17,13 +17,17 @@ import ScheduleRideScreen from '../screens/root/home/schedule-ride/ScheduleRideS
 import FindScheduledRideScreen from '../screens/root/home/find-scheduled-ride/FindScheduledRideScreen';
 import AcceptedRideScreen from '../screens/root/home/accept-ride/AcceptedRideScreen';
 import ChatScreen from '../screens/root/home/chat/ChatScreen';
+import BookForFriendScreen from '../screens/root/home/book-for-friend/BookForFriendScreen';
+import AddDestinationScreen from '../screens/root/home/add-destination/AddDestinationScreen';
+import AddStopScreen from '../screens/root/home/add-stop/AddStopScreen';
+import SetStopScreen from '../screens/root/home/set-stop/SetStopScreen';
 
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
 const AppStack = () => {
     return (
         <Stack.Navigator>
-             <Stack.Screen name='TabsScreen' component={TabLayout} options={{ headerShown: false, gestureEnabled: false }}></Stack.Screen>
+            <Stack.Screen name='TabsScreen' component={TabLayout} options={{ headerShown: false, gestureEnabled: false }}></Stack.Screen>
             <Stack.Screen name="HomeScreen" component={Home} options={{ headerShown: false }}></Stack.Screen>
             <Stack.Screen name='FindRideScreen' component={FindRide} options={{ headerShown: false }}></Stack.Screen>
             <Stack.Screen name="FilterRideScreen" component={ConfirmRide} options={{ headerShown: false }}></Stack.Screen>
@@ -38,6 +42,11 @@ const AppStack = () => {
             <Stack.Screen name="FindScheduledRideScreen" component={FindScheduledRideScreen} options={{ headerShown: false }}></Stack.Screen>
             <Stack.Screen name="AcceptedRideScreen" component={AcceptedRideScreen} options={{ headerShown: false }}></Stack.Screen>
             <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerShown: false }}></Stack.Screen>
+            <Stack.Screen name="BookForFriendScreen" component={BookForFriendScreen} options={{ headerShown: false }}></Stack.Screen>
+            <Stack.Screen name="AddDestinationScreen" component={AddDestinationScreen} options={{ headerShown: false }}></Stack.Screen>
+            <Stack.Screen name="AddStopScreen" component={AddStopScreen} options={{ headerShown: false }}></Stack.Screen>
+            <Stack.Screen name="SetStopScreen" component={SetStopScreen} options={{ headerShown: false }}></Stack.Screen>
+
         </Stack.Navigator>
     )
 }

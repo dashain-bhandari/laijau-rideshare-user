@@ -15,6 +15,11 @@ interface LocationState {
         destinationLatitude: number | undefined,
         destinationLongitude: number | undefined,
         destinationAddress: string | undefined
+    },
+    stopLocation: {
+        stopLatitude: number | undefined,
+        stopLongitude: number | undefined,
+        stopAddress: string | undefined
     }
 }
 const initialState: LocationState = {
@@ -27,7 +32,13 @@ const initialState: LocationState = {
         destinationLatitude: undefined,
         destinationLongitude: undefined,
         destinationAddress: undefined
+    },
+    stopLocation: {
+        stopLatitude: undefined,
+        stopLongitude: undefined,
+        stopAddress: undefined
     }
+
 }
 export const locationSlice = createSlice({
     name: "location",
@@ -40,9 +51,13 @@ export const locationSlice = createSlice({
         setDestinationLocation: (state, action) => {
             state.destinationLocation = action.payload
         }
+        ,
+        setStopLocation: (state, action) => {
+            state.stopLocation = action.payload
+        }
     }
 })
 
-export const { setUserLocation, setDestinationLocation } = locationSlice.actions
+export const { setUserLocation, setDestinationLocation, setStopLocation } = locationSlice.actions
 
 export default locationSlice.reducer;

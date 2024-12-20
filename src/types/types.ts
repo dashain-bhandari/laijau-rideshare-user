@@ -20,16 +20,16 @@ export type AppStackParamList = {
     AddNewAddressScreen: {
         tag: string,
         selectedIcon: string,
-        addressName?:string|undefined,
-        addressLatitude?:number|undefined,
-        addressLongitude?:number|undefined,
+        addressName?: string | undefined,
+        addressLatitude?: number | undefined,
+        addressLongitude?: number | undefined,
     },
     SetAnyAddressScreen: {
         tag: string,
         selectedIcon: string,
-        addressName?:string|undefined,
-        addressLatitude?:number|undefined,
-        addressLongitude?:number|undefined,
+        addressName?: string | undefined,
+        addressLatitude?: number | undefined,
+        addressLongitude?: number | undefined,
     },
     SaveNewAddressScreen: {
         tag: string,
@@ -44,10 +44,18 @@ export type AppStackParamList = {
     FindScheduledRideScreen: {
         date: Date,
         alertDate: Date,
-        selectedTime:string|null
+        selectedTime: string | null
     },
     AcceptedRideScreen: undefined,
-    ChatScreen: undefined
+    ChatScreen: undefined,
+    BookForFriendScreen: undefined,
+    AddDestinationScreen: undefined,
+    AddStopScreen: {
+        tag: string,
+    },
+    SetStopScreen: {
+        tag: string
+    }
 }
 
 export type AuthStackParamList = {
@@ -81,6 +89,11 @@ export type FindScheduledRideScreenProps = NativeStackScreenProps<AppStackParamL
 export type SetOnMapScreenProps = NativeStackScreenProps<AppStackParamList, 'SetOnMapScreen'>;
 export type AcceptedRideScreenProps = NativeStackScreenProps<AppStackParamList, 'AcceptedRideScreen'>;
 export type ChatScreenProps = NativeStackScreenProps<AppStackParamList, 'ChatScreen'>;
+export type BookForFriendScreenProps = NativeStackScreenProps<AppStackParamList, 'BookForFriendScreen'>;
+export type AddDestinationScreenProps = NativeStackScreenProps<AppStackParamList, 'AddDestinationScreen'>;
+export type SetStopScreenProps = NativeStackScreenProps<AppStackParamList, 'SetStopScreen'>;
+export type AddStopScreenProps = NativeStackScreenProps<AppStackParamList, 'AddStopScreen'>;
+
 
 
 export type HomeScreenNavigation = NativeStackNavigationProp<AppStackParamList, 'HomeScreen'>;

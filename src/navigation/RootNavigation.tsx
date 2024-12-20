@@ -67,7 +67,7 @@ function RootNavigator(): React.JSX.Element {
       >
         {loading ? (
           <Stack.Screen name="SplashScreen" component={SplashScreen} />
-        ) : token ? (
+        ) : user ? (
           <Stack.Screen name="AppStackScreen" component={AppStack} />
         ) : (
           <Stack.Screen name="AuthStackScreen" component={AuthStack} />
