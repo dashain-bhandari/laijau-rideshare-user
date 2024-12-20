@@ -21,11 +21,11 @@ import { setOngoingRide } from '../../../state/ongoingRide/ongoingRideSlice';
 import OngoingRide from '../../../components/OngoingRide';
 import { setScheduledRide } from '../../../state/scheduledRide/scheduledRideSlice';
 import ScheduledRide from '../../../components/ScheduledRide';
-import { TabsScreenProps } from '../../../types/types';
+import { HomeScreenNavigation, TabsScreenProps } from '../../../types/types';
 
 const ios = Platform.OS === "ios";
 const Home = () => {
-
+const navigation=useNavigation<HomeScreenNavigation>();
     const socket = useContext(SocketContext)
     const { user } = useSelector((state: RootState) => state.user);
     //for requesting permission and opening modal if permission denied
@@ -137,6 +137,7 @@ const Home = () => {
                         </View>
                         {/* image avatar */}
                         <Pressable
+                        onPress={()=>navigation.navigate("UserProfileScreen")}
                             // onPress={() => navigation.push("/(root)/(screens)/user-profile")} 
                             style={styles.userAvatar}>
                             {/* <Image resizeMode='contain' style={{ width: 45, height: 45 }} source={require("../../../assets/images/user.jpg")}></Image> */}
