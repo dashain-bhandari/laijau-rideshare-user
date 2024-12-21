@@ -1,4 +1,7 @@
 {
   "name": "laijauuser",
-  "displayName": "laijauuser"
+  "displayName": "laijauuser",
+  "plugins": [
+    "expo-secure-store"
+  ]
 }

@@ -8,7 +8,7 @@ interface Address {
 }
 interface UserState {
     user: {
-        id: number,
+        id: string,
         fullName: string,
         mobileNumber: string,
         email: string,

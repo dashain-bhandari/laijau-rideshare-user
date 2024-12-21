@@ -12,8 +12,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useTranslation } from 'react-i18next'
+import * as SecureStore from "expo-secure-store";
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import colors from '../../utils/data/colors';
 
 const SettingsModalContent = ({modalVisible,setModalVisible}:{
@@ -25,7 +25,7 @@ const SettingsModalContent = ({modalVisible,setModalVisible}:{
     const onChangeLanguage = async (lang: string) => {
         if (lang != language) {
           
-            await AsyncStorage.setItem("language",lang)
+            await SecureStore.setItemAsync("language",lang)
             setLanguage(lang);
             i18n.changeLanguage(lang)
             // Updates.reloadAsync()
@@ -33,7 +33,7 @@ const SettingsModalContent = ({modalVisible,setModalVisible}:{
     }
     useEffect(() => {
         const loadLanguage = async () => {
-            let lang = await AsyncStorage.getItem("language")
+            let lang = await SecureStore.getItemAsync("language")
             lang && setLanguage(lang);
         }
         loadLanguage()

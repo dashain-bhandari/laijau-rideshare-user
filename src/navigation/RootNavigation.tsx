@@ -4,7 +4,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useContext, useEffect, useState } from 'react';
 import { Provider, useDispatch, useSelector } from "react-redux"
 import { RootState, store } from '../state/store';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AxiosInstance } from '../config/AxiosInstance';
 import { setUser } from '../state/user/userSlice';
 import { RootStackParamList } from '../types/types';
@@ -14,7 +13,7 @@ import colors from '../utils/data/colors';
 import AppStack from './AppStack';
 import AuthStack from './AuthStack';
 import SplashScreen from '../screens/SplashScreen';
-
+import * as SecureStore from "expo-secure-store";
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
 function RootNavigator(): React.JSX.Element {
@@ -31,7 +30,7 @@ function RootNavigator(): React.JSX.Element {
     const getUser = async () => {
       try {
         console.log("user", user)
-        const token = await AsyncStorage.getItem("user-token");
+      let token = await SecureStore.getItemAsync("user-token")
         console.log(token)
         setToken(token)
         if (token) {
@@ -45,6 +44,7 @@ function RootNavigator(): React.JSX.Element {
         setLoading(false)
       } catch (error: any) {
         console.log(error.message)
+     
         setLoading(false)
       }
     }

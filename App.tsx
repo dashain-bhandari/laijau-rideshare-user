@@ -33,7 +33,6 @@ import Details from './src/screens/auth/EnterDetails';
 import TabLayout from './src/screens/tabs/TabLayout';
 import { Provider, useDispatch, useSelector } from "react-redux"
 import { RootState, store } from './src/state/store';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AxiosInstance } from './src/config/AxiosInstance';
 import { setUser } from './src/state/user/userSlice';
 import RootNavigator from './src/navigation/RootNavigation';

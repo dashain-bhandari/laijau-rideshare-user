@@ -8,10 +8,9 @@ import { AxiosInstance } from '../../config/AxiosInstance'
 import { useNavigation } from '@react-navigation/native'
 import colors from '../../utils/data/colors'
 import { HomeScreenNavigation, RegisterScreenProps } from '../../types/types'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../../state/user/userSlice'
-
+import * as SecureStore from "expo-secure-store";
 const { width, height } = Dimensions.get("screen")
 
 
@@ -21,8 +20,8 @@ const RegisterScreen = ({ navigation }: RegisterScreenProps) => {
   const [code, onChangeCode] = React.useState('');
   const [loading, setLoading] = useState<boolean>(false);
 
-  const navigationHome=useNavigation<HomeScreenNavigation>()
-const dispatch=useDispatch()
+  const navigationHome = useNavigation<HomeScreenNavigation>()
+  const dispatch = useDispatch()
   const sendVerificationCode = async () => {
     let phoneNumber = `${number}`
     setLoading(true)
@@ -32,11 +31,11 @@ const dispatch=useDispatch()
       console.log(data);
 
       if (data && data.token) {
-        await AsyncStorage.setItem("user-token", data.token)
-
-        let token=await AsyncStorage.getItem("user-token")
-      //  token &&  navigationHome.navigate("TabsScreen");
-       dispatch(setUser({ fullName: data.data.name, mobileNumber: data.data.phoneNumber, email: data?.data.email, id: data?.data.id, savedAddresses: data?.data.savedAddresses }))
+        // await AsyncStorage.setItem("user-token", data.token)
+        SecureStore.setItemAsync("user-token", data.token)
+        let token = await SecureStore.getItemAsync("user-token")
+        //  token &&  navigationHome.navigate("TabsScreen");
+        dispatch(setUser({ fullName: data.data.name, mobileNumber: data.data.phoneNumber, email: data?.data.email, id: data?.data.id, savedAddresses: data?.data.savedAddresses }))
 
       }
       else {
@@ -45,6 +44,7 @@ const dispatch=useDispatch()
       }
       setLoading(false)
     } catch (error) {
+    
       console.log(error);
       setLoading(false);
     }

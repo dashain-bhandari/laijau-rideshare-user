@@ -3,19 +3,16 @@ import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native'
 import { ScrollView } from 'react-native'
 import { OtpInput } from "react-native-otp-entry";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AxiosInstance } from '../../config/AxiosInstance';
 import colors from '../../utils/data/colors';
 import { useNavigation } from '@react-navigation/native';
 import { OtpVerificationScreenProps } from '../../types/types';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../state/user/userSlice';
-
+import * as SecureStore from "expo-secure-store";
 const { width } = Dimensions.get("screen");
 
-async function save(key: string, value: string) {
-  await AsyncStorage.setItem(key, value);
-}
+
 const Otp = ({ route, navigation }: OtpVerificationScreenProps) => {
   const [otp, setOtp] = useState<number>()
   const { email } = route.params;
@@ -28,7 +25,7 @@ const Otp = ({ route, navigation }: OtpVerificationScreenProps) => {
       });
       console.log(data);
       if (data && data.token && data.data) {
-        save("user-token", data.token);
+        SecureStore.setItemAsync("user-token", data.token)
         // await AsyncStorage.setItem("user", JSON.stringify(data.user))
         dispatch(setUser({ fullName: data.data.name, mobileNumber: data.data.phoneNumber, email: data?.data.email, id: data?.data.id, savedAddresses: data?.data.savedAddresses }))
 
