@@ -1,8 +1,8 @@
-import { Dimensions, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import { Dimensions, Platform, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useRef, useState } from 'react'
 import { AllAddressScreenProps, HomeScreenNavigation } from '../../../../types/types'
 import { FlatList } from 'react-native'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../../state/store'
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo';
@@ -11,6 +11,11 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native'
 import colors from '../../../../utils/data/colors'
 import Animated from 'react-native-reanimated'
+import { MenuView, MenuComponentRef } from '@react-native-menu/menu';
+import { AxiosInstance } from '../../../../config/AxiosInstance'
+import { setUser } from '../../../../state/user/userSlice'
+import { setDestinationLocation } from '../../../../state/location/locationSlice'
+
 
 const { width, height } = Dimensions.get("screen");
 
@@ -32,9 +37,11 @@ const AllAddressScreen = ({ navigation }: AllAddressScreenProps) => {
                     <View>
                         <Text style={{ fontSize: 16, color: "#333", fontWeight: "500" }}>Your addresses</Text>
                     </View>
-                    <Pressable onPress={() => { setEdit(true) }}>
+                    <Pressable onPress={() => { setEdit(!edit) }}>
                         <Text>
-                            Edit
+                            {
+                                edit ? "Done" : "Edit"
+                            }
                         </Text>
                     </Pressable>
                 </View>
@@ -45,7 +52,7 @@ const AllAddressScreen = ({ navigation }: AllAddressScreenProps) => {
                             , borderColor: "#eee"
                         }}></View>}
                         data={user?.savedAddresses}
-                        renderItem={({ item }) => <AddressItem item={item} />}
+                        renderItem={({ item }) => <AddressItem item={item} edit={edit} />}
                     />
                 </View>
                 <TouchableOpacity
@@ -150,17 +157,61 @@ const styles = StyleSheet.create({
     }
 })
 
-const AddressItem = ({ item }: { item: any }) => {
+const AddressItem = ({ item, edit }: { item: any, edit: boolean }) => {
     const navigation = useNavigation<HomeScreenNavigation>()
-    return (<>
-        <TouchableOpacity
-            onPress={() => navigation.navigate("AddNewAddressScreen", {
+    const menuRef = useRef<MenuComponentRef>(null);
+    const { user } = useSelector((state: RootState) => state.user)
+    const dispatch = useDispatch();
+    const handlePressAction = async (id: string) => {
+        if (id == "delete") {
+            if (item?.addressLabel && user?.id) {
+                try {
+                    const { data } = await AxiosInstance.delete(`/user/delete-saved-address/${user?.id}/${item?.addressLabel}`);
+                    console.log(data?.data);
+                    if (data?.data) {
+                        dispatch(setUser(data.data))
+                    }
+                } catch (error: any) {
+                    console.log(error.message)
+                }
+            }
+        }
+        if (id == "edit") {
+            navigation.navigate("AddNewAddressScreen", {
                 tag: "editAddress",
                 selectedIcon: item.addressLabel,
-                addressName:item?.addressName,
-                addressLatitude:item?.addressLatitude,
-                addressLongitude:item?.addressLongitude
-            })}
+                addressName: item?.addressName,
+                addressLatitude: item?.addressLatitude,
+                addressLongitude: item?.addressLongitude
+            })
+        }
+    }
+    return (<>
+        <TouchableOpacity
+            onPress={
+
+                () => {
+
+                    if (!edit) {
+                        // navigation.navigate("AddNewAddressScreen", {
+                        //     tag: "editAddress",
+                        //     selectedIcon: item.addressLabel,
+                        //     addressName: item?.addressName,
+                        //     addressLatitude: item?.addressLatitude,
+                        //     addressLongitude: item?.addressLongitude
+                        // })
+                        dispatch(setDestinationLocation(
+                            {
+                                destinationLatitude: item?.addressLatitude,
+                                destinationLongitude: item?.addressLongitude,
+                                destinationAddress: item?.addressName
+                            }
+                        ))
+                        navigation.popTo("FindDestinationScreen");
+                    }
+                }
+
+            }
             activeOpacity={0.7} style={styles.itemContainer}>
             <View style={styles.itemIcon}>
                 {
@@ -190,9 +241,51 @@ const AddressItem = ({ item }: { item: any }) => {
                         </Text>
                     </View>
                 </View>
-                <View>
-                    <Entypo name="chevron-small-right" size={24} color="#777" />
-                </View>
+                <Pressable onPress={() => {
+                    if (edit) {
+                        console.log(edit)
+
+                    }
+                }}>
+                    {!edit && (<Entypo name="chevron-small-right" size={24} color="#777" />)}
+
+
+
+                </Pressable>
+                {
+                    edit && (
+                        <MenuView
+                            ref={menuRef}
+
+                            onPressAction={({ nativeEvent }) => {
+                                //   console.warn(JSON.stringify(nativeEvent));
+                                handlePressAction(nativeEvent.event);
+                            }}
+                            actions={[
+                                {
+                                    id: 'edit',
+                                    title: 'Edit',
+                                    titleColor: '#2367A2',
+
+
+                                },
+
+                                {
+                                    id: 'delete',
+                                    title: 'Delete',
+                                    attributes: {
+                                        destructive: true,
+                                    },
+
+                                },
+                            ]}
+                            shouldOpenOnLongPress={false}
+                        >
+                            <Entypo name="dots-three-vertical" size={24} color="#777" />
+                        </MenuView>
+                    )
+                }
+
             </View>
         </TouchableOpacity>
     </>)

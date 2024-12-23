@@ -11,6 +11,7 @@ import { fallBackAddress } from '../../../../constants/fallBackAddress'
 import * as Location from "expo-location"
 import { calculateDistance, checkValidDestination } from '../../../../helpers/distance'
 import { AxiosInstance } from '../../../../config/AxiosInstance'
+import BackButton from '../../../../components/BackButton'
 
 
 const SetAnyAddressScreen = ({ navigation, route }: SetAnyAddressScreenProps) => {
@@ -77,6 +78,7 @@ const SetAnyAddressScreen = ({ navigation, route }: SetAnyAddressScreenProps) =>
 
     return (
         <View style={styles.container}>
+            <BackButton onPressHandler={()=>navigation.goBack()}/>
             <View style={styles.mapContainer}>
                 <MapView
                     mapType='mutedStandard'

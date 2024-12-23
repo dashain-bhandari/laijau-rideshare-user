@@ -37,6 +37,7 @@ import { AxiosInstance } from './src/config/AxiosInstance';
 import { setUser } from './src/state/user/userSlice';
 import RootNavigator from './src/navigation/RootNavigation';
 import { SocketContextProvider } from './src/context/SocketContext';
+import { MenuProvider } from 'react-native-popup-menu';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -52,7 +53,9 @@ function App(): React.JSX.Element {
   return (
     <SocketContextProvider>
       <Provider store={store}>
+       
         <RootNavigator />
+       
       </Provider>
     </SocketContextProvider>
 

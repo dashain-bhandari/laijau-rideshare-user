@@ -9,7 +9,7 @@ import Entypo from '@expo/vector-icons/Entypo';
 import axios from 'axios';
 import colors from '../../../../utils/data/colors';
 import { useDispatch, useSelector } from 'react-redux';
-import { setFriendDetail, setInitialPrice, setMinimumPrice } from '../../../../state/rideRequest/rideRequestSlice';
+import { setDistanceInKm, setFriendDetail, setInitialPrice, setMinimumPrice, setOfferedPrice } from '../../../../state/rideRequest/rideRequestSlice';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { AddDestinationScreenProps } from '../../../../types/types';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -66,20 +66,16 @@ const AddDestinationScreen = ({ navigation }: AddDestinationScreenProps) => {
 
     }, [destinationLocation, stopLocation])
 
-    const onConfirm = () => {
+    const onConfirm = async () => {
 
-        // if(userLocation.userLatitude && userLocation.userLongitude){
-        //     navigation.navigate("FilterRideScreen")
-        // }
-        // else{
-        //     navigation.navigate("FindDestinationScreen")
-        // }
         if ((stopLocation.stopLongitude && stopLocation.stopLatitude) && !(destinationLocation.destinationLongitude && destinationLocation.destinationLatitude)) {
 
             let distance = calculateDistance({ lat1: userLocation?.userLatitude!, lat2: stopLocation?.stopLatitude!, long1: userLocation.userLongitude!, long2: stopLocation.stopLongitude! })
-            let { initialPrice, minimumPrice } = calculatePricings({ distance, vehcileType: vehicleType! })
+            let { initialPrice, minimumPrice } = await calculatePricings({ distance, vehicleType: vehicleType!, coordinates: { latitude: userLocation?.userLatitude!, longitude: userLocation?.userLongitude! } })
+           dispatch(setDistanceInKm(distance))
             dispatch(setInitialPrice(initialPrice))
             dispatch(setMinimumPrice(minimumPrice))
+            dispatch(setOfferedPrice(initialPrice));
             //set destination with stop
             setTimeout(() => {
                 dispatch(setDestinationLocation({
@@ -92,7 +88,7 @@ const AddDestinationScreen = ({ navigation }: AddDestinationScreenProps) => {
         else {
             let distance1 = calculateDistance({ lat1: userLocation?.userLatitude!, lat2: stopLocation?.stopLatitude!, long1: userLocation.userLongitude!, long2: stopLocation.stopLongitude! })
             let distance2 = calculateDistance({ lat1: stopLocation?.stopLatitude!, lat2: destinationLocation?.destinationLatitude!, long1: stopLocation.stopLongitude!, long2: destinationLocation.destinationLongitude! })
-            let { initialPrice, minimumPrice } = calculatePricings({ distance: distance1 + distance2, vehcileType: vehicleType! })
+            let { initialPrice, minimumPrice } = await calculatePricings({ distance: distance1 + distance2, vehicleType: vehicleType!, coordinates: { latitude: userLocation?.userLatitude!, longitude: userLocation?.userLongitude! } })
             dispatch(setInitialPrice(initialPrice))
             dispatch(setMinimumPrice(minimumPrice))
         }
@@ -115,12 +111,12 @@ const AddDestinationScreen = ({ navigation }: AddDestinationScreenProps) => {
                         </View>
                         <Pressable
                             onPress={onPickupPress}
-                            style={{flexDirection: "row", justifyContent: "center", alignItems: "center",paddingLeft: 10, marginTop: 20, borderRadius: 10,borderWidth:1,borderColor:"#ddd" }}>
+                            style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", paddingLeft: 10, marginTop: 20, borderRadius: 10, borderWidth: 1, borderColor: "#ddd" }}>
                             <MaterialCommunityIcons name="human-handsup" size={24} color={colors.primary[500]} />
                             <TextInput
-                             style={{ flexGrow: 1, paddingHorizontal: 10, paddingVertical: 10, borderRadius: 10 }}
+                                style={{ flexGrow: 1, paddingHorizontal: 10, paddingVertical: 10, borderRadius: 10 }}
                                 pointerEvents='none'
-                                placeholderTextColor={"#666"} placeholder='Pick up' 
+                                placeholderTextColor={"#666"} placeholder='Pick up'
                                 value={userLocation?.userAddress}
 
                             ></TextInput>
@@ -130,28 +126,28 @@ const AddDestinationScreen = ({ navigation }: AddDestinationScreenProps) => {
                         <Pressable
                             onPress={onStopPress}
 
-                            style={{flexDirection: "row", justifyContent: "center", alignItems: "center",paddingLeft: 10, marginTop: 10, borderRadius: 10,borderWidth:1,borderColor:"#ddd" }}>
-                               
-                           
-                           
-                           <MaterialCommunityIcons name="numeric-1-circle" size={24} color={colors.primary[500]} />
-                         
+                            style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", paddingLeft: 10, marginTop: 10, borderRadius: 10, borderWidth: 1, borderColor: "#ddd" }}>
+
+
+
+                            <MaterialCommunityIcons name="numeric-1-circle" size={24} color={colors.primary[500]} />
+
                             <TextInput
                                 editable={false}
                                 pointerEvents='none'
-                                placeholderTextColor={"#666"} placeholder='Search stop' 
+                                placeholderTextColor={"#666"} placeholder='Search stop'
                                 style={{ flexGrow: 1, paddingHorizontal: 10, paddingVertical: 10, borderRadius: 10 }}
                                 value={stopLocation?.stopAddress}
 
                             ></TextInput>
-                     
+
 
                         </Pressable>
 
                         <Pressable
                             onPress={onDestinationPress}
-                            style={{flexDirection: "row", justifyContent: "center", alignItems: "center",paddingLeft: 10, marginTop: 10, borderRadius: 10,borderWidth:1,borderColor:"#ddd" }}>
-                            
+                            style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", paddingLeft: 10, marginTop: 10, borderRadius: 10, borderWidth: 1, borderColor: "#ddd" }}>
+
                             <Entypo name="location-pin" size={24} color={colors.primary[500]} />
                             <TextInput
                                 pointerEvents='none'

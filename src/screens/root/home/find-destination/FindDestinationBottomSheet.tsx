@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../state/store';
 import { calculateDistance } from '../../../../helpers/distance';
 import { calculatePricings } from '../../../../helpers/price';
-import { setInitialPrice, setMinimumPrice } from '../../../../state/rideRequest/rideRequestSlice';
+import { setDistanceInKm, setInitialPrice, setMinimumPrice, setOfferedPrice } from '../../../../state/rideRequest/rideRequestSlice';
 
 const FindDestinationBottomSheet = ({ navigation }: FindDestinationScreenProps) => {
     const translateY = useSharedValue(0);
@@ -106,12 +106,15 @@ const FindDestinationBottomSheet = ({ navigation }: FindDestinationScreenProps) 
     const [isValid, setIsValid] = useState(false);
     const { userLocation, destinationLocation } = useSelector((state: RootState) => state.location)
     const { vehicleType } = useSelector((state: RootState) => state.rideRequest)
-    const onConfirmDestination = () => {
+    const onConfirmDestination = async() => {
         //set prices
         let distance = calculateDistance({ lat1: userLocation?.userLatitude!, lat2: destinationLocation?.destinationLatitude!, long1: userLocation.userLongitude!, long2: destinationLocation.destinationLongitude! })
-        let { initialPrice, minimumPrice } = calculatePricings({ distance, vehcileType: vehicleType! })
-        dispatch(setInitialPrice(initialPrice))
-        dispatch(setMinimumPrice(minimumPrice))
+        let { initialPrice, minimumPrice } = await calculatePricings({ distance, vehicleType: vehicleType!,coordinates:{latitude:userLocation?.userLatitude!,longitude:userLocation?.userLongitude!} })
+       console.log("initia;",initialPrice)
+          dispatch(setDistanceInKm(distance))
+        dispatch(setInitialPrice(initialPrice));
+        dispatch(setOfferedPrice(initialPrice));
+        dispatch(setMinimumPrice(minimumPrice));
         navigation.navigate("FilterRideScreen")
     }
 

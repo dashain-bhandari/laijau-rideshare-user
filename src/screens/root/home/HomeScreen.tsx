@@ -1,4 +1,4 @@
-import { Linking, Modal, Platform, StyleSheet, Text, View, Image, AppState, Pressable } from 'react-native'
+import { Linking, Modal, Platform, StyleSheet, Text, View, Image, AppState, Pressable, Alert } from 'react-native'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -22,10 +22,16 @@ import OngoingRide from '../../../components/OngoingRide';
 import { setScheduledRide } from '../../../state/scheduledRide/scheduledRideSlice';
 import ScheduledRide from '../../../components/ScheduledRide';
 import { HomeScreenNavigation, TabsScreenProps } from '../../../types/types';
+import CustomBottomSheet from '../../../components/CustomBottomSheet';
+import BottomModal from '../../../components/BottomModal';
+import StarRating from 'react-native-star-rating-widget';
+import { Rating, AirbnbRating } from 'react-native-ratings';
+import { TextInput } from 'react-native';
+import { AxiosInstance } from '../../../config/AxiosInstance';
 
 const ios = Platform.OS === "ios";
 const Home = () => {
-const navigation=useNavigation<HomeScreenNavigation>();
+    const navigation = useNavigation<HomeScreenNavigation>();
     const socket = useContext(SocketContext)
     const { user } = useSelector((state: RootState) => state.user);
     //for requesting permission and opening modal if permission denied
@@ -119,14 +125,29 @@ const navigation=useNavigation<HomeScreenNavigation>();
                 return () => unsubscribe();
             }
         } catch (error: any) {
-            console.log("Error fetching user's ongoing ride", error.message)
+            console.log("Error fetching user's ongoing ride", error.message);
         }
     }
 
+    const [visible, setVisible] = useState(false)
+    const [rating, setRating] = useState(0);
+    const [review, setReview] = useState("");
+
+    const onSubmit = async () => {
+        try {
+            const { data } = await AxiosInstance.post("/review", {
+                rating, review,
+            })
+        } catch (error: any) {
+            console.log("error", error.message)
+        }
+    }
     return (
 
         <View style={{ flex: 1, backgroundColor: "#fff" }}>
+
             <SafeAreaView  >
+
 
                 <View style={{ paddingHorizontal: 16 }}>
                     {/* header */}
@@ -137,7 +158,7 @@ const navigation=useNavigation<HomeScreenNavigation>();
                         </View>
                         {/* image avatar */}
                         <Pressable
-                        onPress={()=>navigation.navigate("UserProfileScreen")}
+                            onPress={() => navigation.navigate("UserProfileScreen")}
                             // onPress={() => navigation.push("/(root)/(screens)/user-profile")} 
                             style={styles.userAvatar}>
                             {/* <Image resizeMode='contain' style={{ width: 45, height: 45 }} source={require("../../../assets/images/user.jpg")}></Image> */}
@@ -171,6 +192,34 @@ const navigation=useNavigation<HomeScreenNavigation>();
                                 </View>
                             </View>
                         </Modal>
+
+
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={visible}
+                            onRequestClose={() => {
+
+                                setVisible(!visible);
+                            }}>
+                            <View style={styles.centeredView}>
+                                <View style={styles.modalView}>
+                                    <Text style={{
+                                        fontWeight: "500", fontSize: 20, color: "#333"
+                                    }}>How was your ride?</Text>
+                                    <Rating
+                                        showRating
+                                        ratingTextColor={"#555"}
+                                        onFinishRating={(rate: number) => setRating(rate)}
+                                        style={{ paddingVertical: 10 }}
+                                    />
+                                    <TextInput placeholder='type here' value={review} onChangeText={(text) => setReview(text)} ></TextInput>
+                                    <TouchableOpacity style={{ backgroundColor: "#eee", padding: 10, borderRadius: 10 }}>
+                                        <Text style={{ color: "#555" }}>Submit</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </Modal>
                     </View>
                     <View style={{ marginTop: 20 }}>
                         <DestinationInput />
@@ -188,7 +237,10 @@ const navigation=useNavigation<HomeScreenNavigation>();
                     {/* scheduled ride */}
                     <ScheduledRide />
                 </ScrollView>
+
             </SafeAreaView>
+
+
         </View>
 
     )
@@ -221,5 +273,21 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
+    },
+
+    buttonOpen: {
+        backgroundColor: '#F194FF',
+    },
+    buttonClose: {
+        backgroundColor: '#2196F3',
+    },
+    textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: 'center',
     },
 })

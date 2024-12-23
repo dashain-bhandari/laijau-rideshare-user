@@ -1,9 +1,9 @@
-import { Dimensions, StyleSheet, Text, TextInputBase, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Dimensions, StyleSheet, Text, TextInputBase, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../state/store';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -14,6 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import { HomeScreenNavigation } from '../types/types';
 import { AxiosInstance } from '../config/AxiosInstance';
 import CustomBottomSheet from './CustomBottomSheet';
+import { setUser } from '../state/user/userSlice';
 
 interface SaveNewAddressProps {
     tag: string,
@@ -88,8 +89,8 @@ const SaveNewAddress = ({ tag, address, label, selectedIcon }: SaveNewAddressPro
     const [displayAlert, setDisplayAlert] = useState(false);
     const [alertResponse, setAlertResponse] = useState(false);
 
-
-
+    const dispatch = useDispatch();
+    const [submitting, setSubmitting] = useState(false);
     const onSavePress = async () => {
         try {
             if (user) {
@@ -97,6 +98,7 @@ const SaveNewAddress = ({ tag, address, label, selectedIcon }: SaveNewAddressPro
                     setDisplayAlert(true)
                 }
                 else {
+                    setSubmitting(true);
                     console.log("address", address)
                     console.log("address name", addressName);
                     console.log("address label", addressLabel);
@@ -110,12 +112,15 @@ const SaveNewAddress = ({ tag, address, label, selectedIcon }: SaveNewAddressPro
                     })
                     console.log("data", data.data)
                     if (data.data) {
+                        dispatch(setUser(data.data));
                         navigation.pop(4);
                     }
+                    setSubmitting(false);
                 }
             }
         } catch (error: any) {
             console.log(error.message)
+            setSubmitting(false);
         }
     }
 
@@ -125,7 +130,7 @@ const SaveNewAddress = ({ tag, address, label, selectedIcon }: SaveNewAddressPro
         try {
 
             if (user) {
-
+                setSubmitting(true);
                 console.log("address", address)
                 console.log("address name", addressName);
                 console.log("address label", addressLabel);
@@ -140,13 +145,15 @@ const SaveNewAddress = ({ tag, address, label, selectedIcon }: SaveNewAddressPro
 
                 console.log("data", data.data)
                 if (data.data) {
+                    dispatch(setUser(data.data));
                     navigation.pop(4);
                 }
-
+                setSubmitting(false);
             }
 
         } catch (error) {
             console.log(error)
+            setSubmitting(false);
         }
         finally {
             setDisplayAlert(false);
@@ -285,10 +292,15 @@ const SaveNewAddress = ({ tag, address, label, selectedIcon }: SaveNewAddressPro
 
                                 <TouchableOpacity
                                     onPress={onSavePress}
-                                    activeOpacity={0.7} style={{ backgroundColor: colors.primary[500], flexGrow: 1, padding: 10, borderRadius: 10 }}>
+                                    activeOpacity={0.7} style={{ backgroundColor: colors.primary[500], flexGrow: 1, padding: 10, borderRadius: 10, flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                                     <Text style={{ textAlign: "center", color: "#fff" }}>
                                         Save
                                     </Text>
+                                    {
+                                        submitting && (
+                                            <ActivityIndicator size={10} color={"#eee"}></ActivityIndicator>
+                                        )
+                                    }
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     onPress={onCancelPress}

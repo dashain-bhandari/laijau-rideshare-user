@@ -1,5 +1,7 @@
 // Haversine formula to calculate distance between two coordinates
 function haversineDistance(coord1, coord2) {
+  console.log("coord1",coord1)
+  console.log("coord2",coord2)
   const toRad = (value) => (value * Math.PI) / 180;
 
   const R = 6371; // Radius of Earth in kilometers
@@ -28,17 +30,19 @@ export function KNN(drivers, riderLocation, k, preferenceWeight = 1) {
     preferenceWeight: number (importance of preference points)
   */
   drivers = drivers?.filter((i) => {
-    console.log("i", i);
+    console.log("driver",i)
+    console.log("rider location", riderLocation);
     return i?.vehicleType == riderLocation?.vehicleType
   })
 
   console.log("filtered", drivers)
 
   const distances = drivers?.map((driver) => {
-    const distance = haversineDistance(riderLocation, {
-      lat: driver?.location?.lat2,
-      lon: driver?.location?.lon2,
+    const distance = haversineDistance({lat1:riderLocation?.location?.lat1,lon1:riderLocation?.location?.lon1}, {
+      lat2: driver?.lat2,
+      lon2: driver?.lon2,
     });
+    console.log("distance",distance)
 
     const preferenceMatch = driver?.vehicleType === riderLocation.preference ? 0 : 1;
 
@@ -51,15 +55,18 @@ export function KNN(drivers, riderLocation, k, preferenceWeight = 1) {
     return {
      
       combinedScore,
-      ...driver
+     id:driver.id
     };
   });
 
   // Sort drivers by weighted score (ascending order)
   distances.sort((a, b) => a.combinedScore - b.combinedScore);
 
-  // Return the top k nearest drivers
-  return distances.slice(0, k);
+  const topDriverIds = distances
+  .slice(0, k) // Get the top k nearest drivers
+  .map(driver => driver.id); // Extract only the IDs
+
+return topDriverIds;
 }
 
 // Example usage:
