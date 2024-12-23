@@ -28,12 +28,14 @@ import { database } from '../../../../../firebaseConfig'
 import { v4 as uuidv4 } from 'uuid';
 import { KNN } from '../../../../helpers/KNN'
 import { calculatePricings } from '../../../../helpers/price'
+import { useTranslation } from 'react-i18next'
 
 
 const { height, width } = Dimensions.get("screen")
 
 const ConfirmRide = ({ navigation }: FilterRideScreenProps) => {
 
+    const {t}=useTranslation()
     const socket = useContext(SocketContext)
     const [selectedLanguage, setSelectedLanguage] = useState<string | number>("any");
     const [displayOptions, setDisplayOptions] = useState<"flex" | "none">("none")
@@ -233,7 +235,7 @@ eti khera no need to show requested price as request garepachi yo screen nai dek
 
                                     <View style={{ flex: 2, marginRight: 10 }}>
                                         <StyledButton
-                                            title='Find ride'
+                                            title={t('buttonTitles.findRide')}
                                             buttonStyles={styles.findRideButton}
                                             textStyles={styles.findRideTextStyle}
                                             onPress={onFindRidePress}
@@ -241,7 +243,7 @@ eti khera no need to show requested price as request garepachi yo screen nai dek
                                     </View>
                                     <View style={{ flex: 1 }}>
                                         <StyledButton
-                                            title='Schedule ride'
+                                            title={t('buttonTitles.scheduleRide')}
                                             buttonStyles={styles.scheduleButton}
                                             onPress={scheduleRidePress}
                                         ></StyledButton>

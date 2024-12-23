@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../state/store';
 import { setDestinationLocation } from '../../../../state/location/locationSlice';
+import { useTranslation } from 'react-i18next';
 
 const YourAddresses = () => {
 
@@ -23,11 +24,12 @@ const YourAddresses = () => {
     const work = user?.savedAddresses?.find((i) => i.addressLabel == "Work")
     const college = user?.savedAddresses?.find((i) => i.addressLabel == "College")
     const dispatch = useDispatch();
+    const {t}=useTranslation();
     return (
         <View>
             <View style={styles.headingContainer}>
-                <Text>Your addresses</Text>
-                <TouchableOpacity onPress={onViewAllPress}><Text style={{ color: "#777" }}>view all</Text></TouchableOpacity>
+                <Text>{t('headings.yourAddresses')}</Text>
+                <TouchableOpacity onPress={onViewAllPress}><Text style={{ color: "#777" }}>{t('viewAll')}</Text></TouchableOpacity>
             </View>
             {/* home */}
             <View style={styles.addressContainer}>
@@ -47,8 +49,8 @@ const YourAddresses = () => {
                         }
                     }}
                     style={styles.textContainer}>
-                    <Text style={styles.heading}>Home</Text>
-                    <Text style={styles.address}> {home?.addressName || "Set an address"}</Text>
+                    <Text style={styles.heading}>{t('home')}</Text>
+                    <Text style={styles.address}> {home?.addressName || t('setAnAddress')}</Text>
 
                 </Pressable>
             </View>
@@ -73,8 +75,8 @@ const YourAddresses = () => {
                         }
                     }}
                     style={styles.textContainer}>
-                    <Text style={styles.heading}>Work</Text>
-                    <Text style={styles.address}> {work?.addressName || "Set an address"}</Text>
+                    <Text style={styles.heading}>{t('work')}</Text>
+                    <Text style={styles.address}> {work?.addressName || t('setAnAddress')}</Text>
                 </Pressable>
 
             </View>
@@ -99,8 +101,8 @@ const YourAddresses = () => {
                         }
                     }}
                     style={styles.textContainer}>
-                    <Text style={styles.heading}>College</Text>
-                    <Text style={styles.address}> {college?.addressName ?? "Set an address"}</Text>
+                    <Text style={styles.heading}>{t('college')}</Text>
+                    <Text style={styles.address}> {college?.addressName ?? t('setAnAddress')}</Text>
                 </Pressable>
 
             </View>

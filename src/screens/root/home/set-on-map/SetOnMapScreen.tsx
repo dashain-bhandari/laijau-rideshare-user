@@ -10,6 +10,8 @@ import { setDestinationLocation, setUserLocation } from '../../../../state/locat
 import { fallBackAddress } from '../../../../constants/fallBackAddress'
 import * as Location from "expo-location"
 import { calculateDistance, checkValidDestination } from '../../../../helpers/distance'
+import { useTranslation } from 'react-i18next'
+import BackButton from '../../../../components/BackButton'
 
 
 const SetOnMapScreen = ({ navigation }: SetOnMapScreenProps) => {
@@ -31,8 +33,8 @@ const SetOnMapScreen = ({ navigation }: SetOnMapScreenProps) => {
         if (setScreen?.tag == "pickup") {
             dispatch(setUserLocation({
                 userLatitude: latitude,
-                userLongitude:longitude,
-               userAddress: address
+                userLongitude: longitude,
+                userAddress: address
             }))
         }
         else {
@@ -81,8 +83,11 @@ const SetOnMapScreen = ({ navigation }: SetOnMapScreenProps) => {
             setIsValid(true)
         }
     }, [draggedLocation.address])
+
+    const { t } = useTranslation()
     return (
         <View style={styles.container}>
+            <BackButton onPressHandler={() => { navigation.goBack() }} />
             <View style={styles.mapContainer}>
                 <MapView
                     mapType='mutedStandard'
@@ -141,7 +146,7 @@ const SetOnMapScreen = ({ navigation }: SetOnMapScreenProps) => {
                     style={[styles.buttonContainer, {
                         backgroundColor: isValid ? colors.primary[500] : colors.primary[200]
                     }]} onPress={() => { onConfirmPress(draggedLocation) }}>
-                    <Text style={{ color: "#fff", textAlign: "center" }}>{setScreen?.tag == "pickup" ? "Confirm pickup" : "Confirm destination"}</Text>
+                    <Text style={{ color: "#fff", textAlign: "center" }}>{setScreen?.tag == "pickup" ? "Confirm pickup" : t('buttonTitles.confirmDestination')}</Text>
                 </TouchableOpacity >
             </View>
         </View>

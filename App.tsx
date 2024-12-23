@@ -38,7 +38,8 @@ import { setUser } from './src/state/user/userSlice';
 import RootNavigator from './src/navigation/RootNavigation';
 import { SocketContextProvider } from './src/context/SocketContext';
 import { MenuProvider } from 'react-native-popup-menu';
-
+import { I18nextProvider } from "react-i18next";
+import i18n from './src/i18n';
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
@@ -53,9 +54,9 @@ function App(): React.JSX.Element {
   return (
     <SocketContextProvider>
       <Provider store={store}>
-       
+      <I18nextProvider i18n={i18n}>
         <RootNavigator />
-       
+       </I18nextProvider>
       </Provider>
     </SocketContextProvider>
 

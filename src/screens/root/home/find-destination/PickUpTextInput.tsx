@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setUserLocation } from '../../../../state/location/locationSlice';
 import { setSetScreen } from '../../../../state/rideRequest/rideRequestSlice';
 import { RootState } from '../../../../state/store';
+import { useTranslation } from 'react-i18next';
 
 const PickUpTextInput = () => {
     const dispatch = useDispatch()
@@ -18,7 +19,7 @@ const PickUpTextInput = () => {
             address
         }))
     }
-
+const {t}=useTranslation()
     const {userLocation}=useSelector((state:RootState)=>state.location)
     return (
         <View style={{
@@ -39,7 +40,7 @@ const PickUpTextInput = () => {
                     }))
 
                 }}
-                placeholder='pick up'></TextInput>
+                placeholder={t('placeholders.pickup')}></TextInput>
 
         </View>
     )

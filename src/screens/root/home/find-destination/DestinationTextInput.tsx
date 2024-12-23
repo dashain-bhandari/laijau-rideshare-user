@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../state/store';
 import { setDestinationLocation } from '../../../../state/location/locationSlice';
 import { setSetScreen } from '../../../../state/rideRequest/rideRequestSlice';
+import { useTranslation } from 'react-i18next';
 
 const DestinationTextInput = forwardRef(
     function DestinationTextInput(props, ref) {
@@ -30,6 +31,8 @@ const DestinationTextInput = forwardRef(
             }))
         }
         const {userLocation,destinationLocation}=useSelector((state:RootState)=>state.location)
+
+        const {t}=useTranslation();
         return (
             <View style={{
                 padding: 10, borderRadius: 10, borderWidth: 1,
@@ -46,7 +49,7 @@ const DestinationTextInput = forwardRef(
 
                     }}
                     value={destinationLocation?.destinationAddress}
-                    placeholder='destination'></TextInput>
+                    placeholder={t('placeholders.destination')}></TextInput>
             </View>
         )
     }

@@ -16,6 +16,7 @@ import { RootState } from '../../../../state/store';
 import { calculateDistance } from '../../../../helpers/distance';
 import { calculatePricings } from '../../../../helpers/price';
 import { setDistanceInKm, setInitialPrice, setMinimumPrice, setOfferedPrice } from '../../../../state/rideRequest/rideRequestSlice';
+import { useTranslation } from 'react-i18next';
 
 const FindDestinationBottomSheet = ({ navigation }: FindDestinationScreenProps) => {
     const translateY = useSharedValue(0);
@@ -130,6 +131,8 @@ const FindDestinationBottomSheet = ({ navigation }: FindDestinationScreenProps) 
         }
 
     }, [userLocation, destinationLocation, vehicleType])
+
+    const {t}=useTranslation();
     return (
         <GestureDetector gesture={gesture}>
             <Animated.View style={[styles.container, animatedSheetStyle]}>
@@ -154,7 +157,7 @@ const FindDestinationBottomSheet = ({ navigation }: FindDestinationScreenProps) 
                     </View>
                     {/* setonmap */}
                     <Pressable style={[styles.setOnMapView, { marginBottom: 20 }]} onPress={onSetOnMapHandler} >
-                        <Text>Set on Map</Text>
+                        <Text>{t('buttonTitles.setOnMap')}</Text>
                         <FontAwesome name="map-pin" size={18} color={colors.secondary[500]} />
 
                     </Pressable>
@@ -166,7 +169,7 @@ const FindDestinationBottomSheet = ({ navigation }: FindDestinationScreenProps) 
                     <TouchableOpacity
                         disabled={!isValid}
                         onPress={onConfirmDestination} style={[styles.confirmDestinationButton, { backgroundColor: isValid ? colors.primary[500] : colors.primary[200], marginTop: 20 }]}>
-                        <Text style={{ color: "white", textAlign: "center" }}>Confirm Destination</Text>
+                        <Text style={{ color: "white", textAlign: "center" }}>{t('buttonTitles.confirmDestination')}</Text>
                     </TouchableOpacity>
                 </View>
             </Animated.View>

@@ -12,6 +12,7 @@ import * as Location from "expo-location"
 import { calculateDistance, checkValidDestination } from '../../../../helpers/distance'
 import { AxiosInstance } from '../../../../config/AxiosInstance'
 import BackButton from '../../../../components/BackButton'
+import { useTranslation } from 'react-i18next'
 
 
 const SetAnyAddressScreen = ({ navigation, route }: SetAnyAddressScreenProps) => {
@@ -76,6 +77,8 @@ const SetAnyAddressScreen = ({ navigation, route }: SetAnyAddressScreenProps) =>
     }
 
 
+    const {t}=useTranslation()
+
     return (
         <View style={styles.container}>
             <BackButton onPressHandler={()=>navigation.goBack()}/>
@@ -131,7 +134,7 @@ const SetAnyAddressScreen = ({ navigation, route }: SetAnyAddressScreenProps) =>
                     style={[styles.buttonContainer, {
                         backgroundColor: colors.primary[400],
                     }]} onPress={() => { onConfirmPress(draggedLocation) }}>
-                    <Text style={{ color: "#fff", textAlign: "center" }}>{"Confirm address"}</Text>
+                    <Text style={{ color: "#fff", textAlign: "center" }}>{t('buttonTitles.confirmAddress')}</Text>
                 </TouchableOpacity >
             </View>
         </View>

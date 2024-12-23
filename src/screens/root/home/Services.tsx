@@ -9,11 +9,13 @@ import { HomeScreenNavigation } from '../../../types/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { setBookedForFriend, setVehicleType } from '../../../state/rideRequest/rideRequestSlice';
 import { RootState } from '../../../state/store';
+import { useTranslation } from 'react-i18next';
 const Services = () => {
   const navigation = useNavigation<HomeScreenNavigation>()
+  const {t}=useTranslation()
   return (
     <View >
-      <Text style={{ fontSize: 16 }}>Services</Text>
+      <Text style={{ fontSize: 16 }}>{t("headings.services")}</Text>
       {/* bike */}
       <View style={{
         flexDirection: "row",
@@ -53,6 +55,7 @@ const styles = StyleSheet.create({
 
 const Bike = ({ navigation }: { navigation: HomeScreenNavigation }) => {
   const dispatch = useDispatch()
+  const { t } = useTranslation();
   const { ongoingRide } = useSelector((state: RootState) => state.ongoingRide)
   return (
     <TouchableOpacity style={{
@@ -82,7 +85,7 @@ const Bike = ({ navigation }: { navigation: HomeScreenNavigation }) => {
       {/* <View style={{backgroundColor:colors.primary[200],width:75,height:75,flexDirection:"row",justifyContent:"center",alignItems:"center",borderRadius:40}}>
       <FontAwesome5 name="motorcycle" size={36} color={"#555"} />
       </View> */}
-      <Text style={{ marginTop: 5 }} >Bike</Text>
+      <Text style={{ marginTop: 5 }} >{t('services.bike')}</Text>
     </TouchableOpacity>
   )
 }
@@ -90,6 +93,7 @@ const Bike = ({ navigation }: { navigation: HomeScreenNavigation }) => {
 const Car = ({ navigation }: { navigation: HomeScreenNavigation }) => {
   const dispatch = useDispatch()
   const { ongoingRide } = useSelector((state: RootState) => state.ongoingRide)
+  const { t } = useTranslation();
   return (
     <TouchableOpacity style={{
       flexDirection: "column",
@@ -113,7 +117,7 @@ const Car = ({ navigation }: { navigation: HomeScreenNavigation }) => {
         style={styles.serviceView}>
         <FontAwesome6 name="car-side" size={36} color={colors.primary[800]} />
       </LinearGradient>
-      <Text style={{ marginTop: 5 }}>Car</Text>
+      <Text style={{ marginTop: 5 }}>{t('services.car')}</Text>
     </TouchableOpacity>
   )
 }
@@ -121,6 +125,7 @@ const Car = ({ navigation }: { navigation: HomeScreenNavigation }) => {
 const ForFriend = ({ navigation }: { navigation: HomeScreenNavigation }) => {
   const dispatch = useDispatch()
   const { bookedForFriend } = useSelector((state: RootState) => state.bookedForFriend)
+  const { t } = useTranslation();
   return (
     <TouchableOpacity style={{
       flexDirection: "column",
@@ -135,7 +140,7 @@ const ForFriend = ({ navigation }: { navigation: HomeScreenNavigation }) => {
         //   navigation.navigate("FindDestinationScreen")
         // }
 
-        console.log("booked for friend",bookedForFriend)
+        console.log("booked for friend", bookedForFriend)
         if (bookedForFriend) {
           navigation.navigate("AcceptedRideScreen", { tag: "bookedRide" });
         }
@@ -143,9 +148,6 @@ const ForFriend = ({ navigation }: { navigation: HomeScreenNavigation }) => {
           dispatch(setBookedForFriend(true));
           navigation.navigate("BookForFriendScreen")
         }
-
-
-
       }}
     >
       <LinearGradient
@@ -156,7 +158,7 @@ const ForFriend = ({ navigation }: { navigation: HomeScreenNavigation }) => {
         <FontAwesome5 name="user-friends" size={36} color={colors.primary[800]} />
 
       </LinearGradient>
-      <Text style={{ marginTop: 5 }}>Book for friend</Text>
+      <Text style={{ marginTop: 5 }}>{t('services.bookForFriend')}</Text>
     </TouchableOpacity>
   )
 }

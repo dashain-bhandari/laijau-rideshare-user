@@ -1,0 +1,48 @@
+{
+    "language": "Language",
+    "buttonTitles": {
+        "findRide": "Find ride",
+        "scheduleRide": "Schedule ride",
+        "confirmDestination": "Confirm destination",
+        "setAddress": "Set address",
+        "viewDetails":"View details",
+        "setOnMap":"Set on Map",
+        "addNewAddress":"Add new address",
+        "confirmAddress":"Confirm address",
+        "save":"Save",
+        "cancel":"Cancel"
+    },
+    "services":{
+        "bike":"Bike",
+        "car":"Car",
+        "bookForFriend":"Book for friend"
+    },
+    "headings":{
+        "services":"Services",
+        "ongoingRide":"Ongoing Ride",
+        "scheduledRide":"Scheduled Ride",
+        "bookedForFriend":"Booked for friend",
+        "yourAddresses":"Your addresses",
+        "saveNewAddress":"Save new address",
+        "additionalInformation":"Additional information",
+        "editAddress":"Edit Address"
+    }
+    ,"noRide":"You haven't booked any ride at the moment",
+    "welcome":"Welcome",
+    "whereToGo":"Where to go",
+    "placeholders":{
+        "pickup":"pick up",
+        "destination":"destination"
+        ,
+        "addressLabel":"Address label"
+    },
+    "viewAll":"view all",
+    "home":"Home",
+    "work":"Work",
+    "college":"College",
+    "other":"Other",
+    "setAnAddress":"Set an address",
+    "edit":"edit",
+    "done":"done",
+    "saveAs":"Save as"
+}

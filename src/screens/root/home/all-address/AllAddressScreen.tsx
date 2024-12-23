@@ -15,6 +15,7 @@ import { MenuView, MenuComponentRef } from '@react-native-menu/menu';
 import { AxiosInstance } from '../../../../config/AxiosInstance'
 import { setUser } from '../../../../state/user/userSlice'
 import { setDestinationLocation } from '../../../../state/location/locationSlice'
+import { useTranslation } from 'react-i18next'
 
 
 const { width, height } = Dimensions.get("screen");
@@ -25,6 +26,7 @@ const AllAddressScreen = ({ navigation }: AllAddressScreenProps) => {
 
     console.log("user", user)
     const [edit, setEdit] = useState(false);
+    const {t}=useTranslation()
     return (
         <View style={{
             flex: 1,
@@ -35,12 +37,12 @@ const AllAddressScreen = ({ navigation }: AllAddressScreenProps) => {
                         <AntDesign name='arrowleft' size={24} color={"#555"}></AntDesign>
                     </Pressable>
                     <View>
-                        <Text style={{ fontSize: 16, color: "#333", fontWeight: "500" }}>Your addresses</Text>
+                        <Text style={{ fontSize: 16, color: "#333", fontWeight: "500" }}>{t('headings.yourAddresses')}</Text>
                     </View>
                     <Pressable onPress={() => { setEdit(!edit) }}>
                         <Text>
                             {
-                                edit ? "Done" : "Edit"
+                                edit ? t('done') : t('edit')
                             }
                         </Text>
                     </Pressable>
@@ -73,7 +75,7 @@ const AllAddressScreen = ({ navigation }: AllAddressScreenProps) => {
 
                     >
                         <Text>
-                            Add new address
+                           {t('buttonTitles.addNewAddress')}
                         </Text>
                     </View>
 

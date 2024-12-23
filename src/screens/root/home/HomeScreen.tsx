@@ -31,6 +31,7 @@ import { AxiosInstance } from '../../../config/AxiosInstance';
 import {  setOfferedPrice, setRideId, setVehicleType } from '../../../state/rideRequest/rideRequestSlice';
 import { setDestinationLocation, setUserLocation } from '../../../state/location/locationSlice';
 import { setBookedRide } from '../../../state/bookForFriend/bookForFriendSlice';
+import { useTranslation } from 'react-i18next';
 
 const ios = Platform.OS === "ios";
 const Home = () => {
@@ -194,6 +195,8 @@ const Home = () => {
             console.log("error", error.message)
         }
     }
+
+    const {t}=useTranslation()
     return (
 
         <View style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -205,8 +208,9 @@ const Home = () => {
                     {/* header */}
                     <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
                         <View>
-                            <Text style={{ fontWeight: "semibold", fontSize: 20 }}>Hi! {user?.fullName}</Text>
-                            <Text>Welcome back</Text>
+                            <Text style={{fontSize:16}}>{t('welcome')}! </Text>
+                            <Text style={{ fontWeight: "semibold", fontSize: 20 }}>{user?.fullName}</Text>
+                            
                         </View>
                         {/* image avatar */}
                         <Pressable

@@ -1,0 +1,54 @@
+{
+    "language": "Language",
+    "buttonTitles": {
+        "findRide": "सवारी खोज्नुहोस्",
+        "scheduleRide": "पछि खोज्नुहोस्",
+        "confirmDestination": "पक्का गर्नुहोस्",
+        "setAddress": "पक्का गर्नुहोस्",
+        "viewDetails":"विवरणहरू हेर्नुहोस्",
+        "setOnMap":"नक्सामा सेट गर्नुहोस्"
+        ,
+        "addNewAddress":"नयाँ ठेगाना थप्नुहोस्"
+        ,
+        "confirmAddress":"पक्का गर्नुहोस्",
+        "save":"पक्का गर्नुहोस्",
+        "cancel":"रद्द गर्नुहोस्"
+    }
+    ,
+    "services":{
+        "bike":"बाईक",
+        "car":"कार",
+        "bookForFriend":"साथीको लागि खोज्नुस"
+    },
+    "headings":{
+        "services":"सेवाहरु",
+        "ongoingRide":"चलिरहेको सवारी",
+        "scheduledRide":"अनुसूचित सवारी",
+        "bookedForFriend":"साथीको लागि बुक गरिएको सवारी",
+        "yourAddresses":"आफ्नो ठेगानाहरू",
+        "saveNewAddress":"नयाँ ठेगाना बचत गर्नुहोस्",
+        "additionalInformation":"अतिरिक्त जानकारी",
+        "editAddress":"ठेगाना सम्पादन गर्नुहोस्"
+    },
+    "noRide":"तपाईंले कुनै सवारी बुक गर्नुभएको छैन",
+    "welcome":"नमस्ते",
+    "whereToGo":"कहाँ जाने"
+    ,
+    "placeholders":{
+        "pickup":"पिकअप",
+        "destination":"गन्तव्य",
+        "addressLabel":"ठेगाना लेबल"
+    },
+    "viewAll":"सबै हेर्नुहोस्",
+
+
+    "home":"घर",
+    "work":"काम",
+    "college":"कलेज",
+    "other":"अन्य",
+    "setAnAddress":"ठेगाना सेट गर्नुहोस्",
+    "edit":"सम्पादन गर्नुहोस्",
+    "done":"सकियो"
+    ,
+    "saveAs":"रूपमा बचत गर्नुहोस्"
+}

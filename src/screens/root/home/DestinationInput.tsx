@@ -7,9 +7,13 @@ import colors from '../../../utils/data/colors';
 import { useNavigation } from '@react-navigation/native';
 import { HomeScreenNavigation, RootStackParamList } from '../../../types/types';
 import { TouchableWithoutFeedback } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 const DestinationInput = () => {
-    const navigation = useNavigation<HomeScreenNavigation>()
+
+    const navigation = useNavigation<HomeScreenNavigation>();
+    const { t } = useTranslation();
+    
     return (
         <TouchableWithoutFeedback
             onPress={() => navigation.navigate("FindDestinationScreen")}
@@ -21,7 +25,7 @@ const DestinationInput = () => {
             }}>
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <View style={{ marginRight: 5 }}><Ionicons name="location" size={24} color={colors.secondary[600]} /></View>
-                    <Text style={{ color: "#555" }}>Where to go?</Text>
+                    <Text style={{ color: "#555" }}>{t('whereToGo')}?</Text>
                 </View>
 
                 <View style={{ marginRight: 5 }}><Ionicons name="search" size={20} color={"#333"} /></View>

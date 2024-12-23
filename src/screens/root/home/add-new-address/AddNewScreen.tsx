@@ -7,6 +7,7 @@ import { TextInput } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import colors from '../../../../utils/data/colors';
+import { useTranslation } from 'react-i18next';
 const AddNewScreen = ({ navigation, route }: AddNewAddressScreenProps) => {
   const inputRef = useRef<TextInput>(null);
   const { tag, selectedIcon,addressLatitude,addressName,addressLongitude } = route.params
@@ -16,7 +17,7 @@ const AddNewScreen = ({ navigation, route }: AddNewAddressScreenProps) => {
     }, 0);
   }, [])
 
-
+const {t}=useTranslation()
   return (
     <Pressable style={{ flex: 1 }} onPress={() => {
       Keyboard.dismiss()
@@ -27,14 +28,14 @@ const AddNewScreen = ({ navigation, route }: AddNewAddressScreenProps) => {
             <AntDesign name="arrowleft" size={24} color="#555" />
           </TouchableOpacity>
           <View>
-            <Text style={{ textAlign: "center", fontSize: 16, fontWeight: "500", color: "#555" }}>Add new address</Text>
+            <Text style={{ textAlign: "center", fontSize: 16, fontWeight: "500", color: "#555" }}>{t('buttonTitles.addNewAddress')}</Text>
           </View>
         </View>
         <View style={styles.inputContainer}>
           <View style={styles.iconBackground}>
             <FontAwesome name="bookmark" size={20} color="#fff" />
           </View>
-          <TextInput ref={inputRef} placeholder='add new address' value={addressName}></TextInput>
+          <TextInput ref={inputRef} placeholder={t('buttonTitles.addNewAddress')} value={addressName}></TextInput>
         </View>
         <TouchableOpacity
           activeOpacity={0.7}
@@ -49,7 +50,7 @@ const AddNewScreen = ({ navigation, route }: AddNewAddressScreenProps) => {
           }}
           style={styles.setOnMapContainer}>
           <Ionicons name="pin" size={24} color={"#fff"} />
-          <Text style={{ color: "#fff" }}>Set on map</Text>
+          <Text style={{ color: "#fff" }}>{t('buttonTitles.setOnMap')}</Text>
         </TouchableOpacity>
       </SafeAreaView>
 

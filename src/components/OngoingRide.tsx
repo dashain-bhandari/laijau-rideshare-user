@@ -9,16 +9,18 @@ import { useNavigation } from '@react-navigation/native';
 import { HomeScreenNavigation } from '../types/types';
 import { useSelector } from 'react-redux';
 import { RootState } from '../state/store';
+import { useTranslation } from 'react-i18next';
 const OngoingRide = () => {
     const navigation = useNavigation<HomeScreenNavigation>()
     const { ongoingRide } = useSelector((state: RootState) => state.ongoingRide);
+    const {t}=useTranslation()
     return (
         <>
             {
                 ongoingRide?.rideId ? (
                     <Pressable style={{ flex: 1, marginTop: 20, }}>
                         <View style={{ flexDirection: "column", gap: 5 }}>
-                            <Text style={{ fontSize: 16 }}>Ongoing Ride</Text>
+                            <Text style={{ fontSize: 16 }}>{t('headings.ongoingRide')}</Text>
                             <View style={{ backgroundColor: "#fff", padding: 10, borderRadius: 10, gap: 15, borderColor: "#ddd", borderWidth: 1 }}>
                                 {/* user pickup */}
                                 <View style={{ flexDirection: "row", gap: 10, alignItems: "center", marginTop: 10 }}>
@@ -47,7 +49,7 @@ const OngoingRide = () => {
                                         navigation.navigate("AcceptedRideScreen", { tag: "ongoingRide" })
                                     }}
                                     activeOpacity={0.5} style={{ backgroundColor: colors.secondary[400], padding: 10, borderRadius: 10, marginBottom: 10 }}>
-                                    <Text style={{ textAlign: "center", color: "#fff" }}>View Details</Text>
+                                    <Text style={{ textAlign: "center", color: "#fff" }}>{t('buttonTitles.viewDetails')}</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -56,13 +58,13 @@ const OngoingRide = () => {
                     <>
                         <Pressable style={{ flex: 1, marginTop: 20, }}>
                             <View style={{ flexDirection: "column", gap: 5 }}>
-                                <Text style={{ fontSize: 16 }}>Ongoing Ride</Text>
+                                <Text style={{ fontSize: 16 }}>{t('headings.ongoingRide')}</Text>
                                 <View style={{ backgroundColor: "#fff", padding: 10, borderRadius: 10, gap: 15, borderColor: "#ddd", borderWidth: 1, flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
 
                                     <View>
                                         <Image style={{ width: 150, height: 150 }} source={require("../assets/images/no-result.png")}></Image>
                                     </View>
-                                    <Text style={{ marginBottom: 10, textAlign: "center", color: "#555" }}>You have no ride at the moment!</Text>
+                                    <Text style={{ marginBottom: 10, textAlign: "center", color: "#555" }}>{t('noRide')}!</Text>
                                 </View>
                             </View>
                         </Pressable>

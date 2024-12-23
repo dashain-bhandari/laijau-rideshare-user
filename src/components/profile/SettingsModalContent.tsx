@@ -1,5 +1,5 @@
 
-import { StyleSheet, Text, View, Image, Pressable, Dimensions } from 'react-native'
+import { StyleSheet, Text, View, Image, Pressable, Dimensions, DevSettings } from 'react-native'
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView } from 'react-native'
@@ -28,6 +28,7 @@ const SettingsModalContent = ({modalVisible,setModalVisible}:{
             await SecureStore.setItemAsync("language",lang)
             setLanguage(lang);
             i18n.changeLanguage(lang)
+            DevSettings.reload()
             // Updates.reloadAsync()
         }
     }

@@ -15,6 +15,7 @@ import { HomeScreenNavigation } from '../types/types';
 import { AxiosInstance } from '../config/AxiosInstance';
 import CustomBottomSheet from './CustomBottomSheet';
 import { setUser } from '../state/user/userSlice';
+import { useTranslation } from 'react-i18next';
 
 interface SaveNewAddressProps {
     tag: string,
@@ -186,6 +187,8 @@ const SaveNewAddress = ({ tag, address, label, selectedIcon }: SaveNewAddressPro
             translateModal.value = withTiming(0, { duration: 700 })
         }
     }, [displayAlert])
+
+    const {t}=useTranslation()
     return (
         <View style={styles.container}>
             <SafeAreaView style={{ flex: 1 }}>
@@ -195,7 +198,7 @@ const SaveNewAddress = ({ tag, address, label, selectedIcon }: SaveNewAddressPro
                     </TouchableOpacity >
                     <Text style={{ fontSize: 16, color: "#333", fontWeight: "500" }}>
                         {
-                            tag == "saveNewAddress" ? "Save new address" : "Edit address"
+                            tag == "saveNewAddress" ? t('headings.saveNewAddress') :t('headings.editAddress')
                         }
                     </Text>
                 </View>
@@ -215,7 +218,7 @@ const SaveNewAddress = ({ tag, address, label, selectedIcon }: SaveNewAddressPro
                     </View>
                     <View style={styles.addressNameContainer}>
                         <View>
-                            <Text style={{ fontSize: 16, color: "#333", fontWeight: "500" }}>Save as</Text>
+                            <Text style={{ fontSize: 16, color: "#333", fontWeight: "500" }}>{t('saveAs')}</Text>
                         </View>
                         <View style={styles.addressListContainer}>
                             {/* home */}
@@ -226,7 +229,7 @@ const SaveNewAddress = ({ tag, address, label, selectedIcon }: SaveNewAddressPro
                                 <View style={[styles.addressIconBackground, { backgroundColor: addressIcon == "Home" ? colors.secondary[300] : "#eee" }]}>
                                     <Entypo name="home" size={20} color={addressIcon == "Home" ? "#fff" : "#555"} />
                                 </View>
-                                <Text style={styles.addressIconName}>Home</Text>
+                                <Text style={styles.addressIconName}>{t('home')}</Text>
                             </TouchableOpacity>
                             {/* college */}
                             <TouchableOpacity
@@ -237,7 +240,7 @@ const SaveNewAddress = ({ tag, address, label, selectedIcon }: SaveNewAddressPro
 
                                     <FontAwesome name="building" size={20} color={addressIcon == "College" ? "#fff" : "#555"} />
                                 </View>
-                                <Text style={styles.addressIconName}>College</Text>
+                                <Text style={styles.addressIconName}>{t('college')}</Text>
                             </TouchableOpacity>
                             {/* work */}
                             <TouchableOpacity
@@ -247,7 +250,7 @@ const SaveNewAddress = ({ tag, address, label, selectedIcon }: SaveNewAddressPro
                                 <View style={[styles.addressIconBackground, { backgroundColor: addressIcon == "Work" ? colors.secondary[300] : "#eee" }]}>
                                     <MaterialIcons name="work" size={20} color={addressIcon == "Work" ? "#fff" : "#555"} />
                                 </View>
-                                <Text style={styles.addressIconName}>Work</Text>
+                                <Text style={styles.addressIconName}>{t("work")}</Text>
                             </TouchableOpacity>
                             {/* other */}
                             <TouchableOpacity
@@ -257,7 +260,7 @@ const SaveNewAddress = ({ tag, address, label, selectedIcon }: SaveNewAddressPro
                                 <View style={[styles.addressIconBackground, { backgroundColor: addressIcon == "Other" ? colors.secondary[300] : "#eee" }]}>
                                     <MaterialIcons name="bookmark" size={20} color={addressIcon == "Other" ? "#fff" : "#555"} />
                                 </View>
-                                <Text style={styles.addressIconName}>Other</Text>
+                                <Text style={styles.addressIconName}>{t("other")}</Text>
                             </TouchableOpacity>
                         </View>
 
@@ -266,7 +269,7 @@ const SaveNewAddress = ({ tag, address, label, selectedIcon }: SaveNewAddressPro
                             <TextInput
                                 value={addressLabel}
                                 onChangeText={text => setAddressLabel(text)}
-                                placeholder='Address label'
+                                placeholder={t('placeholders.addressLabel')}
                             />
                         </Animated.View>
 
@@ -274,14 +277,14 @@ const SaveNewAddress = ({ tag, address, label, selectedIcon }: SaveNewAddressPro
                         <Animated.View style={[styles.additionalInfoContainer, infoAnimatedStyle]}>
                             <View>
                                 <Text>
-                                    Additional Information
+                                    {t("headings.additionalInformation")}
                                 </Text>
                             </View>
                             <View style={[styles.inputContainer, { marginTop: 10 }]}>
                                 <TextInput
                                     value={additionalInfo}
                                     onChangeText={(text) => setAdditionalInfo(text)}
-                                    placeholder='additional information'></TextInput>
+                                    placeholder= {t("headings.additionalInformation")}></TextInput>
                             </View>
                             <View style={{ marginTop: 10 }}>
                                 <Text style={{ color: "#888", paddingLeft: 10, fontSize: 12 }}>
@@ -294,7 +297,7 @@ const SaveNewAddress = ({ tag, address, label, selectedIcon }: SaveNewAddressPro
                                     onPress={onSavePress}
                                     activeOpacity={0.7} style={{ backgroundColor: colors.primary[500], flexGrow: 1, padding: 10, borderRadius: 10, flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                                     <Text style={{ textAlign: "center", color: "#fff" }}>
-                                        Save
+                                    {t("buttonTitles.save")}
                                     </Text>
                                     {
                                         submitting && (
@@ -305,7 +308,7 @@ const SaveNewAddress = ({ tag, address, label, selectedIcon }: SaveNewAddressPro
                                 <TouchableOpacity
                                     onPress={onCancelPress}
                                     activeOpacity={0.7} style={{ borderColor: colors.primary[700], flexGrow: 1, padding: 10, borderRadius: 10, borderWidth: 1 }}>
-                                    <Text style={{ textAlign: "center", color: colors.primary[700] }}>Cancel</Text>
+                                    <Text style={{ textAlign: "center", color: colors.primary[700] }}> {t("buttonTitles.cancel")}</Text>
                                 </TouchableOpacity>
                             </View>
                         </Animated.View>
