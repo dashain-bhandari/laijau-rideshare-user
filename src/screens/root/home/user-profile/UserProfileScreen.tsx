@@ -14,6 +14,7 @@ const UserProfile = ({ navigation }: UserProfileScreenProps) => {
 
   const [modalVisible, setModalVisible] = useState(false);
 
+  const [emergencyModal,setEmergencyModal]=useState(false);
 
   return (
     <View style={{ flex: 1 }}>
@@ -34,7 +35,7 @@ const UserProfile = ({ navigation }: UserProfileScreenProps) => {
 
         {/* settings */}
         <SettingsOptions modalVisible={modalVisible} setModalVisible={setModalVisible} />
-        <MoreOptions />
+        <MoreOptions  />
       </Animated.ScrollView >
 
     </View>

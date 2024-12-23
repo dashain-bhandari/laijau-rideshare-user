@@ -8,7 +8,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 import colors from '../../../../utils/data/colors';
 import { useDispatch } from 'react-redux';
-import { setFriendDetail } from '../../../../state/rideRequest/rideRequestSlice';
+import { setBookedForFriend, setFriendDetail } from '../../../../state/rideRequest/rideRequestSlice';
 import { BookForFriendScreenProps } from '../../../../types/types';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
@@ -25,9 +25,10 @@ const BookForFriendScreen = ({ navigation }: BookForFriendScreenProps) => {
             Alert.alert("Both name and mobile number are required.")
         }
         else {
+            dispatch(setBookedForFriend(true));
             dispatch(setFriendDetail({
                 friendName: name,
-                friendNo: no
+                friendNumber: no
             }))
             navigation.navigate("FindDestinationScreen")
         }

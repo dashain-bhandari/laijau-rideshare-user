@@ -18,7 +18,7 @@ const OngoingRide = () => {
                 ongoingRide?.rideId ? (
                     <Pressable style={{ flex: 1, marginTop: 20, }}>
                         <View style={{ flexDirection: "column", gap: 5 }}>
-                            <Text style={{  fontSize: 16 }}>Ongoing Ride</Text>
+                            <Text style={{ fontSize: 16 }}>Ongoing Ride</Text>
                             <View style={{ backgroundColor: "#fff", padding: 10, borderRadius: 10, gap: 15, borderColor: "#ddd", borderWidth: 1 }}>
                                 {/* user pickup */}
                                 <View style={{ flexDirection: "row", gap: 10, alignItems: "center", marginTop: 10 }}>
@@ -44,7 +44,7 @@ const OngoingRide = () => {
                                 {/* button */}
                                 <TouchableOpacity
                                     onPress={() => {
-                                        navigation.navigate("AcceptedRideScreen")
+                                        navigation.navigate("AcceptedRideScreen", { tag: "ongoingRide" })
                                     }}
                                     activeOpacity={0.5} style={{ backgroundColor: colors.secondary[400], padding: 10, borderRadius: 10, marginBottom: 10 }}>
                                     <Text style={{ textAlign: "center", color: "#fff" }}>View Details</Text>
@@ -54,7 +54,7 @@ const OngoingRide = () => {
                     </Pressable>
                 ) : (
                     <>
-                        <Pressable style={{ flex: 1, marginTop: 20,  }}>
+                        <Pressable style={{ flex: 1, marginTop: 20, }}>
                             <View style={{ flexDirection: "column", gap: 5 }}>
                                 <Text style={{ fontSize: 16 }}>Ongoing Ride</Text>
                                 <View style={{ backgroundColor: "#fff", padding: 10, borderRadius: 10, gap: 15, borderColor: "#ddd", borderWidth: 1, flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
@@ -62,7 +62,7 @@ const OngoingRide = () => {
                                     <View>
                                         <Image style={{ width: 150, height: 150 }} source={require("../assets/images/no-result.png")}></Image>
                                     </View>
-                                    <Text style={{marginBottom:10,textAlign:"center",color:"#555"}}>You have no ride at the moment!</Text>
+                                    <Text style={{ marginBottom: 10, textAlign: "center", color: "#555" }}>You have no ride at the moment!</Text>
                                 </View>
                             </View>
                         </Pressable>

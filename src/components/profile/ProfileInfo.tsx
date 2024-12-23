@@ -11,8 +11,9 @@ const ProfileInfo = () => {
     const {user}=useSelector((state:RootState)=>state.user)
   return (
     <View style={styles.infoContainer}>
-    <View style={styles.userAvatar}>
-        <Image style={{ width: 100, height: 100 }} resizeMode='contain' source={require("../../assets/images/user.jpg")}></Image>
+    <View style={{backgroundColor:colors.primary[400],width:80,height:80,borderRadius:50,justifyContent:"center",alignItems:"center",flexDirection:"row",marginRight:10}}>
+        {/* <Image style={{ width: 100, height: 100 }} resizeMode='contain' source={require("../../assets/images/user.jpg")}></Image> */}
+        <Text style={{color:"#fff",fontSize:48}}>{user?.fullName?.slice(0,1)}</Text>
     </View>
     <View style={{ flexDirection: "column", justifyContent: "center" }}>
         <View style={styles.textContainer}>

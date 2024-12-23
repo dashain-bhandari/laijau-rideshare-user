@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View, ScrollView, Image, Pressable, Dimensions } from 'react-native'
+import { FlatList, StyleSheet, Text, View, ScrollView, Image, Pressable, Dimensions, Alert } from 'react-native'
 import React, { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react'
 import CustomBottomSheet from '../../../../components/CustomBottomSheet'
 import { Gesture, GestureHandlerRootView } from 'react-native-gesture-handler'
@@ -41,7 +41,7 @@ const ConfirmRide = ({ navigation }: FilterRideScreenProps) => {
     const vehicleOptionsForCar = ["Taxi", "EV", "Any"];
     const [womanFilterOn, setWomanFilterOn] = useState(false);
     const [priceModal, setPriceModal] = useState(false);
-    const { offeredPrice, initialPrice, minimumPrice, vehicleType, preferredVehicle } = useSelector((state: RootState) => state.rideRequest)
+    const { offeredPrice, initialPrice, minimumPrice, vehicleType, preferredVehicle,bookedForFriend,friendName,friendNumber } = useSelector((state: RootState) => state.rideRequest)
     const { user } = useSelector((state: RootState) => state.user)
     const { userLocation, destinationLocation } = useSelector((state: RootState) => state.location)
 
@@ -58,7 +58,7 @@ const ConfirmRide = ({ navigation }: FilterRideScreenProps) => {
             querySnapshot.forEach(async (doc) => {
                 allDrivers.push(doc.data());
             });
-            console.log("all drivers",allDrivers)
+            console.log("all drivers", allDrivers)
             const nearestDrivers = KNN(allDrivers, { location: { lat1: userLocation?.userLatitude, lon1: userLocation?.userLongitude }, preference: preferredVehicle, vehicleType }, 15);
             console.log("nearest drivers are: ", nearestDrivers);
             return nearestDrivers;
@@ -99,7 +99,7 @@ const ConfirmRide = ({ navigation }: FilterRideScreenProps) => {
                     await deleteDoc(doc.ref)
                 });
 
-                 let nearestDrivers=await findNearestDrivers();
+                let nearestDrivers = await findNearestDrivers();
 
                 await addDoc(collection(database, "userRideRequests"), {
                     rideId: rideId,
@@ -111,8 +111,11 @@ const ConfirmRide = ({ navigation }: FilterRideScreenProps) => {
                     status: 'pending',
                     user,
                     createdAt: serverTimestamp(),
-                    scheduled:false,
-                     nearestDrivers
+                    scheduled: false,
+                    nearestDrivers,
+                    bookedForFriend,
+                    friendName:friendName??"",
+                    friendNumber:friendNumber??""
 
                 })
             } catch (error) {
@@ -124,9 +127,16 @@ const ConfirmRide = ({ navigation }: FilterRideScreenProps) => {
 
 
 
+    // check if already scheduled one ride
+    const { scheduledRide } = useSelector((state: RootState) => state.scheduledRide)
+
     const scheduleRidePress = () => {
 
-        navigation.navigate("ScheduleRideScreen")
+        if (!scheduledRide) {
+            navigation.navigate("ScheduleRideScreen")
+        } else {
+            Alert.alert("You have already scheduled a ride.")
+        }
     }
 
     return (
@@ -297,20 +307,20 @@ const styles = StyleSheet.create(
 
 const VehicleList = ({ item }: { item: { title: string, image: any, route: any } }) => {
     const { title, route, image } = item;
-    const { vehicleType,distanceInKm } = useSelector((state: RootState) => state.rideRequest)
-    const { userLocation} = useSelector((state: RootState) => state.location)
+    const { vehicleType, distanceInKm } = useSelector((state: RootState) => state.rideRequest)
+    const { userLocation } = useSelector((state: RootState) => state.location)
     console.log("vehivcle type", vehicleType)
     const dispatch = useDispatch()
 
     return (
         // add animation to onpress later
-        <TouchableOpacity activeOpacity={1} onPress={async() => {
+        <TouchableOpacity activeOpacity={1} onPress={async () => {
             dispatch(setVehicleType(title))
-              let { initialPrice, minimumPrice } = await calculatePricings({ distance:distanceInKm!, vehicleType: title!,coordinates:{latitude:userLocation?.userLatitude!,longitude:userLocation?.userLongitude!} })
-                   console.log("initia;",initialPrice)
-                     dispatch(setInitialPrice(initialPrice))
-                               dispatch(setMinimumPrice(minimumPrice))
-                               dispatch(setOfferedPrice(initialPrice));
+            let { initialPrice, minimumPrice } = await calculatePricings({ distance: distanceInKm!, vehicleType: title!, coordinates: { latitude: userLocation?.userLatitude!, longitude: userLocation?.userLongitude! } })
+            console.log("initia;", initialPrice)
+            dispatch(setInitialPrice(initialPrice))
+            dispatch(setMinimumPrice(minimumPrice))
+            dispatch(setOfferedPrice(initialPrice));
         }}>
             <View style={{
                 flexDirection: "column", padding: 10, borderRadius: 10, justifyContent: "center", alignItems: "center", backgroundColor: vehicleType == title ? colors.primary[100] : "#fff"

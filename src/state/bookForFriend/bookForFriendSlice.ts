@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { act } from "react";
 
 interface InitialState {
-    bookedForFriendRide: {
+    bookedForFriend: {
         status: "accepted" | "started" | "ended" | "canceled",
         driver: any,
         user: any,
@@ -16,21 +16,21 @@ interface InitialState {
 }
 
 const initialState: any = {
-    bookedRide: undefined,
+    bookedForFriend: undefined,
 
 }
 const bookForFriendSlice = createSlice({
-    name: "bookedForFriendRide",
+    name: "bookedForFriend",
     initialState: initialState,
     reducers: {
         setStatus: (state, action) => {
             state.bookedForFriendRide = { ...state, status: action.payload }
         },
-        setBookedForFriend: (state, action) => {
-            state.bookedForFriendRide = action.payload
+        setBookedRide: (state, action) => {
+            state.bookedForFriend = action.payload
         }
     }
 })
 
-export const { setStatus, setBookedForFriend } = bookForFriendSlice.actions
+export const { setStatus, setBookedRide } = bookForFriendSlice.actions
 export default bookForFriendSlice.reducer;

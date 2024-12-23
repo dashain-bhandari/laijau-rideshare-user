@@ -13,8 +13,13 @@ import { database } from '../../../../../firebaseConfig';
 import { collection, deleteDoc, doc, getDocs, onSnapshot, query, where } from 'firebase/firestore';
 import { setOngoingRide } from '../../../../state/ongoingRide/ongoingRideSlice';
 import StyledButton from '../../../../styled/StyledButton';
-const AcceptedRideContent = () => {
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import { setBookedRide } from '../../../../state/bookForFriend/bookForFriendSlice';
 
+
+const AcceptedRideContent = ({tag}:{tag:string}) => {
+
+    console.log("tag in accepted ride:",tag)
     const { user } = useSelector((state: RootState) => state.user)
     const navigation = useNavigation<HomeScreenNavigation>();
     const onChatPress = () => {
@@ -27,9 +32,10 @@ const AcceptedRideContent = () => {
 
     const [loading, setLoading] = useState(false)
     const { ongoingRide } = useSelector((state: RootState) => state.ongoingRide)
+    const { bookedForFriend } = useSelector((state: RootState) => state.bookedForFriend)
     const dispatch = useDispatch()
     useEffect(() => {
-        if (ongoingRide) {
+        if ( tag=="ongoingRide" && ongoingRide) {
             const docRef = doc(database, "rides", ongoingRide?.rideId);
             const unsubscribe = onSnapshot(docRef, (snapshot) => {
                 console.log(snapshot.data())
@@ -37,10 +43,18 @@ const AcceptedRideContent = () => {
             })
             return unsubscribe
         }
+        if ( tag=="bookedRide" && bookedForFriend) {
+            const docRef = doc(database, "rides", bookedForFriend?.rideId);
+            const unsubscribe = onSnapshot(docRef, (snapshot) => {
+                console.log(snapshot.data())
+                dispatch(setBookedRide(snapshot.data()));
+            })
+            return unsubscribe
+        }
     }, [])
 
     useEffect(() => {
-        if (ongoingRide && ongoingRide?.status == "ended") {
+        if (tag=="ongoingRide" && ongoingRide && ongoingRide?.status == "ended") {
             try {
                 const docRef = doc(database, "rides", ongoingRide?.rideId);
                 deleteDoc(docRef)
@@ -50,7 +64,17 @@ const AcceptedRideContent = () => {
                 console.log("Error deleting ongoing ride: ", error?.message)
             }
         }
-    }, [ongoingRide])
+        if ( tag=="bookedRide" &&  bookedForFriend && bookedForFriend?.status == "ended") {
+            try {
+                const docRef = doc(database, "rides", bookedForFriend?.rideId);
+                deleteDoc(docRef)
+                dispatch(setBookedRide(undefined));
+                navigation.popTo("TabsScreen")
+            } catch (error: any) {
+                console.log("Error deleting ongoing ride: ", error?.message)
+            }
+        }
+    }, [ongoingRide,bookedForFriend])
 
     const onCancelRequest = async () => {
         try {
@@ -73,8 +97,9 @@ const AcceptedRideContent = () => {
                 loading ? (<>
                     <ActivityIndicator color={colors.primary[500]}></ActivityIndicator>
                 </>) :
-                    (<>
-                        <View style={styles.headerContainer}>
+                   tag=="ongoingRide"? (<>
+                    <View style={styles.headerContainer}>
+                        <View style={{ flexDirection: "row", alignItems: "center" }}>
                             <View style={styles.dot}></View>
                             {
                                 ongoingRide?.riderStatus !== "arrived" && (<Text>Rider is on the way to pickup</Text>)
@@ -86,14 +111,172 @@ const AcceptedRideContent = () => {
                                 ongoingRide?.status == "started" && (<Text>The ride has started</Text>)
                             }
                         </View>
+                        {/* share ride */}
+
+                        <Pressable
+                            style={{ flexDirection: "row", gap: 5, alignItems: "center", backgroundColor: colors.primary[100], paddingVertical: 5, borderRadius: 10, paddingHorizontal: 10 }}
+                            onPress={async () => {
+                                // Replace with your URL
+                                const url = `https://ride-adminpanel.vercel.app/ride/${ongoingRide?.rideId}`;
+
+                                // Check if the URL can be opened
+                                const canOpen = await Linking.canOpenURL(url);
+
+                                if (canOpen) {
+                                    await Linking.openURL(url);
+                                } else {
+                                    console.log('Cannot open URL');
+
+                                }
+                            }}
+                        >
+
+                            <FontAwesome6 name="share" size={24} color={colors.primary[500]} />
+                            <Text style={{ color: colors.primary[700] }}>Share ride</Text>
+                        </Pressable>
+                    </View>
+                    {/* vehicle details */}
+                    <View style={styles.vehicleDetailContainer}>
+                        <View style={styles.vehicleColumnContainer}>
+                            <Text style={{ fontWeight: 600, fontSize: 18 }}>
+                                {ongoingRide?.driver?.vehicleRegistrationNumber}
+                            </Text>
+                            <Text style={{ color: "#555", marginTop: 4 }}>
+                                {ongoingRide?.driver?.vehicleName}
+                            </Text>
+                        </View>
+                    </View>
+                    {/* rider details */}
+                    <View style={styles.riderDetails}>
+                        <View style={styles.imageContainer}>
+                            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", width: "100%", height: "100%", borderRadius: 100 }}>
+                                <Text style={{ color: "#fff", fontSize: 30 }}>{ongoingRide?.driver?.fullName?.slice(0, 1)}</Text>
+                            </View>
+                        </View>
+                        <View style={{ flexDirection: "column" }}>
+                            <Text>
+                                {ongoingRide?.driver?.fullName}
+                            </Text>
+                            <View style={{ flexDirection: "row", alignItems: "center", marginTop: 4 }}>
+                                <View style={styles.ratingContainer}>
+                                    <View style={{ marginRight: 5 }}>
+                                        <FontAwesome name="star" size={18} color={colors.secondary[400]} />
+                                    </View>
+                                    <Text style={{ color: "#888" }}>4.57</Text>
+                                </View>
+                                <View style={styles.separationLine}>
+
+                                </View>
+                                <Text style={{ color: "#888" }}>
+                                    254 trips
+                                </Text>
+                            </View>
+                        </View>
+                    </View>
+
+                    {/* chat and call  */}
+                    <View style={styles.contactContainer}>
+
+                        <Pressable style={styles.chatContainer}
+                            onPress={onChatPress}
+                        >
+                            <View style={{ marginRight: 10 }}>
+                                <Ionicons name="chatbubble-ellipses" size={24} color={colors.primary[500]} />
+                            </View>
+                            <Text style={{ color: "#888" }}>Pickup notes for rider</Text>
+                        </Pressable>
+                        <Pressable style={styles.callContainer}
+                            onPress={onCallPress}
+                        >
+                            <Ionicons name="call" size={24} color={colors.primary[500]} />
+                        </Pressable>
+                    </View>
+
+
+                    {/* emergency services */}
+                    {
+                        ongoingRide && ongoingRide?.status == "started" && (
+                            <Pressable
+                                onPress={() => {
+                                    if (user && user.emergencyContact) {
+                                        Linking.openURL(`tel:${user.emergencyContact
+                                            }`)
+                                    }
+                                    else {
+                                        Linking.openURL(`tel:${"100"
+                                            }`)
+                                    }
+                                }}
+                                style={{ marginHorizontal: 16, borderRadius: 10, padding: 10, justifyContent: "center", alignItems: "center", flexDirection: "row", gap: 10, backgroundColor: colors.secondary[100], marginTop: 20 }}>
+
+                                <Ionicons name="alert-circle" size={24} color={colors.secondary[500]} />
+                                <Text style={{ color: colors.secondary[600] }}>Emergency Services</Text>
+                            </Pressable>
+                        )
+                    }
+
+                    {
+                        (ongoingRide?.status !== "started" && ongoingRide?.status !== "ended") && (
+                            <View style={{ paddingHorizontal: 16, marginBottom: 20 }}>
+                                <StyledButton
+
+                                    buttonStyles={{ backgroundColor: "#eee", marginTop: 20, marginBottom: 20 }}
+                                    textStyles={{ color: colors.secondary[600] }}
+                                    title='Cancel request'
+                                    onPress={() => { onCancelRequest() }}
+                                />
+                            </View>
+                        )
+                    }
+
+                </>)
+                : 
+                (<>
+                        <View style={styles.headerContainer}>
+                            <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                <View style={styles.dot}></View>
+                                {
+                                    bookedForFriend?.riderStatus !== "arrived" && (<Text>Rider is on the way to pickup</Text>)
+                                }
+                                {
+                                    bookedForFriend?.riderStatus == "arrived" && bookedForFriend?.status == "accepted" && (<Text>Waiting for driver to start the ride</Text>)
+                                }
+                                {
+                                    bookedForFriend?.status == "started" && (<Text>The ride has started</Text>)
+                                }
+                            </View>
+                            {/* share ride */}
+
+                            <Pressable
+                                style={{ flexDirection: "row", gap: 5, alignItems: "center", backgroundColor: colors.primary[100], paddingVertical: 5, borderRadius: 10, paddingHorizontal: 10 }}
+                                onPress={async () => {
+                                    // Replace with your URL
+                                    const url = `https://ride-adminpanel.vercel.app/ride/${bookedForFriend?.rideId}`;
+
+                                    // Check if the URL can be opened
+                                    const canOpen = await Linking.canOpenURL(url);
+
+                                    if (canOpen) {
+                                        await Linking.openURL(url);
+                                    } else {
+                                        console.log('Cannot open URL');
+
+                                    }
+                                }}
+                            >
+
+                                <FontAwesome6 name="share" size={24} color={colors.primary[500]} />
+                                <Text style={{ color: colors.primary[700] }}>Share ride</Text>
+                            </Pressable>
+                        </View>
                         {/* vehicle details */}
                         <View style={styles.vehicleDetailContainer}>
                             <View style={styles.vehicleColumnContainer}>
                                 <Text style={{ fontWeight: 600, fontSize: 18 }}>
-                                    {ongoingRide?.driver?.vehicleRegistrationNumber}
+                                    {bookedForFriend?.driver?.vehicleRegistrationNumber}
                                 </Text>
                                 <Text style={{ color: "#555", marginTop: 4 }}>
-                                    {ongoingRide?.driver?.vehicleName}
+                                    {bookedForFriend?.driver?.vehicleName}
                                 </Text>
                             </View>
                         </View>
@@ -101,12 +284,12 @@ const AcceptedRideContent = () => {
                         <View style={styles.riderDetails}>
                             <View style={styles.imageContainer}>
                                 <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", width: "100%", height: "100%", borderRadius: 100 }}>
-                                    <Text style={{ color: "#fff", fontSize: 30 }}>{ongoingRide?.driver?.fullName?.slice(0, 1)}</Text>
+                                    <Text style={{ color: "#fff", fontSize: 30 }}>{bookedForFriend?.driver?.fullName?.slice(0, 1)}</Text>
                                 </View>
                             </View>
                             <View style={{ flexDirection: "column" }}>
                                 <Text>
-                                    {ongoingRide?.driver?.fullName}
+                                    {bookedForFriend?.driver?.fullName}
                                 </Text>
                                 <View style={{ flexDirection: "row", alignItems: "center", marginTop: 4 }}>
                                     <View style={styles.ratingContainer}>
@@ -143,15 +326,42 @@ const AcceptedRideContent = () => {
                             </Pressable>
                         </View>
 
-                        <View style={{ paddingHorizontal: 16 }}>
-                            <StyledButton
 
-                                buttonStyles={{ backgroundColor: "#eee", marginTop: 20, marginBottom: 20 }}
-                                textStyles={{ color: colors.secondary[600] }}
-                                title='Cancel request'
-                                onPress={() => { onCancelRequest() }}
-                            />
-                        </View>
+                        {/* emergency services */}
+                        {
+                            bookedForFriend && bookedForFriend?.status == "started" && (
+                                <Pressable
+                                    onPress={() => {
+                                        if (user && user.emergencyContact) {
+                                            Linking.openURL(`tel:${user.emergencyContact
+                                                }`)
+                                        }
+                                        else {
+                                            Linking.openURL(`tel:${"100"
+                                                }`)
+                                        }
+                                    }}
+                                    style={{ marginHorizontal: 16, borderRadius: 10, padding: 10, justifyContent: "center", alignItems: "center", flexDirection: "row", gap: 10, backgroundColor: colors.secondary[100], marginTop: 20 }}>
+
+                                    <Ionicons name="alert-circle" size={24} color={colors.secondary[500]} />
+                                    <Text style={{ color: colors.secondary[600] }}>Emergency Services</Text>
+                                </Pressable>
+                            )
+                        }
+
+                        {
+                            (bookedForFriend?.status !== "started" && bookedForFriend?.status !== "ended") && (
+                                <View style={{ paddingHorizontal: 16, marginBottom: 20 }}>
+                                    <StyledButton
+
+                                        buttonStyles={{ backgroundColor: "#eee", marginTop: 20, marginBottom: 20 }}
+                                        textStyles={{ color: colors.secondary[600] }}
+                                        title='Cancel request'
+                                        onPress={() => { onCancelRequest() }}
+                                    />
+                                </View>
+                            )
+                        }
 
                     </>)
             }
@@ -172,7 +382,8 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         marginTop: 24,
-        paddingHorizontal: 24
+        paddingHorizontal: 24,
+        justifyContent: "space-between"
     },
     dot: {
         backgroundColor: colors.secondary[400],

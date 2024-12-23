@@ -46,7 +46,9 @@ export type AppStackParamList = {
         alertDate: Date,
         selectedTime: string | null
     },
-    AcceptedRideScreen: undefined,
+    AcceptedRideScreen: {
+        tag:string
+    },
     ChatScreen: undefined,
     BookForFriendScreen: undefined,
     AddDestinationScreen: undefined,

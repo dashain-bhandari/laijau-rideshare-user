@@ -65,7 +65,7 @@ const Bike = ({ navigation }: { navigation: HomeScreenNavigation }) => {
       onPress={() => {
 
         if (ongoingRide) {
-          navigation.navigate("AcceptedRideScreen");
+          navigation.navigate("AcceptedRideScreen", { tag: "ongoingRide" });
         } else {
           dispatch(setVehicleType("Bike"))
           navigation.navigate("FindDestinationScreen");
@@ -99,7 +99,7 @@ const Car = ({ navigation }: { navigation: HomeScreenNavigation }) => {
     }}
       onPress={() => {
         if (ongoingRide) {
-          navigation.navigate("AcceptedRideScreen");
+          navigation.navigate("AcceptedRideScreen", { tag: "ongoingRide" });
         } else {
           dispatch(setVehicleType("Car"))
           navigation.navigate("FindDestinationScreen")
@@ -135,8 +135,16 @@ const ForFriend = ({ navigation }: { navigation: HomeScreenNavigation }) => {
         //   navigation.navigate("FindDestinationScreen")
         // }
 
-        dispatch(setBookedForFriend(true));
-        navigation.navigate("BookForFriendScreen")
+        console.log("booked for friend",bookedForFriend)
+        if (bookedForFriend) {
+          navigation.navigate("AcceptedRideScreen", { tag: "bookedRide" });
+        }
+        else {
+          dispatch(setBookedForFriend(true));
+          navigation.navigate("BookForFriendScreen")
+        }
+
+
 
       }}
     >

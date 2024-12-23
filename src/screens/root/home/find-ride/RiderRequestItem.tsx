@@ -14,6 +14,7 @@ import { RootState } from '../../../../state/store';
 import { useNavigation } from '@react-navigation/native';
 import { HomeScreenNavigation } from '../../../../types/types';
 import { setOngoingRide } from '../../../../state/ongoingRide/ongoingRideSlice';
+import { setBookedForFriend } from '../../../../state/rideRequest/rideRequestSlice';
 
 
 const { height } = Dimensions.get("screen")
@@ -148,43 +149,56 @@ const RiderRequestItem = forwardRef(({ item, setRiders, riders }: any, ref) => {
     }
 
     const createAnOngoingRideAndChatRoom = async () => {
-      try {
-        console.log("item",item)
-          //add a ride to ride collection
-          await setDoc(doc(database, "rides", item?.rideId), {
-            rideId: item?.rideId,
-            ...item,
-            createdAt: Timestamp.fromDate(new Date()),
-            status:"accepted"
+        try {
+            console.log("item", item)
+            //add a ride to ride collection
+            await setDoc(doc(database, "rides", item?.rideId), {
+                rideId: item?.rideId,
+                ...item,
+                createdAt: Timestamp.fromDate(new Date()),
+                status: "accepted"
 
-        })
+            })
 
-        //create chat room
-        await setDoc(doc(database, "chats", item?.rideId), {
-            rideId: item?.rideId,
-            createdAt: Timestamp.fromDate(new Date())
+            //create chat room
+            await setDoc(doc(database, "chats", item?.rideId), {
+                rideId: item?.rideId,
+                createdAt: Timestamp.fromDate(new Date())
 
-        })
+            })
 
-        //store ongoing ride in a state
-        dispatch(setOngoingRide({
-            ...item
-        }))
+            // console.log("onb accept screen", item.bookedForFriend)
+            // if (item?.bookedForFriend) {
+            //     console.log("booked for friend", item?.bookedForFriend)
+            //     dispatch(setBookedForFriend({
+            //         ...item
+            //     }))
+            // } else {
+            //     console.log("booked for friend hehe", item?.bookedForFriend)
+            //     //store ongoing ride in a state
+            //     dispatch(setOngoingRide({
+            //         ...item
+            //     }))
+            // }
 
-      } catch (error:any) {
-        console.log("error",error.message)
-      }
+        } catch (error: any) {
+            console.log("error", error.message)
+        }
 
     }
     const onAccept = async (item: any) => {
         viewTranslateX.value = withTiming(-400, { duration: 600 }, () => {
-            
+
             runOnJS(createAnOngoingRideAndChatRoom)()
             runOnJS(deleteRequestFromDb)()
             runOnJS(decline)(item)
         })
         viewOpacity.value = withTiming(0, { duration: 600 })
-        navigation.navigate("AcceptedRideScreen")
+       if(item?.bookedForFriend){
+        navigation.navigate("AcceptedRideScreen",{tag:"bookedRide"});
+       }else{
+        navigation.navigate("AcceptedRideScreen",{tag:"ongoingRide"});
+       }
 
     }
 
@@ -204,9 +218,9 @@ const RiderRequestItem = forwardRef(({ item, setRiders, riders }: any, ref) => {
                 <View style={styles.infoContainer}>
                     {/* name,profile */}
                     <View style={styles.infoflexContainer}>
-                        <View style={{ width: 40, height: 40, borderRadius: 20,  marginRight: 10, backgroundColor: colors.primary[400] }}>
-                            <View style={{flexDirection:"row",alignItems:"center",justifyContent:"center",width:"100%",height:"100%",borderRadius:100}}>
-                                <Text style={{color:"#fff",fontSize:30}}>{item?.driver?.fullName?.slice(0,1)}</Text>
+                        <View style={{ width: 40, height: 40, borderRadius: 20, marginRight: 10, backgroundColor: colors.primary[400] }}>
+                            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", width: "100%", height: "100%", borderRadius: 100 }}>
+                                <Text style={{ color: "#fff", fontSize: 30 }}>{item?.driver?.fullName?.slice(0, 1)}</Text>
                             </View>
                         </View>
                         <View>
@@ -233,7 +247,7 @@ const RiderRequestItem = forwardRef(({ item, setRiders, riders }: any, ref) => {
                 {/* price */}
                 <View style={{ marginTop: 10, flexDirection: "row", alignItems: "center" }}>
                     <Text style={{ fontWeight: 600, fontSize: 26, color: "#444" }}>रु </Text>
-                    <Text style={{ fontWeight: 700, fontSize: 30 }}>{item?.driverOffer??item.offeredPrice}</Text>
+                    <Text style={{ fontWeight: 700, fontSize: 30 }}>{item?.driverOffer ?? item.offeredPrice}</Text>
                 </View>
                 {/* Buttons */}
                 <View style={styles.buttonContainer}>

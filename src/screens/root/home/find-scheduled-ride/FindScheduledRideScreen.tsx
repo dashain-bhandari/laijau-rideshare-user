@@ -20,28 +20,28 @@ import { setScheduledRide } from '../../../../state/scheduledRide/scheduledRideS
 import notifee, { TimestampTrigger, TriggerType } from '@notifee/react-native';
 const { height, width } = Dimensions.get("screen")
 
-const FindScheduledRideScreen = ({ navigation,route }: FindScheduledRideScreenProps) => {
+const FindScheduledRideScreen = ({ navigation, route }: FindScheduledRideScreenProps) => {
     let [riders, setRiders] = useState<any[]>([]);
     const bottomsheetRef = useRef<any>(null);
     const socket = useContext(SocketContext)
     const { ongoingRide } = useSelector((state: RootState) => state.ongoingRide)
-    const { offeredPrice, vehicleType, rideId, } = useSelector((state: RootState) => state.rideRequest)
+    const { offeredPrice, vehicleType, rideId, initialPrice } = useSelector((state: RootState) => state.rideRequest)
     const { user } = useSelector((state: RootState) => state.user)
     const { userLocation, destinationLocation } = useSelector((state: RootState) => state.location)
     const { scheduledRide } = useSelector((state: RootState) => {
         return state.scheduledRide
     })
 
-    const {selectedTime,date,alertDate}=route.params
+    const { selectedTime, date, alertDate } = route.params
 
-  
+
     const dispatch = useDispatch();
-    console.log("alert date",alertDate.toString())
+    console.log("alert date", alertDate.toString())
     useEffect(() => {
 
         const getRequests = async () => {
             try {
-                if (user ) {
+                if (user) {
                     //fetch any requests belonging to the user
                     const collectionRef = collection(database, "driverRideRequests");
                     const q = rideId ? (query(collectionRef,
@@ -49,7 +49,7 @@ const FindScheduledRideScreen = ({ navigation,route }: FindScheduledRideScreenPr
                             where('userId', '==', user?.id!)))
 
                     const unsubscribe = onSnapshot(q, async (snapshot) => {
-                        const newRiders:any = snapshot.docs.map(doc => ({
+                        const newRiders: any = snapshot.docs.map(doc => ({
                             id: doc.id,
                             name: doc.data().driver.fullName,
                             offeredPrice: doc.data().driverOffer,
@@ -65,55 +65,55 @@ const FindScheduledRideScreen = ({ navigation,route }: FindScheduledRideScreenPr
                         dispatch(setScheduledRide(newRiders[0]));
 
                         //save ride in db
-                            //add a ride to ride collection
-                            await setDoc(doc(database, "rides", newRiders[0]?.rideId), {
-                                rideId: newRiders[0]?.rideId,
-                                ...newRiders[0],
-                                createdAt: Timestamp.fromDate(new Date()),
-                                status: "accepted"
+                        //add a ride to ride collection
+                        await setDoc(doc(database, "rides", newRiders[0]?.rideId), {
+                            rideId: newRiders[0]?.rideId,
+                            ...newRiders[0],
+                            createdAt: Timestamp.fromDate(new Date()),
+                            status: "accepted"
 
-                            })
+                        })
 
-                            //create chat room
-                            await setDoc(doc(database, "chats", newRiders[0]?.rideId), {
-                                rideId: newRiders[0]?.rideId,
-                                createdAt: Timestamp.fromDate(new Date())
+                        //create chat room
+                        await setDoc(doc(database, "chats", newRiders[0]?.rideId), {
+                            rideId: newRiders[0]?.rideId,
+                            createdAt: Timestamp.fromDate(new Date())
 
-                            })
+                        })
 
 
                         //set reminder
                         await notifee.requestPermission()
 
-        // Create a channel (required for Android)
-        const channelId = await notifee.createChannel({
-            id: 'default',
-            name: 'Default Channel',
-            vibration: true,
-            vibrationPattern: [300, 500],
-        });
+                        // Create a channel (required for Android)
+                        const channelId = await notifee.createChannel({
+                            id: 'default',
+                            name: 'Default Channel',
+                            vibration: true,
+                            vibrationPattern: [300, 500],
+                        });
 
-        console.log("alert date",alertDate)
+                        console.log("alert date", alertDate)
 
-        const trigger: TimestampTrigger = {
-            type: TriggerType.TIMESTAMP,
-            timestamp: (new Date(alertDate)).getTime() // fire at 11:10am (10 minutes before meeting)
-        };
-        // Create a trigger notification
-        await notifee.createTriggerNotification(
-            {
-                title: 'Ride reminder',
-                body: `Today at ${selectedTime}`,
+                        const trigger: TimestampTrigger = {
+                            type: TriggerType.TIMESTAMP,
+                            timestamp: (new Date(alertDate)).getTime() // fire at 11:10am (10 minutes before meeting)
+                        };
+                        // Create a trigger notification
+                        await notifee.createTriggerNotification(
+                            {
+                                title: 'Ride reminder',
+                                body: `Today at ${selectedTime}`,
 
-                android: {
-                    channelId: channelId,
-                },
-                ios: {
-                    critical: true
-                }
-            },
-            trigger,
-        );
+                                android: {
+                                    channelId: channelId,
+                                },
+                                ios: {
+                                    critical: true
+                                }
+                            },
+                            trigger,
+                        );
 
                         //delete req.
                         // first delete any existing old requests in driverRideRequests of that user so, we can fetch fresh requests for this particular ride.
@@ -182,7 +182,7 @@ const FindScheduledRideScreen = ({ navigation,route }: FindScheduledRideScreenPr
                                 <View style={{ flexDirection: "column", marginTop: 20, paddingHorizontal: 16 }}>
                                     <View style={{ backgroundColor: colors.secondary[100], padding: 10, borderRadius: 10, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
                                         <Text>
-                                            Rs. 50
+                                        रू {initialPrice}
                                         </Text>
                                     </View>
                                     {/* pickup */}

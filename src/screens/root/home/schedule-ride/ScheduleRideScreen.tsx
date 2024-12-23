@@ -17,6 +17,7 @@ import { RootState } from '../../../../state/store';
 import { setOfferedPrice, setRideId } from '../../../../state/rideRequest/rideRequestSlice';
 import { addDoc, collection, deleteDoc, getDocs, query, serverTimestamp, where } from 'firebase/firestore';
 import { database } from '../../../../../firebaseConfig';
+import { KNN } from '../../../../helpers/KNN';
 
 const { width, height } = Dimensions.get("screen");
 
@@ -28,11 +29,13 @@ const ScheduleRideScreen = ({ navigation }: ScheduleRideScreenProps) => {
     const [isDatePickerVisible, setDatePickerVisibility] = useState<boolean>(false);
     const [pickedOption, setPickedOption] = useState<Date | null>(null)
     const [universalTime, setUniversalTime] = useState<Date | null>(null);
-    const [selectedOption, setSelectedOption] = useState<string>("today");
-    const {offeredPrice,initialPrice,vehicleType,preferredVehicle}=useSelector((state:RootState)=>state.rideRequest)
-    const {user}=useSelector((state:RootState)=>state.user)
-    const {userLocation,destinationLocation}=useSelector((state:RootState)=>state.location)
-    const dispatch=useDispatch();
+    const [selectedOption, setSelectedOption] = useState<string>("");
+    const { offeredPrice, initialPrice, vehicleType, preferredVehicle } = useSelector((state: RootState) => state.rideRequest)
+    const { user } = useSelector((state: RootState) => state.user)
+    const { userLocation, destinationLocation } = useSelector((state: RootState) => state.location)
+
+    const dispatch = useDispatch();
+
     const showTimePicker = () => {
         setTimePickerVisibility(true);
     };
@@ -81,7 +84,7 @@ const ScheduleRideScreen = ({ navigation }: ScheduleRideScreenProps) => {
         }
     }
 
-  
+
     const [isValid, setIsValid] = useState(false);
 
     useEffect(() => {
@@ -93,83 +96,85 @@ const ScheduleRideScreen = ({ navigation }: ScheduleRideScreenProps) => {
         }
     }, [pickedOption, universalTime])
 
+
+    const findNearestDrivers = async () => {
+        try {
+            const allDrivers: any = [];
+            const q = query(collection(database, "driverLocations"));
+            const querySnapshot = await getDocs(q);
+
+            querySnapshot.forEach(async (doc) => {
+                allDrivers.push(doc.data());
+            });
+            console.log("all drivers", allDrivers)
+            const nearestDrivers = KNN(allDrivers, { location: { lat1: userLocation?.userLatitude, lon1: userLocation?.userLongitude }, preference: preferredVehicle, vehicleType }, 15);
+            console.log("nearest drivers are: ", nearestDrivers);
+            return nearestDrivers;
+
+        } catch (error: any) {
+            console.log("error finding nearest drivers: ", error.message);
+        }
+    }
+
     const onFideRidePress = async () => {
         if (pickedOption && universalTime) {
-            const date = new Date(pickedOption?.getFullYear()!, pickedOption?.getMonth()!, pickedOption?.getDate()!, universalTime?.getHours()! , universalTime?.getMinutes());
-            const alertDate = new Date(pickedOption?.getFullYear()!, pickedOption?.getMonth()!, pickedOption?.getDate()!, universalTime?.getHours()-1!, universalTime?.getMinutes());
+            const date = new Date(pickedOption?.getFullYear()!, pickedOption?.getMonth()!, pickedOption?.getDate()!, universalTime?.getHours()!, universalTime?.getMinutes());
+            const alertDate = new Date(pickedOption?.getFullYear()!, pickedOption?.getMonth()!, pickedOption?.getDate()!, universalTime?.getHours() - 1!, universalTime?.getMinutes());
             console.log("universal", date.toString());
 
             console.log("local", date.toLocaleString());
-            console.log("alert",alertDate)
+            console.log("alert", alertDate)
 
-   //add request to the db
-   if (user) {
-    console.log("add")
-    try {
-        if (!offeredPrice) {
-            dispatch(setOfferedPrice(initialPrice!));
-        }
-        // first delete any existing old requests in driverRideRequests of that user so, we can fetch fresh requests for this particular ride.
-        const q = query(collection(database, "driverRideRequests"), where("userId", "==", user?.id));
-        const querySnapshot = await getDocs(q);
+            //add request to the db
+            if (user) {
+                console.log("add")
+                try {
+                    if (!offeredPrice) {
+                        dispatch(setOfferedPrice(initialPrice!));
+                    }
+                    // first delete any existing old requests in driverRideRequests of that user so, we can fetch fresh requests for this particular ride.
+                    const q = query(collection(database, "driverRideRequests"), where("userId", "==", user?.id));
+                    const querySnapshot = await getDocs(q);
 
-        querySnapshot.forEach(async (doc) => {
-            await deleteDoc(doc.ref)
-        });
+                    querySnapshot.forEach(async (doc) => {
+                        await deleteDoc(doc.ref)
+                    });
 
-        // also delete user ko old requests
+                    // also delete user ko old requests
 
-        let rideId = `ride${Date.now()}`;
-        console.log("rideId", rideId)
-        dispatch(setRideId(rideId));
+                    let rideId = `ride${Date.now()}`;
+                    console.log("rideId", rideId)
+                    dispatch(setRideId(rideId));
 
-        const queryUser = query(collection(database, "userRideRequests"), where("userId", "==", user?.id), where("rideId", "!=", rideId));
-        const querySnapshotUser = await getDocs(queryUser);
+                    const queryUser = query(collection(database, "userRideRequests"), where("userId", "==", user?.id), where("rideId", "!=", rideId));
+                    const querySnapshotUser = await getDocs(queryUser);
 
-        querySnapshotUser.forEach(async (doc) => {
-            await deleteDoc(doc.ref)
-        });
+                    querySnapshotUser.forEach(async (doc) => {
+                        await deleteDoc(doc.ref)
+                    });
 
-        // let nearestDrivers=await findNearestDrivers();
+                    let nearestDrivers = await findNearestDrivers();
 
-        await addDoc(collection(database, "userRideRequests"), {
-            rideId: rideId,
-            userId: user?.id,
-            vehicleType,
-            offeredPrice: offeredPrice ?? initialPrice,
-            pickup: userLocation,
-            dropoff: destinationLocation,
-            status: 'pending',
-            user,
-            createdAt: serverTimestamp(),
-            scheduledDate:date.toLocaleString(),
-            scheduled:true
-            // nearestDrivers
+                    await addDoc(collection(database, "userRideRequests"), {
+                        rideId: rideId,
+                        userId: user?.id,
+                        vehicleType,
+                        offeredPrice: offeredPrice ?? initialPrice,
+                        pickup: userLocation,
+                        dropoff: destinationLocation,
+                        status: 'pending',
+                        user,
+                        createdAt: serverTimestamp(),
+                        scheduledDate: date.toLocaleString(),
+                        scheduled: true,
+                        nearestDrivers
+                    })
 
-        })
 
-        // fort test purpose
-        // const trigger: TimestampTrigger = {
-        //     type: TriggerType.TIMESTAMP,
-        //     timestamp: (new Date(alertDate)).getTime() // fire at 11:10am (10 minutes before meeting)
-        // };
-        // // Create a trigger notification
-        // await notifee.createTriggerNotification(
-        //     {
-        //         title: 'Ride reminder',
-        //         body: `Today at ${selectedTime}`,
-
-               
-        //         ios: {
-        //             critical: true
-        //         }
-        //     },
-        //     trigger,
-        // );
-    } catch (error) {
-        console.log("error", error)
-    }
-}
+                } catch (error) {
+                    console.log("error", error)
+                }
+            }
 
             navigation.navigate("FindScheduledRideScreen", {
                 alertDate,
@@ -178,21 +183,25 @@ const ScheduleRideScreen = ({ navigation }: ScheduleRideScreenProps) => {
             })
 
 
-          
+
 
         }
 
-       
+
 
     }
 
-   
+
 
     return (
         <View style={{ flex: 1 }}>
             <BackButton onPressHandler={() => { }} />
             <Map />
-            <BottomModal modalVisible={modalVisible} initialHeight={2.80}>
+            <BottomModal modalVisible={modalVisible} initialHeight={2.50}>
+                <View style={{ backgroundColor: colors.secondary[100], borderRadius: 10, flexDirection: "row", justifyContent: "center", alignItems: "center", padding: 10, marginTop: 20, marginHorizontal: 16 }}>
+                    <View style={{ width: 10, height: 10, borderRadius: 10, backgroundColor: colors.secondary[500], marginRight: 5 }}></View>
+                    <Text style={{ color: colors.secondary[600] }}>The fare for scheduled ride is fixed: Rs. {initialPrice}</Text>
+                </View>
                 <View style={styles.modalContainer}>
 
                     <Text style={{ color: "#555", marginTop: 10 }}>Choose time within tomorrow you want to book a ride</Text>
@@ -221,9 +230,10 @@ const ScheduleRideScreen = ({ navigation }: ScheduleRideScreenProps) => {
                     </Pressable>
 
 
+
                     <StyledButton
-                    disabled={!isValid}
-                        buttonStyles={{ backgroundColor: isValid?colors.primary[500]:colors.primary[200], marginTop: 20 }}
+                        disabled={!isValid}
+                        buttonStyles={{ backgroundColor: isValid ? colors.primary[500] : colors.primary[200], marginTop: 20 }}
                         textStyles={{ color: "#fff" }}
                         title="Find ride"
                         onPress={() => {
@@ -249,7 +259,7 @@ export default ScheduleRideScreen
 
 const styles = StyleSheet.create({
     modalContainer: {
-        marginTop: 20,
+        marginTop: 10,
         paddingHorizontal: 16
     },
     pressableContainer: {

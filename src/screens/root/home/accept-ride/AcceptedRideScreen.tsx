@@ -9,19 +9,19 @@ import AcceptedRideContent from './AcceptedRideContent'
 import Map from '../../../../components/Map'
 import CustomBottomSheet from '../../../../components/CustomBottomSheet'
 import BackButton from '../../../../components/BackButton'
-import { HomeScreenNavigation } from '../../../../types/types'
+import { AcceptedRideScreenProps, HomeScreenNavigation } from '../../../../types/types'
 
-const AcceptedRide = () => {
-    const navigation=useNavigation<HomeScreenNavigation>()
+const AcceptedRide = ({navigation,route}:AcceptedRideScreenProps) => {
+    const {tag}=route.params;
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <View style={styles.container}>
                 <BackButton onPressHandler={()=>{
-                    navigation.goBack();
+                    navigation.popToTop();
                 }}/>
                 <Map />
-                <CustomBottomSheet scrollable={false} initialHeight={2.5}>
-                    <AcceptedRideContent />
+                <CustomBottomSheet scrollable={false} initialHeight={2.3}>
+                    <AcceptedRideContent tag={tag} />
                 </CustomBottomSheet>
             </View>
         </GestureHandlerRootView>

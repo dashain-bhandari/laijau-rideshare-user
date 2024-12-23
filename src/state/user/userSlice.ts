@@ -12,7 +12,8 @@ interface UserState {
         fullName: string,
         mobileNumber: string,
         email: string,
-        savedAddresses: Address[]
+        savedAddresses: Address[],
+        emergencyContact:string|null
     } | undefined
 }
 

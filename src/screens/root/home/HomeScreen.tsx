@@ -28,6 +28,9 @@ import StarRating from 'react-native-star-rating-widget';
 import { Rating, AirbnbRating } from 'react-native-ratings';
 import { TextInput } from 'react-native';
 import { AxiosInstance } from '../../../config/AxiosInstance';
+import {  setOfferedPrice, setRideId, setVehicleType } from '../../../state/rideRequest/rideRequestSlice';
+import { setDestinationLocation, setUserLocation } from '../../../state/location/locationSlice';
+import { setBookedRide } from '../../../state/bookForFriend/bookForFriendSlice';
 
 const ios = Platform.OS === "ios";
 const Home = () => {
@@ -84,7 +87,18 @@ const Home = () => {
 
                     if (newRequests && newRequests.length > 0) {
                         console.log("ongoing ride found:", newRequests)
-                        dispatch(setOngoingRide(newRequests[0]))
+                      
+                        const ongoing=newRequests?.find((i:any)=>!i?.bookedForFriend)
+                        if(ongoing){
+                            dispatch(setOngoingRide(ongoing))
+                        }
+                        const booked=newRequests?.find((i:any)=>i?.bookedForFriend);
+                        console.log("booked ride",booked);
+                        if(booked){
+                            dispatch(setBookedRide(booked))
+                            console.log("dispatched")
+                        }
+                       
                     }
                 })
 
@@ -98,6 +112,7 @@ const Home = () => {
     useEffect(() => {
         fetchOngoingRide();
         fetchScheduledRide();
+        fetchRequestedRide();
     }, [user])
 
     const fetchScheduledRide = async () => {
@@ -118,6 +133,43 @@ const Home = () => {
                     if (newRequests && newRequests.length > 0) {
                         console.log("ongoing ride found:", newRequests)
                         dispatch(setScheduledRide(newRequests[0]))
+                    }
+                })
+
+                // Cleanup subscription when component unmounts
+                return () => unsubscribe();
+            }
+        } catch (error: any) {
+            console.log("Error fetching user's ongoing ride", error.message);
+        }
+    }
+
+
+    const fetchRequestedRide = async () => {
+        try {
+            if (user) {
+
+                const unsubscribe = onSnapshot(collection(database, "userRideRequests"), async (snapshot) => {
+                    const newRequests: any = snapshot.docs.
+                        filter(doc => {
+
+                            return doc.data().userId == user?.id
+                        })
+                        .map(doc => ({
+                            id: doc.id,
+                            ...doc.data(),
+                        }));
+                    console.log("userid", user.id)
+                    console.log("new reqs", newRequests)
+                    if (newRequests && newRequests.length > 0) {
+                        console.log("requested ride found:", newRequests)
+                        console.log("new requests", newRequests)
+                        dispatch(setRideId(newRequests[0]?.rideId));
+                        dispatch(setOfferedPrice(newRequests[0]?.offeredPrice));
+                        dispatch(setVehicleType(newRequests[0]?.vehicleType))
+                        dispatch(setUserLocation(newRequests[0]?.pickup))
+                        dispatch(setDestinationLocation(newRequests[0]?.dropoff))
+                        navigation.navigate("FindRideScreen");
                     }
                 })
 

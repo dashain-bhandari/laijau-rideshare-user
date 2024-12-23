@@ -16,6 +16,7 @@ import { RootState } from '../../../../state/store'
 import { addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, query, serverTimestamp, snapshotEqual, where } from 'firebase/firestore'
 import { database } from '../../../../../firebaseConfig'
 import { setOfferedPrice, setRideId } from '../../../../state/rideRequest/rideRequestSlice'
+import { KNN } from '../../../../helpers/KNN'
 
 const { height, width } = Dimensions.get("screen")
 
@@ -24,7 +25,7 @@ const FindRide = ({ navigation }: FindRideScreenProps) => {
     const bottomsheetRef = useRef<any>(null);
     const socket = useContext(SocketContext)
     const { ongoingRide } = useSelector((state: RootState) => state.ongoingRide)
-    const { offeredPrice, vehicleType, rideId } = useSelector((state: RootState) => state.rideRequest)
+    const { offeredPrice, vehicleType, rideId,preferredVehicle,bookedForFriend,friendNumber,friendName } = useSelector((state: RootState) => state.rideRequest)
     const { user } = useSelector((state: RootState) => state.user)
     const { userLocation, destinationLocation } = useSelector((state: RootState) => state.location)
     const { autoAccept } = useSelector((state: RootState) => state.rideRequest)
@@ -33,6 +34,24 @@ const FindRide = ({ navigation }: FindRideScreenProps) => {
     const [newReqSent, setNewReqSent] = useState(false);
 
 
+    const findNearestDrivers = async () => {
+        try {
+            const allDrivers: any = [];
+            const q = query(collection(database, "driverLocations"));
+            const querySnapshot = await getDocs(q);
+
+            querySnapshot.forEach(async (doc) => {
+                allDrivers.push(doc.data());
+            });
+            console.log("all drivers", allDrivers)
+            const nearestDrivers = KNN(allDrivers, { location: { lat1: userLocation?.userLatitude, lon1: userLocation?.userLongitude }, preference: preferredVehicle, vehicleType }, 15);
+            console.log("nearest drivers are: ", nearestDrivers);
+            return nearestDrivers;
+
+        } catch (error: any) {
+            console.log("error finding nearest drivers: ", error.message);
+        }
+    }
 
     //delete request function
     const deleteExpiredRequestsFromDb = async () => {
@@ -81,21 +100,21 @@ const FindRide = ({ navigation }: FindRideScreenProps) => {
                 setRiders(newRiders);
 
                 //check if any rider can be autoaccepted
-                if (autoAccept) {
-                    const rider = newRiders.find((i) => {
-                        return i.offeredPrice === offeredPrice
-                    });
+                // if (autoAccept) {
+                //     const rider = newRiders.find((i) => {
+                //         return i.offeredPrice === offeredPrice
+                //     });
 
-                    if (rider) {
-                        //delete requests 
-                        deleteExpiredRequestsFromDb();
+                //     if (rider) {
+                //         //delete requests 
+                //         deleteExpiredRequestsFromDb();
 
-                        //create a new ongoing ride state
+                //         //create a new ongoing ride state
 
-                        navigation.navigate("AcceptedRideScreen");
-                    }
+                //         // navigation.navigate("AcceptedRideScreen");
+                //     }
 
-                }
+                // }
             });
 
             // Cleanup subscription when component unmounts
@@ -171,6 +190,7 @@ const FindRide = ({ navigation }: FindRideScreenProps) => {
         querySnapshotUser.forEach(async (doc) => {
             await deleteDoc(doc.ref)
         });
+        const nearestDrivers=await findNearestDrivers();
 
         await addDoc(collection(database, "userRideRequests"), {
             rideId: rideId,
@@ -182,7 +202,11 @@ const FindRide = ({ navigation }: FindRideScreenProps) => {
             status: 'pending',
             user,
             scheduled: false,
-            createdAt: serverTimestamp()
+            createdAt: serverTimestamp(),
+            nearestDrivers,
+            bookedForFriend,
+           friendName:friendName??"",
+                    friendNumber:friendNumber??""
 
         })
         setNewReqSent(!newReqSent);
@@ -216,9 +240,6 @@ const FindRide = ({ navigation }: FindRideScreenProps) => {
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <RiderRequest drivers={riders} setRiders={setRiders} />
-            <BackButton onPressHandler={() => {
-                navigation.goBack()
-            }} />
             <Map />
             <FindRideBottomSheet ref={bottomsheetRef}>
                 <ScrollView contentContainerStyle={{ paddingHorizontal: 16 }}>
