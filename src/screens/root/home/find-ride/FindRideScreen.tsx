@@ -25,7 +25,7 @@ const FindRide = ({ navigation }: FindRideScreenProps) => {
     const bottomsheetRef = useRef<any>(null);
     const socket = useContext(SocketContext)
     const { ongoingRide } = useSelector((state: RootState) => state.ongoingRide)
-    const { offeredPrice, vehicleType, rideId,preferredVehicle,bookedForFriend,friendNumber,friendName } = useSelector((state: RootState) => state.rideRequest)
+    const { offeredPrice, vehicleType, rideId,preferredVehicle,bookedForFriend,friendNumber,friendName,distanceInKm } = useSelector((state: RootState) => state.rideRequest)
     const { user } = useSelector((state: RootState) => state.user)
     const { userLocation, destinationLocation } = useSelector((state: RootState) => state.location)
     const { autoAccept } = useSelector((state: RootState) => state.rideRequest)
@@ -88,10 +88,7 @@ const FindRide = ({ navigation }: FindRideScreenProps) => {
                         id: doc.id,
                         name: doc.data().driver.fullName,
                         offeredPrice: doc.data().driverOffer,
-                        avatar: require("../../../../assets/images/car.png"),
-                        rating: 4.35,
-                        noOfRides: 432,
-                        timeInMinutes: 4,
+                      
                         ...doc.data()
                     }
                 });
@@ -206,10 +203,11 @@ const FindRide = ({ navigation }: FindRideScreenProps) => {
             nearestDrivers,
             bookedForFriend,
            friendName:friendName??"",
-                    friendNumber:friendNumber??""
+                    friendNumber:friendNumber??"",
+                    distanceInKm
 
         })
-        setNewReqSent(!newReqSent);
+        setNewReqSent(!newReqSent)
     }
 
     const onCancelRequest = async () => {

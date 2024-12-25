@@ -32,12 +32,15 @@ import {  setOfferedPrice, setRideId, setVehicleType } from '../../../state/ride
 import { setDestinationLocation, setUserLocation } from '../../../state/location/locationSlice';
 import { setBookedRide } from '../../../state/bookForFriend/bookForFriendSlice';
 import { useTranslation } from 'react-i18next';
+import { setRides } from '../../../state/rides/ridesSlice';
 
 const ios = Platform.OS === "ios";
 const Home = () => {
     const navigation = useNavigation<HomeScreenNavigation>();
     const socket = useContext(SocketContext)
     const { user } = useSelector((state: RootState) => state.user);
+    const {ongoingRide}=useSelector((state:RootState)=>state.ongoingRide)
+    const {scheduledRide}=useSelector((state:RootState)=>state.scheduledRide)
     //for requesting permission and opening modal if permission denied
     const { modalOpen, setModalOpen, requestLocation, subscription, locationAccessPrompt } = useLocation()
 
@@ -195,6 +198,27 @@ const Home = () => {
             console.log("error", error.message)
         }
     }
+
+    useEffect(() => {
+        const getAllRides = async () => {
+        if(user){
+          try {
+            console.log("yoo hiii")
+            const { data } = await AxiosInstance.get(`/ride/user/${user?.id}`);
+            console.log(data)
+            if (data.data) {
+              console.log("rides data from db: ", data.data)
+              dispatch(setRides(data.data))
+            }
+          } catch (error: any) {
+            console.log("error getting user rides from db:", error.message)
+          }
+        }
+         
+        }
+        getAllRides();
+      }, [user])
+
 
     const {t}=useTranslation()
     return (

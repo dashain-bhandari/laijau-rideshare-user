@@ -63,7 +63,7 @@ const AddStopScreen = ({ navigation, route }: AddStopScreenProps) => {
                         <FontAwesome name="map-pin" size={18} color={colors.secondary[500]} />
 
                     </Pressable>
-                    <YourAddresses />
+                    {/* <YourAddresses /> */}
 
 
                 </ScrollView>

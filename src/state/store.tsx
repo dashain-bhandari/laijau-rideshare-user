@@ -4,7 +4,9 @@ import locationReducer from "./location/locationSlice";
 import rideRequestReducer from "./rideRequest/rideRequestSlice";
 import ongoingRideReducer from "./ongoingRide/ongoingRideSlice";
 import scheduledRideReducer from "./scheduledRide/scheduledRideSlice";
-import bookedForFriendReducer from "./bookForFriend/bookForFriendSlice"
+import bookedForFriendReducer from "./bookForFriend/bookForFriendSlice";
+import rideReducer from "./rides/ridesSlice";
+
 export const store = configureStore({
 
     reducer: {
@@ -12,13 +14,14 @@ export const store = configureStore({
         location: locationReducer,
         rideRequest: rideRequestReducer,
         ongoingRide: ongoingRideReducer,
-        scheduledRide:scheduledRideReducer,
-        bookedForFriend:bookedForFriendReducer
+        scheduledRide: scheduledRideReducer,
+        bookedForFriend: bookedForFriendReducer,
+        rides: rideReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
-        serializableCheck:false
+        serializableCheck: false
     }),
-    
+
 })
 
 export type RootState = ReturnType<typeof store.getState>

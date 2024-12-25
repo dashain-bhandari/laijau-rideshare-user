@@ -1,5 +1,5 @@
-import { ActivityIndicator, Image, Pressable, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { ActivityIndicator, Image, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { ScrollView } from 'react-native'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -15,10 +15,20 @@ import { setOngoingRide } from '../../../../state/ongoingRide/ongoingRideSlice';
 import StyledButton from '../../../../styled/StyledButton';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { setBookedRide } from '../../../../state/bookForFriend/bookForFriendSlice';
+import { AxiosInstance } from '../../../../config/AxiosInstance';
+import { TextInput } from 'react-native';
+import { Rating } from 'react-native-ratings';
 
 
-const AcceptedRideContent = ({tag}:{tag:string}) => {
+const AcceptedRideContent = ({tag,setShowRatingModal}:{tag:string,setShowRatingModal:Dispatch<SetStateAction<boolean>>}) => {
 
+
+    const [rating, setRating] = useState(0);
+    const [review, setReview] = useState('');
+    const [submitting, setSubmitting] = useState(false);
+
+
+   
     console.log("tag in accepted ride:",tag)
     const { user } = useSelector((state: RootState) => state.user)
     const navigation = useNavigation<HomeScreenNavigation>();
@@ -54,12 +64,18 @@ const AcceptedRideContent = ({tag}:{tag:string}) => {
     }, [])
 
     useEffect(() => {
+     const getData=async()=>{
         if (tag=="ongoingRide" && ongoingRide && ongoingRide?.status == "ended") {
             try {
                 const docRef = doc(database, "rides", ongoingRide?.rideId);
                 deleteDoc(docRef)
-                dispatch(setOngoingRide(undefined));
-                navigation.popTo("TabsScreen")
+            
+
+                console.log("ongoing ride ",ongoingRide?.rideId)
+                //update ride in db, then show rating
+              const data= await AxiosInstance.patch(`/ride/${ongoingRide?.rideId}`,{status:"ended"});
+              console.log("data",data)
+              setShowRatingModal(true); 
             } catch (error: any) {
                 console.log("Error deleting ongoing ride: ", error?.message)
             }
@@ -68,12 +84,20 @@ const AcceptedRideContent = ({tag}:{tag:string}) => {
             try {
                 const docRef = doc(database, "rides", bookedForFriend?.rideId);
                 deleteDoc(docRef)
-                dispatch(setBookedRide(undefined));
-                navigation.popTo("TabsScreen")
+               
+
+                 //update ride in db, then show rating
+              const data= await AxiosInstance.patch(`/ride/${bookedForFriend?.rideId}`,{status:"ended"});
+              console.log("data",data)
+
+              setShowRatingModal(true); 
+                // navigation.popTo("TabsScreen")
             } catch (error: any) {
                 console.log("Error deleting ongoing ride: ", error?.message)
             }
         }
+     }
+     getData();
     }, [ongoingRide,bookedForFriend])
 
     const onCancelRequest = async () => {
@@ -98,6 +122,7 @@ const AcceptedRideContent = ({tag}:{tag:string}) => {
                     <ActivityIndicator color={colors.primary[500]}></ActivityIndicator>
                 </>) :
                    tag=="ongoingRide"? (<>
+               
                     <View style={styles.headerContainer}>
                         <View style={{ flexDirection: "row", alignItems: "center" }}>
                             <View style={styles.dot}></View>
@@ -232,6 +257,7 @@ const AcceptedRideContent = ({tag}:{tag:string}) => {
                 </>)
                 : 
                 (<>
+           
                         <View style={styles.headerContainer}>
                             <View style={{ flexDirection: "row", alignItems: "center" }}>
                                 <View style={styles.dot}></View>
@@ -451,5 +477,102 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 10,
 
-    }
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 20,
+        width: '90%',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    modalTitle: {
+        fontSize: 24,
+        fontWeight: '600',
+        marginBottom: 20,
+        color: '#333',
+    },
+    starsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginBottom: 20,
+    },
+    star: {
+        marginHorizontal: 5,
+    },
+    reviewInput: {
+        width: '100%',
+        borderWidth: 1,
+        borderColor: '#ddd',
+        borderRadius: 10,
+        padding: 10,
+        marginBottom: 20,
+        textAlignVertical: 'top',
+    },
+    submitButton: {
+        width: '100%',
+        backgroundColor: colors.primary[500],
+    },
+    skipButton: {
+        marginTop: 10,
+        padding: 10,
+    },
+    skipButtonText: {
+        color: colors.primary[500],
+        fontSize: 16,
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+
+        backgroundColor: "rgba(0,0,0,0.5)"
+    },
+
+    userAvatar: { width: 45, height: 45, borderRadius: 40, }
+    ,
+    modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+
+    buttonOpen: {
+        backgroundColor: '#F194FF',
+    },
+    buttonClose: {
+        backgroundColor: '#2196F3',
+    },
+    textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: 'center',
+    },
 })

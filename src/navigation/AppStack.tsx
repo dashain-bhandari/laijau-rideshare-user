@@ -21,6 +21,7 @@ import BookForFriendScreen from '../screens/root/home/book-for-friend/BookForFri
 import AddDestinationScreen from '../screens/root/home/add-destination/AddDestinationScreen';
 import AddStopScreen from '../screens/root/home/add-stop/AddStopScreen';
 import SetStopScreen from '../screens/root/home/set-stop/SetStopScreen';
+import TripDetailScreen from '../screens/root/home/trip-detail/TripDetailScreen';
 
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
@@ -46,7 +47,7 @@ const AppStack = () => {
             <Stack.Screen name="AddDestinationScreen" component={AddDestinationScreen} options={{ headerShown: false }}></Stack.Screen>
             <Stack.Screen name="AddStopScreen" component={AddStopScreen} options={{ headerShown: false }}></Stack.Screen>
             <Stack.Screen name="SetStopScreen" component={SetStopScreen} options={{ headerShown: false }}></Stack.Screen>
-
+            <Stack.Screen name="TripDetailScreen" component={TripDetailScreen} options={{ headerShown: false }}></Stack.Screen>
         </Stack.Navigator>
     )
 }

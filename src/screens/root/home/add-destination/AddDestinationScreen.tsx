@@ -73,8 +73,10 @@ const AddDestinationScreen = ({ navigation }: AddDestinationScreenProps) => {
             let distance = calculateDistance({ lat1: userLocation?.userLatitude!, lat2: stopLocation?.stopLatitude!, long1: userLocation.userLongitude!, long2: stopLocation.stopLongitude! })
             let { initialPrice, minimumPrice } = await calculatePricings({ distance, vehicleType: vehicleType!, coordinates: { latitude: userLocation?.userLatitude!, longitude: userLocation?.userLongitude! } })
            dispatch(setDistanceInKm(distance))
-            dispatch(setInitialPrice(initialPrice))
-            dispatch(setMinimumPrice(minimumPrice))
+            dispatch(setInitialPrice(initialPrice));
+            dispatch(setOfferedPrice(initialPrice))
+            dispatch(setMinimumPrice(minimumPrice));
+
             dispatch(setOfferedPrice(initialPrice));
             //set destination with stop
             setTimeout(() => {
@@ -88,7 +90,10 @@ const AddDestinationScreen = ({ navigation }: AddDestinationScreenProps) => {
         else {
             let distance1 = calculateDistance({ lat1: userLocation?.userLatitude!, lat2: stopLocation?.stopLatitude!, long1: userLocation.userLongitude!, long2: stopLocation.stopLongitude! })
             let distance2 = calculateDistance({ lat1: stopLocation?.stopLatitude!, lat2: destinationLocation?.destinationLatitude!, long1: stopLocation.stopLongitude!, long2: destinationLocation.destinationLongitude! })
+            console.log("distance heee",distance1+distance2)
             let { initialPrice, minimumPrice } = await calculatePricings({ distance: distance1 + distance2, vehicleType: vehicleType!, coordinates: { latitude: userLocation?.userLatitude!, longitude: userLocation?.userLongitude! } })
+            dispatch(setDistanceInKm(distance1+distance2))
+            dispatch(setOfferedPrice(initialPrice))
             dispatch(setInitialPrice(initialPrice))
             dispatch(setMinimumPrice(minimumPrice))
         }

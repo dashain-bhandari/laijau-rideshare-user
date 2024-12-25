@@ -14,6 +14,7 @@ import AppStack from './AppStack';
 import AuthStack from './AuthStack';
 import SplashScreen from '../screens/SplashScreen';
 import * as SecureStore from "expo-secure-store";
+import { setRides } from '../state/rides/ridesSlice';
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
 function RootNavigator(): React.JSX.Element {
@@ -30,7 +31,7 @@ function RootNavigator(): React.JSX.Element {
     const getUser = async () => {
       try {
         console.log("user", user)
-      let token = await SecureStore.getItemAsync("user-token")
+        let token = await SecureStore.getItemAsync("user-token")
         console.log(token)
         setToken(token)
         if (token) {
@@ -44,12 +45,16 @@ function RootNavigator(): React.JSX.Element {
         setLoading(false)
       } catch (error: any) {
         console.log(error.message)
-     
+
         setLoading(false)
       }
     }
     getUser();
   }, [])
+
+
+
+      
 
   useEffect(() => {
     if (socket) {

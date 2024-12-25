@@ -57,6 +57,9 @@ export type AppStackParamList = {
     },
     SetStopScreen: {
         tag: string
+    },
+    TripDetailScreen:{
+        item:any
     }
 }
 
@@ -95,6 +98,7 @@ export type BookForFriendScreenProps = NativeStackScreenProps<AppStackParamList,
 export type AddDestinationScreenProps = NativeStackScreenProps<AppStackParamList, 'AddDestinationScreen'>;
 export type SetStopScreenProps = NativeStackScreenProps<AppStackParamList, 'SetStopScreen'>;
 export type AddStopScreenProps = NativeStackScreenProps<AppStackParamList, 'AddStopScreen'>;
+export type TripDetailScreenProps = NativeStackScreenProps<AppStackParamList, 'TripDetailScreen'>;
 
 
 

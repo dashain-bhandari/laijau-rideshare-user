@@ -43,7 +43,7 @@ const ConfirmRide = ({ navigation }: FilterRideScreenProps) => {
     const vehicleOptionsForCar = ["Taxi", "EV", "Any"];
     const [womanFilterOn, setWomanFilterOn] = useState(false);
     const [priceModal, setPriceModal] = useState(false);
-    const { offeredPrice, initialPrice, minimumPrice, vehicleType, preferredVehicle,bookedForFriend,friendName,friendNumber } = useSelector((state: RootState) => state.rideRequest)
+    const { offeredPrice, initialPrice, minimumPrice, vehicleType, preferredVehicle,bookedForFriend,friendName,friendNumber,distanceInKm } = useSelector((state: RootState) => state.rideRequest)
     const { user } = useSelector((state: RootState) => state.user)
     const { userLocation, destinationLocation } = useSelector((state: RootState) => state.location)
 
@@ -117,7 +117,8 @@ const ConfirmRide = ({ navigation }: FilterRideScreenProps) => {
                     nearestDrivers,
                     bookedForFriend,
                     friendName:friendName??"",
-                    friendNumber:friendNumber??""
+                    friendNumber:friendNumber??"",
+                    distanceInKm
 
                 })
             } catch (error) {

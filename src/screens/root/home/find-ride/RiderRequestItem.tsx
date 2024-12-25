@@ -15,6 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 import { HomeScreenNavigation } from '../../../../types/types';
 import { setOngoingRide } from '../../../../state/ongoingRide/ongoingRideSlice';
 import { setBookedForFriend } from '../../../../state/rideRequest/rideRequestSlice';
+import { AxiosInstance } from '../../../../config/AxiosInstance';
 
 
 const { height } = Dimensions.get("screen")
@@ -107,11 +108,29 @@ const RiderRequestItem = forwardRef(({ item, setRiders, riders }: any, ref) => {
             return updatedRiders;
         });
     }
+
+    const deleteDriverRequestFromDb = async () => {
+        try {
+            //delete driver ride requests collection belonging to that user
+            if (user) {
+                const q = query(collection(database, "driverRideRequests"), where("driverId", "==", item?.driverId));
+                const querySnapshot = await getDocs(q);
+
+                querySnapshot.forEach(async (doc) => {
+                    await deleteDoc(doc.ref)
+                });
+            }
+
+        } catch (error) {
+            console.log("error", error)
+        }
+    }
     const onDecline = (item: any) => {
         console.log(`Declining item with ID: ${item.id}`);
 
         viewTranslateX.value = withTiming(-400, { duration: 600 }, () => {
             runOnJS(decline)(item)
+            runOnJS(deleteDriverRequestFromDb)()
 
         });
         viewOpacity.value = withTiming(0, { duration: 600 });
@@ -132,7 +151,6 @@ const RiderRequestItem = forwardRef(({ item, setRiders, riders }: any, ref) => {
                 });
             }
 
-
             //delete driver ride requests collection belonging to that user
             if (user) {
                 const q = query(collection(database, "driverRideRequests"), where("userId", "==", user?.id));
@@ -150,7 +168,27 @@ const RiderRequestItem = forwardRef(({ item, setRiders, riders }: any, ref) => {
 
     const createAnOngoingRideAndChatRoom = async () => {
         try {
-            console.log("item", item)
+
+            //send data to backend
+
+            console.log("item sent to backend", item)
+
+            const { data } = await AxiosInstance.post("ride", {
+                "pickup": item?.pickup,
+                "dropoff": item?.dropoff,
+                "bookedForFriend": item?.bookedForFriend,
+                "scheduled": item?.scheduled,
+                "scheduledDate": item?.scheduledDate,
+                "userId": item?.userId,
+                "driverId": item?.driverId,
+                "fcmToken": item?.fcmToken,
+                "distanceInKm": item?.distanceInKm ?? "0",
+                "offeredPrice": item?.driverOffer,
+                "vehicleType": item?.vehicleType,
+                "rideId": item?.rideId
+            });
+            console.log("data: ", data.data)
+
             //add a ride to ride collection
             await setDoc(doc(database, "rides", item?.rideId), {
                 rideId: item?.rideId,
@@ -166,21 +204,6 @@ const RiderRequestItem = forwardRef(({ item, setRiders, riders }: any, ref) => {
                 createdAt: Timestamp.fromDate(new Date())
 
             })
-
-            // console.log("onb accept screen", item.bookedForFriend)
-            // if (item?.bookedForFriend) {
-            //     console.log("booked for friend", item?.bookedForFriend)
-            //     dispatch(setBookedForFriend({
-            //         ...item
-            //     }))
-            // } else {
-            //     console.log("booked for friend hehe", item?.bookedForFriend)
-            //     //store ongoing ride in a state
-            //     dispatch(setOngoingRide({
-            //         ...item
-            //     }))
-            // }
-
         } catch (error: any) {
             console.log("error", error.message)
         }
@@ -194,11 +217,13 @@ const RiderRequestItem = forwardRef(({ item, setRiders, riders }: any, ref) => {
             runOnJS(decline)(item)
         })
         viewOpacity.value = withTiming(0, { duration: 600 })
-       if(item?.bookedForFriend){
-        navigation.navigate("AcceptedRideScreen",{tag:"bookedRide"});
-       }else{
-        navigation.navigate("AcceptedRideScreen",{tag:"ongoingRide"});
-       }
+        if (item?.bookedForFriend) {
+            dispatch(setBookedForFriend(item))
+            navigation.navigate("AcceptedRideScreen", { tag: "bookedRide" });
+        } else {
+            dispatch(setOngoingRide(item));
+            navigation.navigate("AcceptedRideScreen", { tag: "ongoingRide" });
+        }
 
     }
 
@@ -230,17 +255,17 @@ const RiderRequestItem = forwardRef(({ item, setRiders, riders }: any, ref) => {
                                 <View style={{ marginRight: 5 }}>
                                     <FontAwesome name="star" size={20} color={colors.secondary[400]} />
                                 </View>
-                                <Text style={{ marginRight: 5 }}>4.78</Text>
-                                <Text style={{ color: "#555" }}>(432 rides)</Text>
+                                <Text style={{ marginRight: 5 }}>{item?.averageRating}</Text>
+                                <Text style={{ color: "#555" }}>({item?.totalRides} rides)</Text>
                             </View>
                             {/* bike name */}
-                            <Text>{item?.vehicleName ?? "Motor bike honda shine"}</Text>
+                            <Text>{item?.driver?.vehicleName ?? "Motor bike honda shine"}</Text>
                         </View>
                     </View>
                     {/* time */}
                     <View>
-                        <Text style={{ fontWeight: 600 }}>4 min.</Text>
-                        <Text style={{ fontWeight: 600 }}>1 km</Text>
+
+                        <Text style={{ fontWeight: 600 }}>{item?.riderDistance} km</Text>
                     </View>
 
                 </View>

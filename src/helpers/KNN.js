@@ -32,7 +32,7 @@ export function KNN(drivers, riderLocation, k, preferenceWeight = 1) {
   drivers = drivers?.filter((i) => {
     console.log("driver",i)
     console.log("rider location", riderLocation);
-    return i?.vehicleType == riderLocation?.vehicleType
+    return i?.vehicleType == riderLocation?.vehicleType 
   })
 
   console.log("filtered", drivers)
