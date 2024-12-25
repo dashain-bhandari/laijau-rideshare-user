@@ -49,7 +49,7 @@ export type AppStackParamList = {
     AcceptedRideScreen: {
         tag:string
     },
-    ChatScreen: undefined,
+    ChatScreen: {tag:string},
     BookForFriendScreen: undefined,
     AddDestinationScreen: undefined,
     AddStopScreen: {

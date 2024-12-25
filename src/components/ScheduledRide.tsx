@@ -49,6 +49,10 @@ const ScheduledRide = () => {
                                     style={{ backgroundColor: colors.secondary[400], padding: 10, borderRadius: 10, marginBottom: 10 }}>
                                     <Text style={{ textAlign: "center", color: "#fff" }}>{scheduledRide?.scheduledDate}</Text>
                                 </Pressable>
+
+                                <TouchableOpacity onPress={()=>navigation.navigate("AcceptedRideScreen",{tag:"scheduledRide"})}>
+                                    <Text>View details</Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
                     </Pressable>
