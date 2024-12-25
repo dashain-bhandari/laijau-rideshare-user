@@ -10,7 +10,11 @@
         "addNewAddress":"Add new address",
         "confirmAddress":"Confirm address",
         "save":"Save",
-        "cancel":"Cancel"
+        "cancel":"Cancel",
+        "cancelRequest":"Cancel request",
+        "raiseFare":"Raise fare",
+        "emergencyServices":"Emergency services",
+        "shareRide":"Share ride"
     },
     "services":{
         "bike":"Bike",
@@ -25,7 +29,8 @@
         "yourAddresses":"Your addresses",
         "saveNewAddress":"Save new address",
         "additionalInformation":"Additional information",
-        "editAddress":"Edit Address"
+        "editAddress":"Edit Address",
+         "preferredVehicleType":"Preferred vehicle type"
     }
     ,"noRide":"You haven't booked any ride at the moment",
     "welcome":"Welcome",
@@ -44,5 +49,30 @@
     "setAnAddress":"Set an address",
     "edit":"edit",
     "done":"done",
-    "saveAs":"Save as"
+    "saveAs":"Save as",
+    "findingDrivers":"Finding drivers",
+    "wayToPickup":"Rider is on the way to pickup",
+    "waitingToStart":"Waiting for driver to start the ride",
+    "hasStarted":"The ride has started",
+    "pickupNotes":"Pickup notes for rider",
+    "fareFixed":"The fare for scheduled ride is fixed",
+    "chooseTime":"Choose time within tomorrow you want to book a ride",
+    "date":"Date",
+    "time":"Time",
+    "next":"Next",
+    "yourTrip":"Your trip",
+    "searchStop":"Search stop",
+    "searchDestination":"Search destination",
+    "stopWarning":"Please keep each stop under 5 mins. When you update stops, your fare gets updated.",
+    "accountnsettings":"Account and Settings",
+    "settings":"Settings",
+   
+    "more":"More",
+    "emergencyContact":"Emergency contact",
+    "saveEmergency":"Save emergency contact",
+"offers":"Offers",
+"ride":"Ride",
+"logout":"Log out"
+
+   
 }

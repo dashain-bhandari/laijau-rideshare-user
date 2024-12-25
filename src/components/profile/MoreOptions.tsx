@@ -6,16 +6,17 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import BottomModal from '../BottomModal';
 import BottomModalWithOverlay from './ModalWithOverlay';
 import EmergencyContactModal from './EmergencyContactModal';
+import { useTranslation } from 'react-i18next';
 const MoreOptions = (
   
 ) => {
     const [modalVisible, setModalVisible] = useState(false)
 
-  
+  const {t}=useTranslation()
   return (
     <View style={ProfileStyles.container}>
      <View>
-        <Text style={ProfileStyles.titleStyle}>More</Text>
+        <Text style={ProfileStyles.titleStyle}>{t('more')}</Text>
     </View>
     <View style={ProfileStyles.itemContainer}>
         {/* language */}
@@ -27,7 +28,7 @@ const MoreOptions = (
         
                 <AntDesign name="contacts" size={24} color="#666" />
             </View>
-            <Text>Emergency contact</Text>
+            <Text>{t('emergencyContact')}</Text>
         </Pressable>
       
     </View>

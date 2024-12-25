@@ -5,6 +5,7 @@ import colors from '../../utils/data/colors'
 import { AxiosInstance } from '../../config/AxiosInstance'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../../state/user/userSlice'
+import { useTranslation } from 'react-i18next'
 
 const EmergencyContactModal = ({ visible, onClose, onSave }: any) => {
 
@@ -26,6 +27,7 @@ const EmergencyContactModal = ({ visible, onClose, onSave }: any) => {
         }
     }
 
+    const {t}=useTranslation()
     return (
         <Modal
             animationType="slide"
@@ -36,7 +38,7 @@ const EmergencyContactModal = ({ visible, onClose, onSave }: any) => {
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
                     <View style={styles.header}>
-                        <Text style={styles.headerText}>Emergency Contact</Text>
+                        <Text style={styles.headerText}>{t('emergencyContact')}</Text>
                         <Pressable onPress={onClose}>
                             <AntDesign name="close" size={24} color="#666" />
                         </Pressable>
@@ -53,7 +55,7 @@ const EmergencyContactModal = ({ visible, onClose, onSave }: any) => {
                     />
 
                     <Pressable style={styles.saveButton} onPress={handleSave}>
-                        <Text style={styles.saveButtonText}>Save emergency Contact</Text>
+                        <Text style={styles.saveButtonText}>{t('saveEmergency')}</Text>
                     </Pressable>
                 </View>
             </View>

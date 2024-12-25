@@ -18,6 +18,7 @@ import { setOfferedPrice, setRideId } from '../../../../state/rideRequest/rideRe
 import { addDoc, collection, deleteDoc, getDocs, query, serverTimestamp, where } from 'firebase/firestore';
 import { database } from '../../../../../firebaseConfig';
 import { KNN } from '../../../../helpers/KNN';
+import { useTranslation } from 'react-i18next';
 
 const { width, height } = Dimensions.get("screen");
 
@@ -191,7 +192,7 @@ const ScheduleRideScreen = ({ navigation }: ScheduleRideScreenProps) => {
 
     }
 
-
+const {t}=useTranslation()
 
     return (
         <View style={{ flex: 1 }}>
@@ -200,11 +201,11 @@ const ScheduleRideScreen = ({ navigation }: ScheduleRideScreenProps) => {
             <BottomModal modalVisible={modalVisible} initialHeight={2.50}>
                 <View style={{ backgroundColor: colors.secondary[100], borderRadius: 10, flexDirection: "row", justifyContent: "center", alignItems: "center", padding: 10, marginTop: 20, marginHorizontal: 16 }}>
                     <View style={{ width: 10, height: 10, borderRadius: 10, backgroundColor: colors.secondary[500], marginRight: 5 }}></View>
-                    <Text style={{ color: colors.secondary[600] }}>The fare for scheduled ride is fixed: Rs. {initialPrice}</Text>
+                    <Text style={{ color: colors.secondary[600] }}>{t('fareFixed')}: Rs. {initialPrice}</Text>
                 </View>
                 <View style={styles.modalContainer}>
 
-                    <Text style={{ color: "#555", marginTop: 10 }}>Choose time within tomorrow you want to book a ride</Text>
+                    <Text style={{ color: "#555", marginTop: 10 }}>{t('chooseTime')}</Text>
 
 
                     {/* date picker */}
@@ -213,7 +214,7 @@ const ScheduleRideScreen = ({ navigation }: ScheduleRideScreenProps) => {
                             <AntDesign name="calendar" size={24} color="#888" />
                         </View>
                         <View>
-                            <Text style={styles.datetimeText}>Date</Text>
+                            <Text style={styles.datetimeText}>{t('date')}</Text>
                             <Text>{selectedDate ?? "Select a date"}</Text>
                         </View>
                     </Pressable>
@@ -224,7 +225,7 @@ const ScheduleRideScreen = ({ navigation }: ScheduleRideScreenProps) => {
                             <Feather name="clock" size={24} color="#888" />
                         </View>
                         <View>
-                            <Text style={styles.datetimeText}>Time</Text>
+                            <Text style={styles.datetimeText}>{t('time')}</Text>
                             <Text>{selectedTime ?? "Select a time"}</Text>
                         </View>
                     </Pressable>
@@ -235,7 +236,7 @@ const ScheduleRideScreen = ({ navigation }: ScheduleRideScreenProps) => {
                         disabled={!isValid}
                         buttonStyles={{ backgroundColor: isValid ? colors.primary[500] : colors.primary[200], marginTop: 20 }}
                         textStyles={{ color: "#fff" }}
-                        title="Find ride"
+                        title={t('buttonTitles.findRide')}
                         onPress={() => {
                             onFideRidePress()
                         }} />

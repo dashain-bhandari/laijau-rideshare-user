@@ -17,6 +17,7 @@ import { addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, query, serverT
 import { database } from '../../../../../firebaseConfig'
 import { setOfferedPrice, setRideId } from '../../../../state/rideRequest/rideRequestSlice'
 import { KNN } from '../../../../helpers/KNN'
+import { useTranslation } from 'react-i18next'
 
 const { height, width } = Dimensions.get("screen")
 
@@ -25,7 +26,7 @@ const FindRide = ({ navigation }: FindRideScreenProps) => {
     const bottomsheetRef = useRef<any>(null);
     const socket = useContext(SocketContext)
     const { ongoingRide } = useSelector((state: RootState) => state.ongoingRide)
-    const { offeredPrice, vehicleType, rideId,preferredVehicle,bookedForFriend,friendNumber,friendName,distanceInKm } = useSelector((state: RootState) => state.rideRequest)
+    const { offeredPrice, vehicleType, rideId, preferredVehicle, bookedForFriend, friendNumber, friendName, distanceInKm } = useSelector((state: RootState) => state.rideRequest)
     const { user } = useSelector((state: RootState) => state.user)
     const { userLocation, destinationLocation } = useSelector((state: RootState) => state.location)
     const { autoAccept } = useSelector((state: RootState) => state.rideRequest)
@@ -88,7 +89,7 @@ const FindRide = ({ navigation }: FindRideScreenProps) => {
                         id: doc.id,
                         name: doc.data().driver.fullName,
                         offeredPrice: doc.data().driverOffer,
-                      
+
                         ...doc.data()
                     }
                 });
@@ -187,7 +188,7 @@ const FindRide = ({ navigation }: FindRideScreenProps) => {
         querySnapshotUser.forEach(async (doc) => {
             await deleteDoc(doc.ref)
         });
-        const nearestDrivers=await findNearestDrivers();
+        const nearestDrivers = await findNearestDrivers();
 
         await addDoc(collection(database, "userRideRequests"), {
             rideId: rideId,
@@ -202,9 +203,9 @@ const FindRide = ({ navigation }: FindRideScreenProps) => {
             createdAt: serverTimestamp(),
             nearestDrivers,
             bookedForFriend,
-           friendName:friendName??"",
-                    friendNumber:friendNumber??"",
-                    distanceInKm
+            friendName: friendName ?? "",
+            friendNumber: friendNumber ?? "",
+            distanceInKm
 
         })
         setNewReqSent(!newReqSent)
@@ -234,7 +235,7 @@ const FindRide = ({ navigation }: FindRideScreenProps) => {
             setDisabled(true)
         }
     }, [price, offeredPrice])
-
+    const { t } = useTranslation()
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <RiderRequest drivers={riders} setRiders={setRiders} />
@@ -246,7 +247,7 @@ const FindRide = ({ navigation }: FindRideScreenProps) => {
                             <>
                                 <Animated.View style={[animatedViewStyle, { backgroundColor: "" }]}>
                                     <View style={{ marginTop: 20 }}>
-                                        <Text style={{ textAlign: "center", }}>Finding drivers...</Text>
+                                        <Text style={{ textAlign: "center", }}>{t('findingDrivers')}...</Text>
                                     </View>
                                     {/* price edit container */}
                                     <PriceEditContainer price={price} setPrice={setPrice} />
@@ -257,7 +258,7 @@ const FindRide = ({ navigation }: FindRideScreenProps) => {
                                         textStyles={{
                                             color: "#fff"
                                         }}
-                                        title='Raise fare'
+                                        title={t('buttonTitles.raiseFare')}
                                         onPress={() => onRaiseFareHandler()} />
                                 </Animated.View>
 
@@ -268,7 +269,7 @@ const FindRide = ({ navigation }: FindRideScreenProps) => {
 
                                     buttonStyles={{ backgroundColor: "#eee", marginTop: 20, marginBottom: 20 }}
                                     textStyles={{ color: colors.secondary[600] }}
-                                    title='Cancel request'
+                                    title={t('buttonTitles.cancelRequest')}
                                     onPress={() => { onCancelRequest() }}
                                 />
                             </>

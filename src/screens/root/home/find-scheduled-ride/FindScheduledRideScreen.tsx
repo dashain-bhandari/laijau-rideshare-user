@@ -18,6 +18,8 @@ import FindRideBottomSheet from '../find-ride/FindRideBottomSheet'
 import Entypo from '@expo/vector-icons/Entypo';
 import { setScheduledRide } from '../../../../state/scheduledRide/scheduledRideSlice'
 import notifee, { TimestampTrigger, TriggerType } from '@notifee/react-native';
+import { useTranslation } from 'react-i18next'
+import { AxiosInstance } from '../../../../config/AxiosInstance'
 const { height, width } = Dimensions.get("screen")
 
 const FindScheduledRideScreen = ({ navigation, route }: FindScheduledRideScreenProps) => {
@@ -61,80 +63,105 @@ const FindScheduledRideScreen = ({ navigation, route }: FindScheduledRideScreenP
 
                         console.log("newriders", newRiders)
 
-                        //add an scheduled ride and delete prev request.
-                        dispatch(setScheduledRide(newRiders[0]));
+                        if (newRiders[0]) {
+                            //add an scheduled ride and delete prev request.
+                            dispatch(setScheduledRide(newRiders[0]));
 
-                        //save ride in db
-                        //add a ride to ride collection
-                        await setDoc(doc(database, "rides", newRiders[0]?.rideId), {
-                            rideId: newRiders[0]?.rideId,
-                            ...newRiders[0],
-                            createdAt: Timestamp.fromDate(new Date()),
-                            status: "accepted"
+                            //save ride in db
+                            console.log("rde data", newRiders[0])
 
-                        })
+                            try {
+                                const { data } = await AxiosInstance.post("ride", {
+                                    "pickup": newRiders[0]?.pickup,
+                                    "dropoff": newRiders[0]?.dropoff,
+                                    "bookedForFriend": newRiders[0]?.bookedForFriend ?? false,
+                                    "scheduled": newRiders[0]?.scheduled,
+                                    "scheduledDate": newRiders[0]?.scheduledDate,
+                                    "userId": newRiders[0]?.userId,
+                                    "driverId": newRiders[0]?.driverId,
+                                    "fcmToken": newRiders[0]?.fcmToken,
+                                    "distanceInKm": newRiders[0]?.distanceInKm ?? "0",
+                                    "offeredPrice": newRiders[0]?.driverOffer,
+                                    "vehicleType": newRiders[0]?.vehicleType,
+                                    "rideId": newRiders[0]?.rideId
+                                });
+                                console.log("data: ", data)
+                            } catch (error: any) {
+                                console.log("errpr sending data", error?.message)
+                            }
 
-                        //create chat room
-                        await setDoc(doc(database, "chats", newRiders[0]?.rideId), {
-                            rideId: newRiders[0]?.rideId,
-                            createdAt: Timestamp.fromDate(new Date())
+                            //add a ride to ride collection
+                            await setDoc(doc(database, "rides", newRiders[0]?.rideId), {
+                                rideId: newRiders[0]?.rideId,
+                                ...newRiders[0],
+                                createdAt: Timestamp.fromDate(new Date()),
+                                status: "accepted"
+                            })
 
-                        })
+                            //create chat room
+                            await setDoc(doc(database, "chats", newRiders[0]?.rideId), {
+                                rideId: newRiders[0]?.rideId,
+                                createdAt: Timestamp.fromDate(new Date())
 
+                            })
+                            navigation.navigate("HomeScreen");
 
-                        //set reminder
-                        await notifee.requestPermission()
+                            //set reminder
+                            await notifee.requestPermission()
 
-                        // Create a channel (required for Android)
-                        const channelId = await notifee.createChannel({
-                            id: 'default',
-                            name: 'Default Channel',
-                            vibration: true,
-                            vibrationPattern: [300, 500],
-                        });
+                            // Create a channel (required for Android)
+                            const channelId = await notifee.createChannel({
+                                id: 'default',
+                                name: 'Default Channel',
+                                vibration: true,
+                                vibrationPattern: [300, 500],
+                            });
 
-                        console.log("alert date", alertDate)
+                            console.log("alert date", alertDate)
 
-                        const trigger: TimestampTrigger = {
-                            type: TriggerType.TIMESTAMP,
-                            timestamp: (new Date(alertDate)).getTime() // fire at 11:10am (10 minutes before meeting)
-                        };
-                        // Create a trigger notification
-                        await notifee.createTriggerNotification(
-                            {
-                                title: 'Ride reminder',
-                                body: `Today at ${selectedTime}`,
+                            const trigger: TimestampTrigger = {
+                                type: TriggerType.TIMESTAMP,
+                                timestamp: (new Date(alertDate)).getTime() // fire at 11:10am (10 minutes before meeting)
+                            };
+                            // Create a trigger notification
+                            await notifee.createTriggerNotification(
+                                {
+                                    title: 'Ride reminder',
+                                    body: `Today at ${selectedTime}`,
 
-                                android: {
-                                    channelId: channelId,
+                                    android: {
+                                        channelId: channelId,
+                                    },
+                                    ios: {
+                                        critical: true
+                                    }
                                 },
-                                ios: {
-                                    critical: true
-                                }
-                            },
-                            trigger,
-                        );
-
-                        //delete req.
-                        // first delete any existing old requests in driverRideRequests of that user so, we can fetch fresh requests for this particular ride.
-                        const q = query(collection(database, "driverRideRequests"), where("userId", "==", user?.id));
-                        const querySnapshot = await getDocs(q);
-
-                        querySnapshot.forEach(async (doc) => {
-                            await deleteDoc(doc.ref)
-                        });
-
-                        // also delete user ko old requests
+                                trigger,
+                            );
 
 
-                        const queryUser = query(collection(database, "userRideRequests"), where("userId", "==", user?.id));
-                        const querySnapshotUser = await getDocs(queryUser);
+                            //delete req.
+                            // first delete any existing old requests in driverRideRequests of that user so, we can fetch fresh requests for this particular ride.
+                            const q = query(collection(database, "driverRideRequests"), where("userId", "==", user?.id));
+                            const querySnapshot = await getDocs(q);
 
-                        querySnapshotUser.forEach(async (doc) => {
-                            await deleteDoc(doc.ref)
-                        });
+                            querySnapshot.forEach(async (doc) => {
+                                await deleteDoc(doc.ref)
+                            });
 
-                        navigation.navigate("HomeScreen");
+                            // also delete user ko old requests
+
+
+                            const queryUser = query(collection(database, "userRideRequests"), where("userId", "==", user?.id));
+                            const querySnapshotUser = await getDocs(queryUser);
+
+                            querySnapshotUser.forEach(async (doc) => {
+                                await deleteDoc(doc.ref)
+                            });
+
+
+                        }
+
                     });
 
                     // Cleanup subscription when component unmounts
@@ -147,14 +174,27 @@ const FindScheduledRideScreen = ({ navigation, route }: FindScheduledRideScreenP
         getRequests();
     }, [user]);
 
+    const onCancelRequest = async () => {
+        try {
+            const queryUser = query(collection(database, "userRideRequests"), where("userId", "==", user?.id), where("rideId", "==", rideId));
+            const querySnapshotUser = await getDocs(queryUser);
 
+            querySnapshotUser.forEach(async (doc) => {
+                await deleteDoc(doc.ref)
+            });
+            navigation.popTo("TabsScreen");
+
+        } catch (error: any) {
+            console.log("error in canceling requests", error?.message)
+        }
+    }
+
+    const { t } = useTranslation()
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
 
-            <BackButton onPressHandler={() => {
-                navigation.goBack()
-            }} />
+
             <Map />
             <FindRideBottomSheet ref={bottomsheetRef}>
                 <ScrollView contentContainerStyle={{}}>
@@ -182,7 +222,7 @@ const FindScheduledRideScreen = ({ navigation, route }: FindScheduledRideScreenP
                                 <View style={{ flexDirection: "column", marginTop: 20, paddingHorizontal: 16 }}>
                                     <View style={{ backgroundColor: colors.secondary[100], padding: 10, borderRadius: 10, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
                                         <Text>
-                                        रू {initialPrice}
+                                            रू {initialPrice}
                                         </Text>
                                     </View>
                                     {/* pickup */}
@@ -215,11 +255,10 @@ const FindScheduledRideScreen = ({ navigation, route }: FindScheduledRideScreenP
                                 </View>
                                 <View style={{ paddingHorizontal: 16 }}>
                                     <StyledButton
-
                                         buttonStyles={{ backgroundColor: "#eee", marginTop: 20, marginBottom: 20, }}
                                         textStyles={{ color: colors.secondary[600] }}
-                                        title='Cancel request'
-                                        onPress={() => { }}
+                                        title={t('buttonTitles.cancelRequest')}
+                                        onPress={() => { onCancelRequest() }}
                                     />
                                 </View>
                             </>

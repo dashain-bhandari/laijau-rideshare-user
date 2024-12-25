@@ -151,7 +151,7 @@ const ConfirmRide = ({ navigation }: FilterRideScreenProps) => {
                 <Map />
 
             </Pressable>
-            <CustomBottomSheet initialHeight={2} scrollable={false}>
+            <CustomBottomSheet initialHeight={2.4} scrollable={false}>
                 <ScrollView style={styles.container} >
                     <Pressable onPress={() => setDisplayOptions("none")}>
 
@@ -161,7 +161,7 @@ const ConfirmRide = ({ navigation }: FilterRideScreenProps) => {
                         {/* choose preferred vehicle here */}
                         <View style={{ marginTop: 20, position: "relative" }}>
 
-                            <Text>Preffered vehicle type</Text>
+                            <Text>{t('headings.preferredVehicleType')}</Text>
                             <View style={{ marginTop: 10 }}>
                                 <Pressable onPress={() => {
                                     displayOptions == "none" ? setDisplayOptions("flex") : setDisplayOptions("none");
@@ -193,11 +193,11 @@ const ConfirmRide = ({ navigation }: FilterRideScreenProps) => {
                                     )
                                 }
 
-                                {/* woman select */}
+                                {/* woman select
                                 <View style={styles.connectWomenContainer}>
                                     <Text>Connect with women riders</Text>
                                     <ToggleSwitch icon={{ type: IconType.MaterialCommunityIcons, name: "face-woman-shimmer", size: 26 }} toggle={true} setToggle={() => { }} />
-                                </View>
+                                </View> */}
                                 {/* price bargain */}
                                 <Pressable
                                     pointerEvents='auto'

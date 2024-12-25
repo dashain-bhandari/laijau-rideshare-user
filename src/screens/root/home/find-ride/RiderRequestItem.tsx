@@ -173,21 +173,6 @@ const RiderRequestItem = forwardRef(({ item, setRiders, riders }: any, ref) => {
 
             console.log("item sent to backend", item)
 
-            const { data } = await AxiosInstance.post("ride", {
-                "pickup": item?.pickup,
-                "dropoff": item?.dropoff,
-                "bookedForFriend": item?.bookedForFriend,
-                "scheduled": item?.scheduled,
-                "scheduledDate": item?.scheduledDate,
-                "userId": item?.userId,
-                "driverId": item?.driverId,
-                "fcmToken": item?.fcmToken,
-                "distanceInKm": item?.distanceInKm ?? "0",
-                "offeredPrice": item?.driverOffer,
-                "vehicleType": item?.vehicleType,
-                "rideId": item?.rideId
-            });
-            console.log("data: ", data.data)
 
             //add a ride to ride collection
             await setDoc(doc(database, "rides", item?.rideId), {
@@ -204,6 +189,23 @@ const RiderRequestItem = forwardRef(({ item, setRiders, riders }: any, ref) => {
                 createdAt: Timestamp.fromDate(new Date())
 
             })
+
+
+            const { data } = await AxiosInstance.post("ride", {
+                "pickup": item?.pickup,
+                "dropoff": item?.dropoff,
+                "bookedForFriend": item?.bookedForFriend,
+                "scheduled": item?.scheduled,
+                "scheduledDate": item?.scheduledDate,
+                "userId": item?.userId,
+                "driverId": item?.driverId,
+                "fcmToken": item?.fcmToken,
+                "distanceInKm": item?.distanceInKm ?? "0",
+                "offeredPrice": item?.driverOffer,
+                "vehicleType": item?.vehicleType,
+                "rideId": item?.rideId
+            });
+            console.log("data: ", data.data)
         } catch (error: any) {
             console.log("error", error.message)
         }

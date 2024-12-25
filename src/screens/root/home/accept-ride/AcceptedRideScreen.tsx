@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../state/store';
 import { setOngoingRide } from '../../../../state/ongoingRide/ongoingRideSlice';
 import { setBookedRide } from '../../../../state/bookForFriend/bookForFriendSlice';
+import { setScheduledRide } from '../../../../state/scheduledRide/scheduledRideSlice';
 
 const AcceptedRide = ({navigation,route}:AcceptedRideScreenProps) => {
     const dispatch=useDispatch()
@@ -30,17 +31,22 @@ const AcceptedRide = ({navigation,route}:AcceptedRideScreenProps) => {
        const [submitting, setSubmitting] = useState(false);
        const {ongoingRide}=useSelector((state:RootState)=>state.ongoingRide)
        const {bookedForFriend}=useSelector((state:RootState)=>state.bookedForFriend)
+       const {scheduledRide}=useSelector((state:RootState)=>state.scheduledRide)
        const handleRatingSubmit = async () => {
         try {
             setSubmitting(true);
          
             let reviewerUserId=user?.id;
-            let reviewedDriverId=tag=="ongoingRide"?ongoingRide?.driver?.id:bookedForFriend?.driver?.id;
+            console.log("ongoing ride",ongoingRide)
+            console.log("booked ride",bookedForFriend)
+            console.log("scheduled ride",scheduledRide)
+            let reviewedDriverId=tag=="ongoingRide"?ongoingRide?.driver?.id:tag=="bookedRide"?bookedForFriend?.driver?.id:scheduledRide?.driver?.id;
             console.log("reviewed driver id",reviewedDriverId)
             console.log("bookedride",bookedForFriend)
 
             tag=="ongoingRide" && dispatch(setOngoingRide(undefined));
             tag=="bookedRide" && dispatch(setBookedRide(undefined));
+            tag=="scheduledRide" && dispatch(setScheduledRide(undefined));
             // Submit rating to your backend
             await AxiosInstance.post('/review', {
                 rating,

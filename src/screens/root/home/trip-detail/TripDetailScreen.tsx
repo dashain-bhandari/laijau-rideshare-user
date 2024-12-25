@@ -141,7 +141,7 @@ const TripDetailScreen = ({ route, navigation }: TripDetailScreenProps) => {
                     </View>
                     {/* status */}
                     {
-                        item?.status == 'cancelled' ? <Canceled /> : <Accepted />
+                        item?.status == 'canceled' ? <Canceled /> : <Accepted />
                     }
 
                 </View>

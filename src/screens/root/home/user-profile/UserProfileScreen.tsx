@@ -7,6 +7,7 @@ import MoreOptions from '../../../../components/profile/MoreOptions';
 import { UserProfileScreenProps } from '../../../../types/types';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useTranslation } from 'react-i18next';
 
 const { width, height } = Dimensions.get("screen");
 
@@ -15,7 +16,7 @@ const UserProfile = ({ navigation }: UserProfileScreenProps) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const [emergencyModal,setEmergencyModal]=useState(false);
-
+const {t}=useTranslation();
   return (
     <View style={{ flex: 1 }}>
 
@@ -23,7 +24,7 @@ const UserProfile = ({ navigation }: UserProfileScreenProps) => {
       <Pressable  onPress={()=>{navigation.goBack()}} style={{position:"absolute",zIndex:100,top:70,left:16}}>
       <Ionicons name="arrow-back" size={24} color="black" />
       </Pressable>
-        <Text style={{fontSize:18,fontWeight:"500"}}>Account and Settings</Text>
+        <Text style={{fontSize:18,fontWeight:"500"}}>{t('accountnsettings')}</Text>
       </View>
       <Animated.ScrollView
         style={[]}

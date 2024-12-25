@@ -165,16 +165,16 @@ const Home = () => {
                         }));
                     console.log("userid", user.id)
                     console.log("new reqs", newRequests)
-                    if (newRequests && newRequests.length > 0) {
-                        console.log("requested ride found:", newRequests)
-                        console.log("new requests", newRequests)
-                        dispatch(setRideId(newRequests[0]?.rideId));
-                        dispatch(setOfferedPrice(newRequests[0]?.offeredPrice));
-                        dispatch(setVehicleType(newRequests[0]?.vehicleType))
-                        dispatch(setUserLocation(newRequests[0]?.pickup))
-                        dispatch(setDestinationLocation(newRequests[0]?.dropoff))
-                        navigation.navigate("FindRideScreen");
-                    }
+                    // if (newRequests && newRequests.length > 0) {
+                    //     console.log("requested ride found:", newRequests)
+                    //     console.log("new requests", newRequests)
+                    //     dispatch(setRideId(newRequests[0]?.rideId));
+                    //     dispatch(setOfferedPrice(newRequests[0]?.offeredPrice));
+                    //     dispatch(setVehicleType(newRequests[0]?.vehicleType))
+                    //     dispatch(setUserLocation(newRequests[0]?.pickup))
+                    //     dispatch(setDestinationLocation(newRequests[0]?.dropoff))
+                    //     navigation.navigate("FindRideScreen");
+                    // }
                 })
 
                 // Cleanup subscription when component unmounts

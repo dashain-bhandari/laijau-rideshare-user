@@ -17,6 +17,7 @@ import { RootState } from '../../../../state/store';
 import { setDestinationLocation } from '../../../../state/location/locationSlice';
 import { calculateDistance } from '../../../../helpers/distance';
 import { calculatePricings } from '../../../../helpers/price';
+import { useTranslation } from 'react-i18next';
 
 const AddDestinationScreen = ({ navigation }: AddDestinationScreenProps) => {
     const [submitting, setSubmitting] = useState<boolean>(false);
@@ -102,6 +103,8 @@ const AddDestinationScreen = ({ navigation }: AddDestinationScreenProps) => {
 
     }
 
+    const {t}=useTranslation()
+
     return (
         <View style={styles.container}>
             <SafeAreaView style={{ flex: 1 }}>
@@ -111,8 +114,8 @@ const AddDestinationScreen = ({ navigation }: AddDestinationScreenProps) => {
                 <KeyboardAvoidingView contentContainerStyle={{ flex: 1, flexDirection: "column" }}>
                     <ScrollView style={{ marginTop: 30, paddingHorizontal: 16 }}>
                         <View style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", paddingHorizontal: 10 }}>
-                            <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: 20 }}>Your trip</Text>
-                            <Text style={{ textAlign: "center", marginTop: 10, width: "80%", color: "#555" }}>Please keep each stop under 5 mins. When you update stops, your fare gets updated.</Text>
+                            <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: 20 }}>{t('yourTrip')}</Text>
+                            <Text style={{ textAlign: "center", marginTop: 10, width: "80%", color: "#555" }}>{t('stopWarning')}</Text>
                         </View>
                         <Pressable
                             onPress={onPickupPress}
@@ -140,7 +143,7 @@ const AddDestinationScreen = ({ navigation }: AddDestinationScreenProps) => {
                             <TextInput
                                 editable={false}
                                 pointerEvents='none'
-                                placeholderTextColor={"#666"} placeholder='Search stop'
+                                placeholderTextColor={"#666"} placeholder={t('searchStop')}
                                 style={{ flexGrow: 1, paddingHorizontal: 10, paddingVertical: 10, borderRadius: 10 }}
                                 value={stopLocation?.stopAddress}
 
@@ -157,7 +160,7 @@ const AddDestinationScreen = ({ navigation }: AddDestinationScreenProps) => {
                             <TextInput
                                 pointerEvents='none'
                                 editable={false}
-                                placeholderTextColor={"#666"} placeholder='Search destination' style={{ flexGrow: 1, paddingHorizontal: 10, paddingVertical: 10, borderRadius: 10 }}
+                                placeholderTextColor={"#666"} placeholder={t('searchDestination')} style={{ flexGrow: 1, paddingHorizontal: 10, paddingVertical: 10, borderRadius: 10 }}
                                 value={destinationLocation?.destinationAddress}
 
                             ></TextInput>
@@ -168,7 +171,7 @@ const AddDestinationScreen = ({ navigation }: AddDestinationScreenProps) => {
                         }} underlayColor={"#9DA9A0"}>
                             <View>
                                 {
-                                    submitting ? (<><ActivityIndicator color={"#fff"}></ActivityIndicator></>) : (<Text style={{ textAlign: "center", color: "#fff" }}>Next</Text>)
+                                    submitting ? (<><ActivityIndicator color={"#fff"}></ActivityIndicator></>) : (<Text style={{ textAlign: "center", color: "#fff" }}>{t('next')}</Text>)
                                 }
                             </View>
                         </TouchableHighlight>
