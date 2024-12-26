@@ -40,6 +40,7 @@ const AcceptedRide = ({navigation,route}:AcceptedRideScreenProps) => {
             console.log("ongoing ride",ongoingRide)
             console.log("booked ride",bookedForFriend)
             console.log("scheduled ride",scheduledRide)
+            let rideId=tag=="ongoingRide"?ongoingRide.rideId:tag=="bookedRide"?bookedForFriend?.rideId:scheduledRide?.rideId;
             let reviewedDriverId=tag=="ongoingRide"?ongoingRide?.driver?.id:tag=="bookedRide"?bookedForFriend?.driver?.id:scheduledRide?.driver?.id;
             console.log("reviewed driver id",reviewedDriverId)
             console.log("bookedride",bookedForFriend)
@@ -52,7 +53,8 @@ const AcceptedRide = ({navigation,route}:AcceptedRideScreenProps) => {
                 rating,
                 review,
                 reviewerUserId,
-                reviewedDriverId
+                reviewedDriverId,
+                rideId
             });
             setShowRatingModal(false);
        

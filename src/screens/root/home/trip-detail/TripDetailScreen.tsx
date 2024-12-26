@@ -56,189 +56,200 @@ const TripDetailScreen = ({ route, navigation }: TripDetailScreenProps) => {
     }
 
     const [showRatingModal, setShowRatingModal] = useState(false);
-    const {user}=useSelector((state:RootState)=>state.user)
+    const { user } = useSelector((state: RootState) => state.user)
     const [rating, setRating] = useState(0);
     const [review, setReview] = useState('');
     const [submitting, setSubmitting] = useState(false);
- 
+
     const handleRatingSubmit = async () => {
-     try {
-         setSubmitting(true);
-      
-       let reviewedDriverId=item?.driver?.id;
-       let reviewerUserId=user?.id
-      
-         // Submit rating to your backend
-         await AxiosInstance.post('/review', {
-             rating,
-             review,
-             reviewerUserId,
-             reviewedDriverId
-         });
-         setShowRatingModal(false);
-    
-         navigation.pop(1)
-     } catch (error) {
-         console.log('Error submitting rating:', error);
-     } finally {
-         setSubmitting(false);
-     }
- };
+        try {
+            setSubmitting(true);
 
- const dispatch=useDispatch()
- const onRepeatRequest=()=>{
-    dispatch(setUserLocation(item?.pickup));
-    dispatch(setDestinationLocation(item?.dropoff));
-    dispatch(setVehicleType(item?.vehicleType));
-    navigation.navigate("FindDestinationScreen")
- }
+            let reviewedDriverId = item?.driver?.id;
+            let reviewerUserId = user?.id
+            let rideId = item?.rideId;
 
-  const onCallPress = () => {
-         Linking.openURL(`tel:${item?.driver?.mobileNumber}`)
-     }
+            // Submit rating to your backend
+            await AxiosInstance.post('/review', {
+                rating,
+                review,
+                reviewerUserId,
+                reviewedDriverId,
+                rideId
+            });
+            setShowRatingModal(false);
+
+            navigation.pop(1)
+        } catch (error) {
+            console.log('Error submitting rating:', error);
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    const dispatch = useDispatch()
+    const onRepeatRequest = () => {
+        dispatch(setUserLocation(item?.pickup));
+        dispatch(setDestinationLocation(item?.dropoff));
+        dispatch(setVehicleType(item?.vehicleType));
+        navigation.navigate("FindDestinationScreen")
+    }
+
+    const onCallPress = () => {
+        Linking.openURL(`tel:${item?.driver?.mobileNumber}`)
+    }
     return (
         <View style={{ flex: 1 }}>
-           <Pressable 
-  
-           style={{flex:1}}>
-           <SafeAreaView style={{ flexDirection: "row", justifyContent: "center", backgroundColor: "#fff", borderBottomColor: "#eee", borderBottomWidth: 4, paddingHorizontal: 16, paddingTop: 10 }}>
-                <Pressable style={{ position: "absolute", top: 60, left: 16 }} onPress={() => navigation.goBack()}>
-                    <AntDesign name="arrowleft" size={24} color="black" />
-                </Pressable>
-                <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                    <Text style={{ fontWeight: "600", fontSize: 18, textAlign: "center" }}>
-                        Trip Detail
-                    </Text>
-                </View>
-            </SafeAreaView>
+            <Pressable
 
-            <ScrollView style={{ backgroundColor: "#fff" }}>
-                {/* Vehicle and Price Info */}
-                <View style={{
-                    flexDirection: "column", gap: 10, borderBottomColor: "#ddd",
-                    borderBottomWidth: 1
-                }}>
-                    <View style={styles.vehicleInfoContainer}>
-                        <View style={styles.vehicleTypeContainer}>
-                            <View style={styles.iconContainer}>
-                                {
-                                    item?.vehicleType == "Car" ? (
-                                        <FontAwesome5 name="car" size={20} color="#555" />
-                                    ) : (
-                                        <MaterialCommunityIcons name="motorbike" size={20} color="#555" />
-                                    )
-                                }
-                            </View>
-                            <View>
-                                <Text style={styles.vehicleType}>{item?.vehicleType || "Standard"}</Text>
-                                <Text style={styles.licensePlate}>{item?.driver?.vehicleRegistrationNumber || "ABC 123"}</Text>
-                            </View>
-                        </View>
-                        <View style={styles.priceContainer}>
-                            <Text style={styles.priceLabel}>Total Fare</Text>
-                            <Text style={styles.priceAmount}>Rs. {item?.offeredPrice || "25.00"}</Text>
-                        </View>
+                style={{ flex: 1 }}>
+                <SafeAreaView style={{ flexDirection: "row", justifyContent: "center", backgroundColor: "#fff", borderBottomColor: "#eee", borderBottomWidth: 4, paddingHorizontal: 16, paddingTop: 10 }}>
+                    <Pressable style={{ position: "absolute", top: 60, left: 16 }} onPress={() => navigation.goBack()}>
+                        <AntDesign name="arrowleft" size={24} color="black" />
+                    </Pressable>
+                    <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+                        <Text style={{ fontWeight: "600", fontSize: 18, textAlign: "center" }}>
+                            Trip Detail
+                        </Text>
                     </View>
-                    {/* status */}
-                    {
-                        item?.status == 'canceled' ? <Canceled /> : <Accepted />
-                    }
+                </SafeAreaView>
 
-                </View>
-
-                {/* loc */}
-                <View style={{ backgroundColor: "#fff", padding: 16, flexDirection: "column", gap: 20, borderBottomColor: "#ddd", borderBottomWidth: 1 }}>
-                    <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-                        <View style={{ width: 30, height: 30, borderRadius: 30, backgroundColor: colors.secondary[200], flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                            <AntDesign name="arrowdown" size={20} color="#fff" />
-                        </View>
-                        <Text>{item?.pickup?.userAddress}</Text>
-                    </View>
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-                            <View style={{ width: 30, height: 30, borderRadius: 30, backgroundColor: colors.primary[200], flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                                <Entypo name="location-pin" size={20} color="#fff" />
-                            </View>
-                            <Text>{item?.dropoff?.destinationAddress}</Text>
-                        </View>
-                    </View>
-                    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 80 }}>
-                        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-                            <AntDesign name="clockcircleo" size={24} color="#555" />
-                            <Text>19 min</Text>
-                        </View>
-                        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-                            <MaterialCommunityIcons name="map-marker-distance" size={24} color="#555" />
-                            <Text>19 km</Text>
-                        </View>
-                    </View>
-                </View>
-
-                {/* Rest of the existing code remains the same */}
-                {/* rider details */}
-                <View style={{ flexDirection: "column", gap: 20, borderBottomColor: "#ddd", borderBottomWidth: 1 }}>
-                    <View style={styles.riderDetails}>
-                        <View style={{ flexDirection: "row", alignItems: "center" }}>
-                            <View style={styles.imageContainer}>
-                                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", width: "100%", height: "100%", borderRadius: 100 }}>
-                                    <Text style={{ color: "#fff", fontSize: 30 }}>{item?.driver?.fullName?.slice(0, 1)}</Text>
+                <ScrollView style={{ backgroundColor: "#fff" }}>
+                    {/* Vehicle and Price Info */}
+                    <View style={{
+                        flexDirection: "column", gap: 10, borderBottomColor: "#ddd",
+                        borderBottomWidth: 1
+                    }}>
+                        <View style={styles.vehicleInfoContainer}>
+                            <View style={styles.vehicleTypeContainer}>
+                                <View style={styles.iconContainer}>
+                                    {
+                                        item?.vehicleType == "Car" ? (
+                                            <FontAwesome5 name="car" size={20} color="#555" />
+                                        ) : (
+                                            <MaterialCommunityIcons name="motorbike" size={20} color="#555" />
+                                        )
+                                    }
+                                </View>
+                                <View>
+                                    <Text style={styles.vehicleType}>{item?.vehicleType || "Standard"}</Text>
+                                    <Text style={styles.licensePlate}>{item?.driver?.vehicleRegistrationNumber || "ABC 123"}</Text>
                                 </View>
                             </View>
-                            <View style={{ flexDirection: "column" }}>
-                                <Text>
-                                    {item?.driver?.fullName}
-                                </Text>
-                                <View style={{ flexDirection: "row", alignItems: "center", marginTop: 4 }}>
-                                    <View style={styles.ratingContainer}>
-                                        <View style={{ marginRight: 5 }}>
-                                            <FontAwesome name="star" size={18} color={colors.secondary[400]} />
-                                        </View>
-                                        <Text style={{ color: "#888" }}>4.57</Text>
+                            <View style={styles.priceContainer}>
+                                <Text style={styles.priceLabel}>Total Fare</Text>
+                                <Text style={styles.priceAmount}>Rs. {item?.offeredPrice || "25.00"}</Text>
+                            </View>
+                        </View>
+                        {/* status */}
+                        {
+                            item?.status == 'canceled' ? <Canceled /> : <Accepted />
+                        }
+
+                    </View>
+
+                    {/* loc */}
+                    <View style={{ backgroundColor: "#fff", padding: 16, flexDirection: "column", gap: 20, borderBottomColor: "#ddd", borderBottomWidth: 1 }}>
+                        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+                            <View style={{ width: 30, height: 30, borderRadius: 30, backgroundColor: colors.secondary[200], flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+                                <AntDesign name="arrowdown" size={20} color="#fff" />
+                            </View>
+                            <Text>{item?.pickup?.userAddress}</Text>
+                        </View>
+                        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                            <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+                                <View style={{ width: 30, height: 30, borderRadius: 30, backgroundColor: colors.primary[200], flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+                                    <Entypo name="location-pin" size={20} color="#fff" />
+                                </View>
+                                <Text>{item?.dropoff?.destinationAddress}</Text>
+                            </View>
+                        </View>
+                        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 80 }}>
+                            <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+                                <AntDesign name="clockcircleo" size={24} color="#555" />
+                                <Text>19 min</Text>
+                            </View>
+                            <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+                                <MaterialCommunityIcons name="map-marker-distance" size={24} color="#555" />
+                                <Text>19 km</Text>
+                            </View>
+                        </View>
+                    </View>
+
+                    {/* Rest of the existing code remains the same */}
+                    {/* rider details */}
+                    <View style={{ flexDirection: "column", gap: 20, borderBottomColor: "#ddd", borderBottomWidth: 1 }}>
+                        <View style={styles.riderDetails}>
+                            <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                <View style={styles.imageContainer}>
+                                    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", width: "100%", height: "100%", borderRadius: 100 }}>
+                                        <Text style={{ color: "#fff", fontSize: 30 }}>{item?.driver?.fullName?.slice(0, 1)}</Text>
                                     </View>
-                                    <View style={styles.separationLine}>
-                                    </View>
-                                    <Text style={{ color: "#888" }}>
-                                        254 trips
+                                </View>
+                                <View style={{ flexDirection: "column" }}>
+                                    <Text>
+                                        {item?.driver?.fullName}
                                     </Text>
+                                    <View style={{ flexDirection: "row", alignItems: "center", marginTop: 4 }}>
+                                        <View style={styles.ratingContainer}>
+                                            <View style={{ marginRight: 5 }}>
+                                                <FontAwesome name="star" size={18} color={colors.secondary[400]} />
+                                            </View>
+                                            <Text style={{ color: "#888" }}>4.57</Text>
+                                        </View>
+                                        <View style={styles.separationLine}>
+                                        </View>
+                                        <Text style={{ color: "#888" }}>
+                                            254 trips
+                                        </Text>
+                                    </View>
                                 </View>
                             </View>
+                            <Pressable
+                                onPress={onCallPress}
+                                style={{ backgroundColor: colors.secondary[200], padding: 8, borderRadius: 20 }}>
+                                <Ionicons name="call" size={24} color="#fff" />
+                            </Pressable>
                         </View>
-                        <Pressable 
-                        onPress={onCallPress}
-                        style={{ backgroundColor: colors.secondary[200], padding: 8, borderRadius: 20 }}>
-                            <Ionicons name="call" size={24} color="#fff" />
-                        </Pressable>
+                        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 80, marginBottom: 10 }}>
+                            {
+                                item?.review ? (<>
+                                    <Pressable
+
+                                        style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+                                        <MaterialIcons name="star-rate" size={24} color={colors.secondary[400]} />
+                                        <Text>You rated {item?.review?.rating}</Text>
+                                    </Pressable>
+                                </>) : (<Pressable
+                                    onPress={() => setShowRatingModal(true)}
+                                    style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+                                    <MaterialIcons name="star-rate" size={24} color={colors.secondary[400]} />
+                                    <Text>Rate now</Text>
+                                </Pressable>)
+                            }
+                            <Pressable
+                                onPress={onRepeatRequest}
+                                style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+                                <FontAwesome name="repeat" size={20} color={colors.secondary[400]} />
+                                <Text>Repeat request</Text>
+                            </Pressable>
+                        </View>
                     </View>
-                    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 80, marginBottom: 10 }}>
-                        <Pressable 
-                        onPress={()=>setShowRatingModal(true)}
-                        style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-                            <MaterialIcons name="star-rate" size={24} color={colors.secondary[400]} />
-                            <Text>Rate now</Text>
-                        </Pressable>
-                        <Pressable 
-                        onPress={onRepeatRequest}
-                        style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-                            <FontAwesome name="repeat" size={20} color={colors.secondary[400]} />
-                            <Text>Repeat request</Text>
-                        </Pressable>
-                    </View>
-                </View>
-                {/* delete */}
-                <TouchableOpacity
-                    onPress={deleteRide}
-                    style={{ padding: 10, borderRadius: 10, backgroundColor: "#eee", marginTop: 20, marginHorizontal: 16 }}>
-                    <Text style={{ color: "#555", textAlign: "center" }}>Delete history {deleting && (<ActivityIndicator size={16}></ActivityIndicator>)}</Text>
-                </TouchableOpacity>
-            </ScrollView>
-           </Pressable>
-           <BottomModalWithOverlay initialHeight={1} modalVisible={showRatingModal}>
-            <View style={styles.ratingModalContent}>
-                  
+                    {/* delete */}
+                    <TouchableOpacity
+                        onPress={deleteRide}
+                        style={{ padding: 10, borderRadius: 10, backgroundColor: "#eee", marginTop: 20, marginHorizontal: 16 }}>
+                        <Text style={{ color: "#555", textAlign: "center" }}>Delete history {deleting && (<ActivityIndicator size={16}></ActivityIndicator>)}</Text>
+                    </TouchableOpacity>
+                </ScrollView>
+            </Pressable>
+            <BottomModalWithOverlay initialHeight={1} modalVisible={showRatingModal}>
+                <View style={styles.ratingModalContent}>
+
 
                     {/* Title */}
                     <Text style={styles.modalTitle}>Rate your ride</Text>
-                    
+
                     {/* Star Rating */}
                     <View style={styles.starsContainer}>
                         {[1, 2, 3, 4, 5].map((star) => (
@@ -273,13 +284,13 @@ const TripDetailScreen = ({ route, navigation }: TripDetailScreenProps) => {
                         onPress={handleRatingSubmit}
                         disabled={rating === 0 || submitting}
                         buttonStyles={styles.submitButton}
-                        textStyles={{color:"#fff"}}
+                        textStyles={{ color: "#fff" }}
                     />
 
                     {/* Skip Button */}
                     <Pressable
                         onPress={() => {
-                           
+
                             setShowRatingModal(false);
                             navigation.pop(1);
                         }}
